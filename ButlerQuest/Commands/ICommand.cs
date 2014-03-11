@@ -8,6 +8,7 @@ namespace ButlerQuest
 {
     interface ICommand
     {
+        //Showing people how to use git stuff
         bool IsFinished
         {
             get;
