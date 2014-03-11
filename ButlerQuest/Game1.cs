@@ -28,6 +28,7 @@ namespace ButlerQuest
         Vector2 lastNodeLoc;
         Texture2D playertx;
         Texture2D targettx;
+        Animation anim;
         Path<SquareGraphNode> path;
 
         public Game1()
@@ -70,6 +71,7 @@ namespace ButlerQuest
             // TODO: use this.Content to load your game content here
             playertx = Content.Load<Texture2D>("player.png");
             targettx = Content.Load<Texture2D>("target.png");
+            anim = new Animation(0, 2, 32, 32, 1, 3, 10, Content.Load<Texture2D>("tiles.png"));
         }
 
         /// <summary>
@@ -88,6 +90,7 @@ namespace ButlerQuest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            anim.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -177,6 +180,7 @@ namespace ButlerQuest
             Matrix cameraMatrix = Matrix.CreateTranslation(-(int)viewport.X, -(int)viewport.Y, 0);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cameraMatrix);
             test.Draw(viewport, 0);
+            anim.Draw(spriteBatch, new Rectangle(0, 0, 32, 32));
             spriteBatch.Draw(targettx, target, Color.White);
             spriteBatch.Draw(playertx, player, Color.White);
             spriteBatch.End();

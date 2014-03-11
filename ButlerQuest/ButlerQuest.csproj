@@ -35,14 +35,18 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Animation.cs" />
     <Compile Include="AStar.cs" />
     <Compile Include="Commands\CommandMove.cs" />
     <Compile Include="Commands\CommandWait.cs" />
     <Compile Include="Data Structures.cs" />
+    <Compile Include="DrawableGameObject.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="IEnemy.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="MoveableGameObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
