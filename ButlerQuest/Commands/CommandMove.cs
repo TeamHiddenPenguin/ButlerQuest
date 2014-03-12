@@ -14,35 +14,36 @@ namespace ButlerQuest
             set;
         }
 
-        IEnemy reference;
+        Enemy reference;
         Vector2 speed;
         Vector2 endPosition;
-        public CommandMove(Vector2 endPosition, IEnemy reference)
+        public CommandMove(Vector2 endPosition, Enemy reference)
         {
             this.reference = reference;
-            Vector2 startPosition = new Vector2(reference.Location.X, reference.Location.Y);
+            Vector2 startPosition = new Vector2(reference.location.X, reference.location.Y);
             this.endPosition = endPosition;
-            speed = Vector2.Normalize((endPosition - startPosition)) * reference.Velocity;
+            speed = Vector2.Normalize((endPosition - startPosition)) * reference.velocity;
         }
 
         public void Update(GameTime gameTime)
         {
+            reference.Move(speed);
             if (speed.X >= 0)
             {
                 if (speed.Y >= 0)
                 {
-                    if ((reference.Location + speed).X > endPosition.X && (reference.Location + speed).Y > endPosition.Y)
+                    if (reference.location.X > endPosition.X && reference.location.Y > endPosition.Y)
                     {
                         IsFinished = true;
-                        return;
+                        reference.location = endPosition;
                     }
                 }
                 else
                 {
-                    if ((reference.Location + speed).X > endPosition.X && (reference.Location + speed).Y < endPosition.Y)
+                    if (reference.location.X > endPosition.X && reference.location.Y < endPosition.Y)
                     {
                         IsFinished = true;
-                        return;
+                        reference.location = endPosition;
                     }
                 }
             }
@@ -50,22 +51,21 @@ namespace ButlerQuest
             {
                 if (speed.Y >= 0)
                 {
-                    if ((reference.Location + speed).X < endPosition.X && (reference.Location + speed).Y > endPosition.Y)
+                    if (reference.location.X < endPosition.X && reference.location.Y > endPosition.Y)
                     {
                         IsFinished = true;
-                        return;
+                        reference.location = endPosition;
                     }
                 }
                 else
                 {
-                    if ((reference.Location + speed).X < endPosition.X && (reference.Location + speed).Y < endPosition.Y)
+                    if (reference.location.X < endPosition.X && reference.location.Y < endPosition.Y)
                     {
                         IsFinished = true;
-                        return;
+                        reference.location = endPosition;
                     }
                 }
             }
-            reference.Move(speed);
         }
     }
 }
