@@ -40,13 +40,13 @@
     <Compile Include="Commands\CommandMove.cs" />
     <Compile Include="Commands\CommandWait.cs" />
     <Compile Include="Data Structures.cs" />
-    <Compile Include="DrawableGameObject.cs" />
-    <Compile Include="Enemy.cs" />
+    <Compile Include="GameObject Hierarchy\DrawableGameObject.cs" />
+    <Compile Include="GameObject Hierarchy\Enemy.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="GameObject.cs" />
+    <Compile Include="GameObject Hierarchy\GameObject.cs" />
     <Compile Include="Map.cs" />
-    <Compile Include="MoveableGameObject.cs" />
+    <Compile Include="GameObject Hierarchy\MovableGameObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
