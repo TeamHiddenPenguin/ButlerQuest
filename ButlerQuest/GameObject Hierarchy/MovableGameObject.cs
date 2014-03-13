@@ -16,10 +16,12 @@ namespace ButlerQuest
 
 
         // methods
-        // moves the object based on it's velocity
-        public void Move(Vector2 speed)
+        // moves the object based on it's velocity and the direction given.
+        public void Move(Vector2 direction)
         {
-            location += velocity;
+            Vector2 dirUnit; // Vector2 to hold the unit vector of the direction given.
+            Vector2.Normalize(ref direction, out dirUnit); // normalizes the direction vector and stores it in dirUnit.
+            location = location + (velocity * dirUnit);
         } 
     }
 }
