@@ -35,10 +35,13 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\AIManager.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="AStar.cs" />
     <Compile Include="Commands\CommandMove.cs" />
     <Compile Include="Commands\CommandWait.cs" />
+    <Compile Include="Commands\GetNextSetCommand.cs" />
+    <Compile Include="Commands\WaitForNextCommand.cs" />
     <Compile Include="Data Structures.cs" />
     <Compile Include="GameObject Hierarchy\DrawableGameObject.cs" />
     <Compile Include="GameObject Hierarchy\Enemy.cs" />

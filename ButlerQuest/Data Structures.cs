@@ -75,9 +75,9 @@ namespace ButlerQuest
 
                 return returnable;
             }
-            //Otherwise throw an Exception
+            //Otherwise return the default value of our generic value type
             else
-                throw new KeyNotFoundException("No values exist at this priority");
+                return default(TValue);
         }
 
         /// <summary>
@@ -105,9 +105,9 @@ namespace ButlerQuest
 
                 return returnable;
             }
-            //Otherwise throw errors
+            //Otherwise return the default value
             else
-                throw new WTFException("The PriorityQueue is empty");
+                return default(TValue);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace ButlerQuest
                 return pair.Value.Peek();
             }
             else
-                throw new WTFException("The PriorityQueue is empty");
+                return default(TValue);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace ButlerQuest
             if (storage.ContainsKey(priority))
                 return storage[priority].Peek();
             else
-                throw new KeyNotFoundException("No values exist at this priority");
+                return default(TValue);
         }
 
         /// <summary>
@@ -153,9 +153,9 @@ namespace ButlerQuest
                 storage.Remove(priority);
                 return returnable;
             }
-            //Otherwise, exceptions!
+            //Otherwise, return null
             else
-                throw new KeyNotFoundException("No values exist at this priority");
+                return default(Queue<TValue>);
         }
 
         /// <summary>
