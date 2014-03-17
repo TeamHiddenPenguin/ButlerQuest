@@ -40,9 +40,9 @@ namespace ButlerQuest
             sprites[currentAnimation].Draw(spriteBatch, rectangle);
         }
 
-        public virtual void Update() // updates the current animation
+        public virtual void Update(GameTime gameTime) // updates the current animation
         {
-
+            sprites[currentAnimation].Update();
         }
     }
 }

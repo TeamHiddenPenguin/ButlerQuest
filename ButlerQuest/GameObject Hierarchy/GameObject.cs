@@ -16,7 +16,7 @@ namespace ButlerQuest
         // methods
 
         // sorry if this has too many if statements.
-        Boolean IsColliding(GameObject otherObject, out string collisionSide) // checks if the current GameObject is colliding with the GameObject given in the parameters, based on their Rectangles.
+        public int CollisionSide(GameObject otherObject) // checks if the current GameObject is colliding with the GameObject given in the parameters, based on their Rectangles.
         {
             if (this.rectangle.Intersects(otherObject.rectangle)) // checks to see if the rectangles collide at all.
             {
@@ -24,38 +24,36 @@ namespace ButlerQuest
                 {
                     if (this.rectangle.Y > otherObject.rectangle.Y) // does not collide at this.rectangle.Left
                     {
-                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) collisionSide = "Bottom"; // more of rectangle.Bottom is colliding than rectangle.Right
+                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) return 2; // more of rectangle.Bottom is colliding than rectangle.Right
 
-                        else collisionSide = "Right"; // more of rectangle.Right is colliding than rectangle.Bottom.
+                        else return 1; // more of rectangle.Right is colliding than rectangle.Bottom.
                     }
                     else // does not collide at this.rectangle.Right
                     {
-                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) collisionSide = ""; // more of rectangle.Bottom is colliding than rectangle.Left
+                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) return 2; // more of rectangle.Bottom is colliding than rectangle.Left
 
-                        else collisionSide = "Left"; // more of rectangle.Left is colliding than rectangle.Bottom.
+                        return 3; // more of rectangle.Left is colliding than rectangle.Bottom.
                     }
                 }
                 else // does not collide at this.rectangle.Bottom
                 {
                     if (this.rectangle.Y > otherObject.rectangle.Y) // does not collide at this.rectangle.Left
                     {
-                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) collisionSide = "Top"; // more of rectangle.Top is colliding than rectangle.Right
+                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) return 0; // more of rectangle.Top is colliding than rectangle.Right
 
-                        else collisionSide = "Right"; // more of rectangle.Right is colliding than rectangle.Top.
+                        return 1; // more of rectangle.Right is colliding than rectangle.Top.
                     }
                     else // does not collide at this.rectangle.Right
                     {
-                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) collisionSide = "Top"; // more of rectangle.Top is colliding than rectangle.Left
+                        if ((this.rectangle.X - otherObject.rectangle.X) > (this.rectangle.Y - otherObject.rectangle.Y)) return 0; // more of rectangle.Top is colliding than rectangle.Left
 
-                        else collisionSide = "Left"; // more of rectangle.Left is colliding than rectangle.Top.
+                        return 3; // more of rectangle.Left is colliding than rectangle.Top.
                     }
                 }
-                return true;
             }
             else // does not collide, therefore collisionSide is null.
             {
-                collisionSide = "";
-                return false;
+                return -1;
             }
         }
     }

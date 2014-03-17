@@ -23,12 +23,14 @@ namespace ButlerQuest
                 currentCommand = new GetNextCommandSet(this, int.MaxValue);
         }
 
-        public virtual override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             if (currentCommand.IsFinished)
                 ChangeCommand();
 
-            //TODO: Add update code in here
+            
             currentCommand.Update(gameTime);
         }
     }
