@@ -270,6 +270,14 @@ namespace ButlerQuest
 
                 if (down != null)
                     node.Neighbors.Add(down);
+
+                if (node.HasConnectionUpwards)
+                    if ((tempNode = nodes.Find(x => x.X == node.X && x.Y == node.Y && x.Z == node.Z + 1)) != null)
+                        node.Neighbors.Add(tempNode);
+
+                if (node.HasConnectionUpwards)
+                    if ((tempNode = nodes.Find(x => x.X == node.X && x.Y == node.Y && x.Z == node.Z - 1)) != null)
+                        node.Neighbors.Add(tempNode);
             }
         }
 

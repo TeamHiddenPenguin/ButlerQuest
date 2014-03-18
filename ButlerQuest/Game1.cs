@@ -23,12 +23,11 @@ namespace ButlerQuest
         KeyboardState oldState = new KeyboardState();
         Map test;
         Rectangle viewport;
-        Vector2 target;
-        Vector2 player;
-        Vector2 lastNodeLoc;
+        Vector3 target;
+        Vector3 player;
+        Vector3 lastNodeLoc;
         Texture2D playertx;
         Texture2D targettx;
-        Animation anim;
         Path<SquareGraphNode> path;
 
         public Game1()
@@ -55,10 +54,10 @@ namespace ButlerQuest
             spriteBatch = new SpriteBatch(GraphicsDevice);
             viewport = new Rectangle(0, 0, 1200, 720);
             test = new Map("Content\\AstarTest.tmx", GraphicsDevice, spriteBatch);
-            player = new Vector2(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y);
+            player = new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y,0);
             lastNodeLoc = player;
-            target = new Vector2(test.ObjectGroups["Target"][0].X, test.ObjectGroups["Target"][0].Y);
-            path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, 0), test.Graph.GetNode((int)player.X, (int)player.Y, 0), AStar.ManhattanDistance, null);
+            target = new Vector3(test.ObjectGroups["Target"][0].X, test.ObjectGroups["Target"][0].Y,1);
+            path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, (int)target.Z), test.Graph.GetNode((int)player.X, (int)player.Y, (int)player.Z), AStar.ManhattanDistance, null);
             base.Initialize();
         }
 
@@ -71,7 +70,6 @@ namespace ButlerQuest
             // TODO: use this.Content to load your game content here
             playertx = Content.Load<Texture2D>("player.png");
             targettx = Content.Load<Texture2D>("target.png");
-            anim = new Animation(0, 2, 32, 32, 1, 3, 10, Content.Load<Texture2D>("tiles.png"));
         }
 
         /// <summary>
@@ -90,7 +88,6 @@ namespace ButlerQuest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            anim.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -133,16 +130,17 @@ namespace ButlerQuest
 
             if (path != null)
             {
-                Vector2 pathLoc = new Vector2(path.LastStep.X * 32, path.LastStep.Y * 32);
+                Vector3 pathLoc = new Vector3(path.LastStep.X * 32, path.LastStep.Y * 32, path.LastStep.Z);
                 player.X = player.X + .05f * (pathLoc.X - lastNodeLoc.X);
                 player.Y = player.Y + .05f * (pathLoc.Y - lastNodeLoc.Y);
+                player.Z = player.Z + .05f * (pathLoc.Z - lastNodeLoc.Z);
 
-                if (Math.Abs(player.X - pathLoc.X) < 1 && Math.Abs(player.Y - pathLoc.Y) < 1)
+                if (Math.Abs(player.X - pathLoc.X) < 1 && Math.Abs(player.Y - pathLoc.Y) < 1 && Math.Abs(player.Z - pathLoc.Z) < .1f)
                 {
                     player = pathLoc;
                     try
                     {
-                        path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, 0), test.Graph.GetNode((int)player.X, (int)player.Y, 0), AStar.ManhattanDistance, null);
+                        path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, (int)target.Z), test.Graph.GetNode((int)player.X, (int)player.Y, (int)target.Z), AStar.ManhattanDistance, null);
                     }
                     catch(Exception e)
                     {
@@ -157,7 +155,7 @@ namespace ButlerQuest
                 //If we are out of path, try to path again
                 try
                 {
-                    path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, 0), test.Graph.GetNode((int)player.X, (int)player.Y, 0), AStar.ManhattanDistance, null);
+                    path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, (int)target.Z), test.Graph.GetNode((int)player.X, (int)player.Y, (int)player.Z), AStar.ManhattanDistance, null);
                 }
                 catch (Exception e)
                 {
@@ -180,9 +178,13 @@ namespace ButlerQuest
             Matrix cameraMatrix = Matrix.CreateTranslation(-(int)viewport.X, -(int)viewport.Y, 0);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cameraMatrix);
             test.Draw(viewport, 0);
-            anim.Draw(spriteBatch, new Rectangle(0, 0, 32, 32));
-            spriteBatch.Draw(targettx, target, Color.White);
-            spriteBatch.Draw(playertx, player, Color.White);
+            if(player.Z < .9f)
+                spriteBatch.Draw(playertx, new Vector2(player.X, player.Y), Color.White);
+            test.Draw(viewport, 1);
+            if(player.Z >.89f)
+                spriteBatch.Draw(playertx, new Vector2(player.X, player.Y), Color.White);
+            spriteBatch.Draw(targettx, new Vector2(target.X, target.Y), Color.White);
+            
             spriteBatch.End();
             base.Draw(gameTime);
         }
