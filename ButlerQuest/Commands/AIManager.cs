@@ -22,7 +22,7 @@ namespace ButlerQuest
         //private Level level;
         private SquareGraph graph;
         public PriorityQueue<int, Enemy> enemiesToPath;
-        private Vector2 lastKnownPlayerLoc;
+        private Vector3 lastKnownPlayerLoc;
         int frequencyFactor;
         public static AIManager SharedAIManager
         {
@@ -88,20 +88,20 @@ namespace ButlerQuest
             }
         }
 
-        private Queue<ICommand> BuildPath(Vector2 start, Vector2 end, Enemy reference, int commandsToCopy)
+        private Queue<ICommand> BuildPath(Vector3 start, Vector3 end, Enemy reference, int commandsToCopy)
         {
             Queue<ICommand> retQueue = new Queue<ICommand>();
             Path<SquareGraphNode> path = AStar.FindPath<SquareGraphNode>(graph.GetNode((int)end.X, (int)end.Y, 0), graph.GetNode((int)start.X, (int)start.Y, 0), AStar.ManhattanDistance, null);
             while (path != null || commandsToCopy > 0)
             {
-                retQueue.Enqueue(new CommandMove(new Vector2(path.LastStep.X, path.LastStep.Y), reference));
+                retQueue.Enqueue(new CommandMove(new Vector3(path.LastStep.X, path.LastStep.Y, path.LastStep.Z), reference));
                 path = path.PreviousSteps;
                 commandsToCopy--;
             }
             retQueue.Enqueue(new GetNextCommandSet(reference, path.LastStep.Cost));
             while (path != null)
             {
-                retQueue.Enqueue(new CommandMove(new Vector2(path.LastStep.X, path.LastStep.Y), reference));
+                retQueue.Enqueue(new CommandMove(new Vector3(path.LastStep.X, path.LastStep.Y, path.LastStep.Z), reference));
                 path = path.PreviousSteps;
             }
             retQueue.Enqueue(new WaitForNextCommand(reference));

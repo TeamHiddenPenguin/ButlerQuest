@@ -10,7 +10,7 @@ namespace ButlerQuest
     {
         //AIState can be found in AIManager
         public AI_STATE state = AI_STATE.UNAWARE;
-        public Vector2 startLocation;
+        public Vector3 startLocation;
         public ICommand currentCommand;
         public Queue<ICommand> defaultCommands;
         public Queue<ICommand> commandQueue;

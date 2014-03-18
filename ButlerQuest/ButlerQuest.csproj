@@ -43,9 +43,9 @@
     <Compile Include="Commands\GetNextSetCommand.cs" />
     <Compile Include="Commands\WaitForNextCommand.cs" />
     <Compile Include="Data Structures.cs" />
+    <Compile Include="Game1.cs" />
     <Compile Include="GameObject Hierarchy\DrawableGameObject.cs" />
     <Compile Include="GameObject Hierarchy\Enemy.cs" />
-    <Compile Include="Game1.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="GameObject Hierarchy\GameObject.cs" />
     <Compile Include="Map.cs" />
@@ -89,7 +89,6 @@
     </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\AstarTest.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

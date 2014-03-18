@@ -15,14 +15,14 @@ namespace ButlerQuest
         }
 
         Enemy reference;
-        Vector2 speed;
-        Vector2 endPosition;
-        public CommandMove(Vector2 endPosition, Enemy reference)
+        Vector3 speed;
+        Vector3 endPosition;
+        public CommandMove(Vector3 endPosition, Enemy reference)
         {
             this.reference = reference;
-            Vector2 startPosition = new Vector2(reference.location.X, reference.location.Y);
+            Vector3 startPosition = new Vector3(reference.location.X, reference.location.Y, reference.location.Z);
             this.endPosition = endPosition;
-            speed = Vector2.Normalize((endPosition - startPosition)) * reference.velocity;
+            speed = Vector3.Normalize((endPosition - startPosition)) * reference.velocity;
         }
 
         public void Update(GameTime gameTime)
