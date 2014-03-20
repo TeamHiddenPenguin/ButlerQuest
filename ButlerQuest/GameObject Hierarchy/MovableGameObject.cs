@@ -14,6 +14,12 @@ namespace ButlerQuest
         // attributes
         public Vector3 velocity;// amount the object moves in a single move method
 
+        // constructor
+        protected MovableGameObject(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
+            : base(animations, names, loc, rect)
+        {
+            velocity = vel;
+        }
 
         // methods
         // moves the object based on it's velocity and the direction given.
@@ -22,6 +28,8 @@ namespace ButlerQuest
             Vector3 dirUnit; // Vector2 to hold the unit vector of the direction given.
             Vector3.Normalize(ref direction, out dirUnit); // normalizes the direction vector and stores it in dirUnit.
             location = location + (velocity * dirUnit);
+            rectangle.X = (int)location.X;
+            rectangle.Y = (int)location.Y;
         } 
     }
 }

@@ -23,8 +23,9 @@ namespace ButlerQuest
         KeyboardState oldState = new KeyboardState();
         Map test;
         Rectangle viewport;
-        Vector3 target;
-        Vector3 player;
+        Enemy target;
+        Enemy player;
+        Enemy colTest;
         Vector3 lastNodeLoc;
         Texture2D playertx;
         Texture2D targettx;
@@ -54,10 +55,11 @@ namespace ButlerQuest
             spriteBatch = new SpriteBatch(GraphicsDevice);
             viewport = new Rectangle(0, 0, 1200, 720);
             test = new Map("Content\\AstarTest.tmx", GraphicsDevice, spriteBatch);
-            player = new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y,0);
-            lastNodeLoc = player;
-            target = new Vector3(test.ObjectGroups["Target"][0].X, test.ObjectGroups["Target"][0].Y,1);
-            path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, (int)target.Z), test.Graph.GetNode((int)player.X, (int)player.Y, (int)player.Z), AStar.ManhattanDistance, null);
+            player = new Enemy(Vector3.Zero, null, null, new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y, 0), new Rectangle(0, 0, 32, 32));
+            lastNodeLoc = player.location;
+            target = new Enemy(new Vector3(6,6,1), null, null, new Vector3(test.ObjectGroups["Target"][0].X, test.ObjectGroups["Target"][0].Y, 1), new Rectangle(0, 0, 32, 32));
+            colTest = new Enemy(new Vector3(6,6,1), null, null, new Vector3(100, 100, 1), new Rectangle(100, 100, 32, 32));
+            path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)player.location.Z), AStar.ManhattanDistance, null);
             base.Initialize();
         }
 
@@ -96,19 +98,19 @@ namespace ButlerQuest
 
             if (kState.IsKeyDown(Keys.W))
             {
-                target.Y -= 6;
+                target.Move(new Vector3(0, -6, 0));
             }
             if (kState.IsKeyDown(Keys.A))
             {
-                target.X -= 6;
+                target.Move(new Vector3(-6, 0, 0));
             }
             if (kState.IsKeyDown(Keys.S))
             {
-                target.Y += 6;
+                target.Move(new Vector3(0, 6, 0));
             }
             if (kState.IsKeyDown(Keys.D))
             {
-                target.X += 6;
+                target.Move(new Vector3(6, 0, 0));
             }
             if(kState.IsKeyDown(Keys.Up))
             {
@@ -131,23 +133,23 @@ namespace ButlerQuest
             if (path != null)
             {
                 Vector3 pathLoc = new Vector3(path.LastStep.X * 32, path.LastStep.Y * 32, path.LastStep.Z);
-                player.X = player.X + .05f * (pathLoc.X - lastNodeLoc.X);
-                player.Y = player.Y + .05f * (pathLoc.Y - lastNodeLoc.Y);
-                player.Z = player.Z + .05f * (pathLoc.Z - lastNodeLoc.Z);
+                player.location.X = player.location.X + .05f * (pathLoc.X - lastNodeLoc.X);
+                player.location.Y = player.location.Y + .05f * (pathLoc.Y - lastNodeLoc.Y);
+                player.location.Z = player.location.Z + .05f * (pathLoc.Z - lastNodeLoc.Z);
 
-                if (Math.Abs(player.X - pathLoc.X) < 1 && Math.Abs(player.Y - pathLoc.Y) < 1 && Math.Abs(player.Z - pathLoc.Z) < .1f)
+                if (Math.Abs(player.location.X - pathLoc.X) < 1 && Math.Abs(player.location.Y - pathLoc.Y) < 1 && Math.Abs(player.location.Z - pathLoc.Z) < .1f)
                 {
-                    player = pathLoc;
+                    player.location = pathLoc;
                     try
                     {
-                        path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, (int)target.Z), test.Graph.GetNode((int)player.X, (int)player.Y, (int)target.Z), AStar.ManhattanDistance, null);
+                        path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)target.location.Z), AStar.ManhattanDistance, null);
                     }
                     catch(Exception e)
                     {
                         //If for some reason the pathfinding fails, just continue along the current path until we can path again
                     }
                     path = path.PreviousSteps;
-                    lastNodeLoc = player;
+                    lastNodeLoc = player.location;
                     
                 }
             }
@@ -155,7 +157,7 @@ namespace ButlerQuest
                 //If we are out of path, try to path again
                 try
                 {
-                    path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.X, (int)target.Y, (int)target.Z), test.Graph.GetNode((int)player.X, (int)player.Y, (int)player.Z), AStar.ManhattanDistance, null);
+                    path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)player.location.Z), AStar.ManhattanDistance, null);
                 }
                 catch (Exception e)
                 {
@@ -178,13 +180,13 @@ namespace ButlerQuest
             Matrix cameraMatrix = Matrix.CreateTranslation(-(int)viewport.X, -(int)viewport.Y, 0);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cameraMatrix);
             test.Draw(viewport, 0);
-            if(player.Z < .9f)
-                spriteBatch.Draw(playertx, new Vector2(player.X, player.Y), Color.White);
+            if(player.location.Z < .9f)
+                spriteBatch.Draw(playertx, new Vector2(player.location.X, player.location.Y), Color.White);
             test.Draw(viewport, 1);
-            if(player.Z >.89f)
-                spriteBatch.Draw(playertx, new Vector2(player.X, player.Y), Color.White);
-            spriteBatch.Draw(targettx, new Vector2(target.X, target.Y), Color.White);
-            
+            if(player.location.Z >.89f)
+                spriteBatch.Draw(playertx, new Vector2(player.location.X, player.location.Y), Color.White);
+            spriteBatch.Draw(targettx, new Vector2(target.location.X, target.location.Y), Color.White);
+            spriteBatch.Draw(playertx, colTest.rectangle, Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }

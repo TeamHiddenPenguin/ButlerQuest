@@ -15,6 +15,13 @@ namespace ButlerQuest
         public Queue<ICommand> defaultCommands;
         public Queue<ICommand> commandQueue;
 
+        // constructor
+        public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
+            : base(vel, animations, names, loc, rect)
+        {
+
+        }
+
         public void ChangeCommand()
         {
             if (commandQueue.Peek() != null)

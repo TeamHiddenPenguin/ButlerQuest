@@ -32,7 +32,16 @@ namespace ButlerQuest
         }
 
         // constructor
-        //DrawableGameObject(Animation[] animations, string[] names);
+        protected DrawableGameObject(Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
+            : base(loc, rect)
+        {
+            sprites = new Dictionary<string, Animation>();
+
+            /*for (int i = 0; i < names.Length; i++)
+            {
+                sprites.Add(names[i], animations[i]);
+            }*/
+        }
 
         // methods
         void Draw(SpriteBatch spriteBatch) // draws the current animation
