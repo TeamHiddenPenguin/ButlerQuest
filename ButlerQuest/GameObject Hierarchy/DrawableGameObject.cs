@@ -44,7 +44,7 @@ namespace ButlerQuest
         }
 
         // methods
-        void Draw(SpriteBatch spriteBatch) // draws the current animation
+        public void Draw(SpriteBatch spriteBatch) // draws the current animation
         {
             sprites[currentAnimation].Draw(spriteBatch, rectangle);
         }
