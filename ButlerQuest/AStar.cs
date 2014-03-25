@@ -10,12 +10,12 @@ namespace ButlerQuest
 {
     class AStar
     {
-        static public Path<Node> FindPath<Node>(
+        /*static public Path<Node> FindPath<Node>(
     Node start,
     Node destination,
     Func<Node, Node, double> distance,
     Func<Node, double> estimate)
-    where Node : IGraphNode
+    where Node : SquareGraphNode
         {
             if (estimate == null)
                 estimate = n => distance(n, destination);
@@ -39,6 +39,43 @@ namespace ButlerQuest
                 }
             }
             return null;
+        }*/
+
+        public static List<SquareGraphNode> FindPath(SquareGraphNode start, SquareGraphNode end, Func<SquareGraphNode, SquareGraphNode, double> distance, Func<SquareGraphNode, SquareGraphNode, double> estimate)
+        {
+            HashSet<SquareGraphNode> closedSet = new HashSet<SquareGraphNode>();
+            PriorityQueue<double, List<SquareGraphNode>> queue = new PriorityQueue<double, List<SquareGraphNode>>();
+            var initialPath = new List<SquareGraphNode>();
+            initialPath.Add(start);
+            queue.Enqueue(0, initialPath);
+            while (!queue.IsEmpty)
+            {
+                var path = queue.Dequeue();
+                var currentNode = path.Last();
+                if (closedSet.Contains(currentNode))
+                    continue;
+                if (currentNode.Equals(end))
+                    return path;
+                closedSet.Add(currentNode);
+                foreach (var node in currentNode.Neighbors)
+                {
+                    double d = distance(currentNode, node);
+                    var newPath = new List<SquareGraphNode>(path);
+                    newPath.Add(node);
+                    queue.Enqueue(CalculatePathCost(path) + d + estimate(node, end), newPath);
+                }
+            }
+            return null;
+        }
+
+        public static int CalculatePathCost(List<SquareGraphNode> list)
+        {
+            int totalCost = 0;
+            foreach (var node in list)
+            {
+                totalCost += node.Cost;
+            }
+            return totalCost;
         }
 
         public static double ManhattanDistance(SquareGraphNode start, SquareGraphNode end)

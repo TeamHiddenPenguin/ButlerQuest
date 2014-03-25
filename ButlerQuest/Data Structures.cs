@@ -165,18 +165,19 @@ namespace ButlerQuest
         {
             get { return storage.Count == 0; }
         }
+
+        public bool Contains(TValue thing)
+        {
+            foreach (var prio in storage.Values)
+            {
+                if (prio.Contains(thing))
+                    return true;
+            }
+            return false;
+        }
     }
 
-
-    /*
-     * A graph node interface meant to work with a pathfinding algorithm
-     */
-    interface IGraphNode
-    {
-        int Cost { get; set; }
-        List<IGraphNode> Neighbors { get; set; }
-    }
-    class SquareGraphNode : IGraphNode
+    class SquareGraphNode
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -186,7 +187,7 @@ namespace ButlerQuest
         public bool HasConnectionDownwards { get; set; }
 
         public int Cost { get; set; }
-        public List<IGraphNode> Neighbors { get; set; }
+        public List<SquareGraphNode> Neighbors { get; set; }
 
         public SquareGraphNode(int x, int y, int z, int cost)
         {
@@ -196,7 +197,7 @@ namespace ButlerQuest
             Cost = cost;
             HasConnectionDownwards = false;
             HasConnectionUpwards = false;
-            Neighbors = new List<IGraphNode>();
+            Neighbors = new List<SquareGraphNode>();
         }
     }
     class SquareGraph
@@ -271,7 +272,7 @@ namespace ButlerQuest
                 if (down != null)
                     node.Neighbors.Add(down);
 
-                if (node.HasConnectionUpwards)
+                if (node.HasConnectionDownwards)
                     if ((tempNode = nodes.Find(x => x.X == node.X && x.Y == node.Y && x.Z == node.Z + 1)) != null)
                         node.Neighbors.Add(tempNode);
 

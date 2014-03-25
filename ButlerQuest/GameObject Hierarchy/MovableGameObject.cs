@@ -26,7 +26,7 @@ namespace ButlerQuest
         public void Move(Vector3 direction)
         {
             Vector3 dirUnit; // Vector2 to hold the unit vector of the direction given.
-            Vector3.Normalize(ref direction, out dirUnit); // normalizes the direction vector and stores it in dirUnit.
+            dirUnit = Vector3.Normalize(direction); // normalizes the direction vector and stores it in dirUnit.
             location = location + (velocity * dirUnit);
             rectangle.X = (int)location.X;
             rectangle.Y = (int)location.Y;

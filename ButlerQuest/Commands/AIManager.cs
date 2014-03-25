@@ -18,12 +18,12 @@ namespace ButlerQuest
     class AIManager
     {
         static private AIManager sharedManager;
-        private Map map;
+        public Map map;
         //private Level level;
-        private SquareGraph graph;
+        public SquareGraph graph;
         public PriorityQueue<int, Enemy> enemiesToPath;
-        private Vector3 lastKnownPlayerLoc;
-        int frequencyFactor;
+        public Vector3 lastKnownPlayerLoc;
+        public int frequencyFactor = 10;
         public static AIManager SharedAIManager
         {
             get
@@ -82,7 +82,7 @@ namespace ButlerQuest
                         //DO LATER THIS IS GONNA BE HARD
                     case AI_STATE.PURSUIT:
                         //build the path, factoring in the distance between the current location and the last known player location. FrequencyFactor determines how quickly we should poll for input.
-                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, ((int)(Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y)) / frequencyFactor) + 1);
+                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, (int)Math.Ceiling(((Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y))/ 32 / frequencyFactor)));
                         break;
                 }
             }
@@ -90,21 +90,20 @@ namespace ButlerQuest
 
         private Queue<ICommand> BuildPath(Vector3 start, Vector3 end, Enemy reference, int commandsToCopy)
         {
+            List<SquareGraphNode> path = AStar.FindPath(graph.GetNode((int)start.X, (int)start.Y, (int)start.Z), graph.GetNode((int)end.X, (int)end.Y, (int)end.Z), AStar.ManhattanDistance, AStar.ManhattanDistance);
+            List<ICommand> translationList = new List<ICommand>();
+            foreach (var item in path)
+            {
+                translationList.Add(new CommandMove(new Vector3(item.X * 32, item.Y * 32, item.Z), reference));
+            }
+            translationList.Insert(commandsToCopy, new GetNextCommandSet(reference, path[commandsToCopy].Cost));
+            translationList.Add(new WaitForNextCommand(reference));
+
             Queue<ICommand> retQueue = new Queue<ICommand>();
-            Path<SquareGraphNode> path = AStar.FindPath<SquareGraphNode>(graph.GetNode((int)end.X, (int)end.Y, 0), graph.GetNode((int)start.X, (int)start.Y, 0), AStar.ManhattanDistance, null);
-            while (path != null || commandsToCopy > 0)
+            foreach (var item in translationList)
             {
-                retQueue.Enqueue(new CommandMove(new Vector3(path.LastStep.X, path.LastStep.Y, path.LastStep.Z), reference));
-                path = path.PreviousSteps;
-                commandsToCopy--;
+                retQueue.Enqueue(item);
             }
-            retQueue.Enqueue(new GetNextCommandSet(reference, path.LastStep.Cost));
-            while (path != null)
-            {
-                retQueue.Enqueue(new CommandMove(new Vector3(path.LastStep.X, path.LastStep.Y, path.LastStep.Z), reference));
-                path = path.PreviousSteps;
-            }
-            retQueue.Enqueue(new WaitForNextCommand(reference));
             return retQueue;
         }
     }

@@ -55,11 +55,13 @@ namespace ButlerQuest
             spriteBatch = new SpriteBatch(GraphicsDevice);
             viewport = new Rectangle(0, 0, 1200, 720);
             test = new Map("Content\\AstarTest.tmx", GraphicsDevice, spriteBatch);
-            player = new Enemy(Vector3.Zero, null, null, new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y, 0), new Rectangle(0, 0, 32, 32));
+            player = new Enemy(new Vector3(1, 1, 1), null, null, new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y, 0), new Rectangle(0, 0, 32, 32));
             lastNodeLoc = player.location;
             target = new Enemy(new Vector3(6,6,1), null, null, new Vector3(test.ObjectGroups["Target"][0].X, test.ObjectGroups["Target"][0].Y, 1), new Rectangle(0, 0, 32, 32));
             colTest = new Enemy(new Vector3(6,6,1), null, null, new Vector3(100, 100, 1), new Rectangle(100, 100, 32, 32));
-            path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)player.location.Z), AStar.ManhattanDistance, null);
+            player.state = AI_STATE.PURSUIT;
+            AIManager.SharedAIManager.graph = test.Graph;
+            //path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)player.location.Z), AStar.ManhattanDistance, null);
             base.Initialize();
         }
 
@@ -128,9 +130,13 @@ namespace ButlerQuest
             {
                 viewport.X += 6;
             }
-
-
-            if (path != null)
+            player.Update(gameTime);
+            AIManager.SharedAIManager.lastKnownPlayerLoc = target.location;
+            while (!AIManager.SharedAIManager.enemiesToPath.IsEmpty)
+            {
+                AIManager.SharedAIManager.ExecuteCommandsAsync();
+            }
+            /*if (path != null)
             {
                 Vector3 pathLoc = new Vector3(path.LastStep.X * 32, path.LastStep.Y * 32, path.LastStep.Z);
                 player.location.X = player.location.X + .05f * (pathLoc.X - lastNodeLoc.X);
@@ -162,7 +168,7 @@ namespace ButlerQuest
                 catch (Exception e)
                 {
                     //If we are out of path and can't path, then just sit in place until we can path again.
-                }
+                }*/
 
             
             base.Update(gameTime);
@@ -186,7 +192,7 @@ namespace ButlerQuest
             if(player.location.Z >.89f)
                 spriteBatch.Draw(playertx, new Vector2(player.location.X, player.location.Y), Color.White);
             spriteBatch.Draw(targettx, new Vector2(target.location.X, target.location.Y), Color.White);
-            spriteBatch.Draw(playertx, colTest.rectangle, Color.White);
+            //spriteBatch.Draw(playertx, colTest.rectangle, Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }

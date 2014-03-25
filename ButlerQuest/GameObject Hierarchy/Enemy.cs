@@ -19,12 +19,13 @@ namespace ButlerQuest
         public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
             : base(vel, animations, names, loc, rect)
         {
-
+            commandQueue = new Queue<ICommand>();
+            defaultCommands = new Queue<ICommand>();
         }
 
         public void ChangeCommand()
         {
-            if (commandQueue.Peek() != null)
+            if (commandQueue.Count != 0 && commandQueue.Peek() != null)
                 currentCommand = commandQueue.Dequeue();
             else
                 currentCommand = new GetNextCommandSet(this, int.MaxValue);
@@ -32,9 +33,9 @@ namespace ButlerQuest
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            //base.Update(gameTime);
 
-            if (currentCommand.IsFinished)
+            if (currentCommand == null || currentCommand.IsFinished)
                 ChangeCommand();
 
             

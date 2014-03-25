@@ -13,15 +13,20 @@ namespace ButlerQuest
             set;
         }
         Enemy reference;
+        int lastDistance;
         public GetNextCommandSet(Enemy reference, int lastDistance)
         {
             this.reference = reference;
-            AIManager.SharedAIManager.enemiesToPath.Enqueue(lastDistance, reference);
+            this.lastDistance = lastDistance;
         }
 
         public void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
-            if (reference.commandQueue.Peek() != null)
+            if (!AIManager.SharedAIManager.enemiesToPath.Contains(reference))
+            {
+                AIManager.SharedAIManager.enemiesToPath.Enqueue(lastDistance, reference);
+            }
+            if (reference.commandQueue.Count != 0 && reference.commandQueue.Peek() != null)
                 IsFinished = true;
         }
     }

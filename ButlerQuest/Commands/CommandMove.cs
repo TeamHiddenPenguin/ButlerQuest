@@ -15,46 +15,54 @@ namespace ButlerQuest
         }
 
         Enemy reference;
-        Vector3 speed;
+        Vector3 direction;
         Vector3 endPosition;
         public CommandMove(Vector3 endPosition, Enemy reference)
         {
             this.reference = reference;
             Vector3 startPosition = new Vector3(reference.location.X, reference.location.Y, reference.location.Z);
             this.endPosition = endPosition;
-            speed = Vector3.Normalize((endPosition - startPosition)) * reference.velocity;
+            direction = endPosition - startPosition;
         }
 
         public void Update(GameTime gameTime)
         {
-            reference.Move(speed);
-            if (speed.X >= 0)
+            if (direction == Vector3.Zero)
             {
-                if (speed.Y >= 0)
+                IsFinished = true;
+                return;
+            }
+            reference.Move(direction);
+            if (direction.X >= 0)
+            {
+                if (direction.Y >= 0)
                 {
-                    if (reference.location.X > endPosition.X && reference.location.Y > endPosition.Y)
+                    if (reference.location.X >= endPosition.X && reference.location.Y >= endPosition.Y)
                     {
                         IsFinished = true;
                         reference.location = endPosition;
+                        return;
                     }
                 }
                 else
                 {
-                    if (reference.location.X > endPosition.X && reference.location.Y < endPosition.Y)
+                    if (reference.location.X >= endPosition.X && reference.location.Y < endPosition.Y)
                     {
                         IsFinished = true;
                         reference.location = endPosition;
+                        return;
                     }
                 }
             }
             else
             {
-                if (speed.Y >= 0)
+                if (direction.Y >= 0)
                 {
-                    if (reference.location.X < endPosition.X && reference.location.Y > endPosition.Y)
+                    if (reference.location.X < endPosition.X && reference.location.Y >= endPosition.Y)
                     {
                         IsFinished = true;
                         reference.location = endPosition;
+                        return;
                     }
                 }
                 else
@@ -63,6 +71,7 @@ namespace ButlerQuest
                     {
                         IsFinished = true;
                         reference.location = endPosition;
+                        return;
                     }
                 }
             }
