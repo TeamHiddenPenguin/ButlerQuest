@@ -18,6 +18,12 @@ namespace ButlerQuest
         {
             this.reference = reference;
             this.lastDistance = lastDistance;
+            Initialize();
+        }
+
+        public void Initialize()
+        {
+            IsFinished = false;
         }
 
         public void Update(Microsoft.Xna.Framework.GameTime gameTime)

@@ -15,5 +15,6 @@ namespace ButlerQuest
             set;
         }
         void Update(GameTime gameTime);
+        void Initialize();
     }
 }

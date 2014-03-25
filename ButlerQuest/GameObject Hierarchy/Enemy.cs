@@ -26,7 +26,10 @@ namespace ButlerQuest
         public void ChangeCommand()
         {
             if (commandQueue.Count != 0 && commandQueue.Peek() != null)
+            {
                 currentCommand = commandQueue.Dequeue();
+                currentCommand.Initialize();
+            }
             else
                 currentCommand = new GetNextCommandSet(this, int.MaxValue);
         }

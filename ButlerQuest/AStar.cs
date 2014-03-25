@@ -59,10 +59,10 @@ namespace ButlerQuest
                 closedSet.Add(currentNode);
                 foreach (var node in currentNode.Neighbors)
                 {
-                    double d = distance(currentNode, node);
+                    double dist = distance(currentNode, node);
                     var newPath = new List<SquareGraphNode>(path);
                     newPath.Add(node);
-                    queue.Enqueue(CalculatePathCost(path) + d + estimate(node, end), newPath);
+                    queue.Enqueue(CalculatePathCost(path) + dist + estimate(node, end), newPath);
                 }
             }
             return null;

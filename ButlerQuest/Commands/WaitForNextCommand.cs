@@ -20,6 +20,11 @@ namespace ButlerQuest
             this.reference = reference;
         }
 
+        public void Initialize()
+        {
+            IsFinished = false;
+        }
+
         public void Update(GameTime gameTime)
         {
             if (reference.commandQueue.Peek() != null)

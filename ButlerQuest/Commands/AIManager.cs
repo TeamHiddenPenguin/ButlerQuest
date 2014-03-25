@@ -23,7 +23,6 @@ namespace ButlerQuest
         public SquareGraph graph;
         public PriorityQueue<int, Enemy> enemiesToPath;
         public Vector3 lastKnownPlayerLoc;
-        public int frequencyFactor = 10;
         public static AIManager SharedAIManager
         {
             get
@@ -81,8 +80,8 @@ namespace ButlerQuest
                     case AI_STATE.HUNTING:
                         //DO LATER THIS IS GONNA BE HARD
                     case AI_STATE.PURSUIT:
-                        //build the path, factoring in the distance between the current location and the last known player location. FrequencyFactor determines how quickly we should poll for input.
-                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, (int)Math.Ceiling(((Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y))/ 32 / frequencyFactor)));
+                        //build the path, factoring in the distance between the current location and the last known player location.
+                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, (int)Math.Ceiling(((Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y))/ 32)));
                         break;
                 }
             }
@@ -96,7 +95,12 @@ namespace ButlerQuest
             {
                 translationList.Add(new CommandMove(new Vector3(item.X * 32, item.Y * 32, item.Z), reference));
             }
-            translationList.Insert(commandsToCopy, new GetNextCommandSet(reference, path[commandsToCopy].Cost));
+            if (commandsToCopy <= 0)
+                translationList.Insert(0, new GetNextCommandSet(reference, path[0].Cost));
+            else if(commandsToCopy >= path.Count)
+                translationList.Insert(path.Count, new GetNextCommandSet(reference, path[path.Count - 1].Cost));
+            else 
+                translationList.Insert(commandsToCopy + 1, new GetNextCommandSet(reference, path[commandsToCopy].Cost));
             translationList.Add(new WaitForNextCommand(reference));
 
             Queue<ICommand> retQueue = new Queue<ICommand>();

@@ -20,6 +20,12 @@ namespace ButlerQuest
         public CommandWait(int frames)
         {
             this.frames = frames;
+            Initialize();
+        }
+
+        public void Initialize()
+        {
+            IsFinished = false;
             timer = 0;
         }
 

@@ -20,58 +20,64 @@ namespace ButlerQuest
         public CommandMove(Vector3 endPosition, Enemy reference)
         {
             this.reference = reference;
-            Vector3 startPosition = new Vector3(reference.location.X, reference.location.Y, reference.location.Z);
             this.endPosition = endPosition;
-            direction = endPosition - startPosition;
+            Initialize();
         }
 
+        public void Initialize()
+        {
+            Vector3 startPosition = new Vector3(reference.location.X, reference.location.Y, reference.location.Z);
+            direction = endPosition - startPosition;
+            if (direction == Vector3.Zero)
+                IsFinished = true;
+            else
+                IsFinished = false;
+        }
         public void Update(GameTime gameTime)
         {
-            if (direction == Vector3.Zero)
+            if (!IsFinished)
             {
-                IsFinished = true;
-                return;
-            }
-            reference.Move(direction);
-            if (direction.X >= 0)
-            {
-                if (direction.Y >= 0)
+                reference.Move(direction);
+                if (direction.X >= 0)
                 {
-                    if (reference.location.X >= endPosition.X && reference.location.Y >= endPosition.Y)
+                    if (direction.Y >= 0)
                     {
-                        IsFinished = true;
-                        reference.location = endPosition;
-                        return;
+                        if (reference.location.X >= endPosition.X && reference.location.Y >= endPosition.Y)
+                        {
+                            IsFinished = true;
+                            reference.location = endPosition;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (reference.location.X >= endPosition.X && reference.location.Y < endPosition.Y)
+                        {
+                            IsFinished = true;
+                            reference.location = endPosition;
+                            return;
+                        }
                     }
                 }
                 else
                 {
-                    if (reference.location.X >= endPosition.X && reference.location.Y < endPosition.Y)
+                    if (direction.Y >= 0)
                     {
-                        IsFinished = true;
-                        reference.location = endPosition;
-                        return;
+                        if (reference.location.X < endPosition.X && reference.location.Y >= endPosition.Y)
+                        {
+                            IsFinished = true;
+                            reference.location = endPosition;
+                            return;
+                        }
                     }
-                }
-            }
-            else
-            {
-                if (direction.Y >= 0)
-                {
-                    if (reference.location.X < endPosition.X && reference.location.Y >= endPosition.Y)
+                    else
                     {
-                        IsFinished = true;
-                        reference.location = endPosition;
-                        return;
-                    }
-                }
-                else
-                {
-                    if (reference.location.X < endPosition.X && reference.location.Y < endPosition.Y)
-                    {
-                        IsFinished = true;
-                        reference.location = endPosition;
-                        return;
+                        if (reference.location.X < endPosition.X && reference.location.Y < endPosition.Y)
+                        {
+                            IsFinished = true;
+                            reference.location = endPosition;
+                            return;
+                        }
                     }
                 }
             }
