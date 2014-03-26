@@ -1,4 +1,13 @@
-﻿/* 
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework;
+
+namespace ButlerQuest
+{
+/* 
  * The PriorityQueue is a well-known data structure. It's essentially a weighted Queue, where instead of being strictly "First In, First Out", it is "First Highest-Priority In, First Highest-Priority Out", if that makes any sense.
  * Basically what that means is that no matter what order it is enqueued in, the highest priority value will be dequeued before anything else (unless the priority is specified). If two things of the same priority exist, then the
  * first value to be added to the priority queue would be dequeued. If a priority is specified when dequeueing, then the first value to enqueued at that priority is dequeued.
@@ -9,15 +18,16 @@
  * Written by Samuel Sternklar on 3/1/2014
  * 
  */ 
-using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-
-namespace ButlerQuest
-{
+    /// <summary>
+    /// The PriorityQueue is a well-known data structure. It's essentially a weighted Queue, where instead of being strictly "First In, First Out", it is "First Highest-Priority In,
+    /// First Highest-Priority Out", if that makes any sense. Basically what that means is that no matter what order it is enqueued in, the highest priority value will be dequeued
+    /// before anything else (unless the priority is specified). If two things of the same priority exist, then the first value to be added to the priority queue would be dequeued.
+    /// If a priority is specified when dequeueing, then the first value to enqueued at that priority is dequeued.
+    /// 
+    /// Written by Samuel Sternklar.
+    /// </summary>
+    /// <typeparam name="TPriority">The type that will be used to determine the priority a value will be placed at</typeparam>
+    /// <typeparam name="TValue">The type of the value that will be stored</typeparam>
     class PriorityQueue<TPriority, TValue>
     {
         //How we're storing the PriorityQueue. Horribly inefficient in comparison to some other ways of doing things, but this is still fairly quick for our purposes
@@ -166,6 +176,19 @@ namespace ButlerQuest
             get { return storage.Count == 0; }
         }
 
+        /// <summary>
+        /// Tells us the number of elements in the PriorityQueue
+        /// </summary>
+        public int Count
+        {
+            get { return storage.Count; }
+        }
+
+        /// <summary>
+        /// Tells us whether or not the PriorityQueue contains a thing at ANY priority
+        /// </summary>
+        /// <param name="thing">Thing to see if we have it or not</param>
+        /// <returns>Whether or not we have the thing</returns>
         public bool Contains(TValue thing)
         {
             foreach (var prio in storage.Values)
@@ -177,18 +200,35 @@ namespace ButlerQuest
         }
     }
 
+    /// <summary>
+    /// A node to be used in a SquareGraph. It itself has no operations, but it contains all of the information required of it
+    /// </summary>
     class SquareGraphNode
     {
+        //The X coordinate of the node
         public int X { get; set; }
+        //The Y coordinate
         public int Y { get; set; }
+        //The Z coordinate
         public int Z { get; set; }
 
+        //Tells whether or not there is a node at a Z coordinate directly above this node
         public bool HasConnectionUpwards { get; set; }
+        //Tells whether or not there is a node at a Z coordinate directly below this node
         public bool HasConnectionDownwards { get; set; }
 
+        //The cost of traversing this node
         public int Cost { get; set; }
+        //This node's neighbors
         public List<SquareGraphNode> Neighbors { get; set; }
 
+        /// <summary>
+        /// Basic constructor
+        /// </summary>
+        /// <param name="x">The X coordinate</param>
+        /// <param name="y">The Y coordinate</param>
+        /// <param name="z">The Z coordinate</param>
+        /// <param name="cost">The cost of the node</param>
         public SquareGraphNode(int x, int y, int z, int cost)
         {
             X = x;

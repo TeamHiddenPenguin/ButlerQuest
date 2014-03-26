@@ -29,7 +29,6 @@ namespace ButlerQuest
         Vector3 lastNodeLoc;
         Texture2D playertx;
         Texture2D targettx;
-        Path<SquareGraphNode> path;
 
         public Game1()
             : base()
@@ -55,7 +54,7 @@ namespace ButlerQuest
             spriteBatch = new SpriteBatch(GraphicsDevice);
             viewport = new Rectangle(0, 0, 1200, 720);
             test = new Map("Content\\AstarTest.tmx", GraphicsDevice, spriteBatch);
-            player = new Enemy(new Vector3(1, 1, 1), null, null, new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y, 0), new Rectangle(0, 0, 32, 32));
+            player = new Enemy(new Vector3(6, 6, 1), null, null, new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y, 0), new Rectangle(0, 0, 32, 32));
             lastNodeLoc = player.location;
             target = new Enemy(new Vector3(6,6,1), null, null, new Vector3(test.ObjectGroups["Target"][0].X, test.ObjectGroups["Target"][0].Y, 1), new Rectangle(0, 0, 32, 32));
             colTest = new Enemy(new Vector3(6,6,1), null, null, new Vector3(100, 100, 1), new Rectangle(100, 100, 32, 32));
@@ -134,43 +133,8 @@ namespace ButlerQuest
             AIManager.SharedAIManager.lastKnownPlayerLoc = target.location;
             while (!AIManager.SharedAIManager.enemiesToPath.IsEmpty)
             {
-                AIManager.SharedAIManager.ExecuteCommandsAsync();
+                AIManager.SharedAIManager.MakePaths();
             }
-            /*if (path != null)
-            {
-                Vector3 pathLoc = new Vector3(path.LastStep.X * 32, path.LastStep.Y * 32, path.LastStep.Z);
-                player.location.X = player.location.X + .05f * (pathLoc.X - lastNodeLoc.X);
-                player.location.Y = player.location.Y + .05f * (pathLoc.Y - lastNodeLoc.Y);
-                player.location.Z = player.location.Z + .05f * (pathLoc.Z - lastNodeLoc.Z);
-
-                if (Math.Abs(player.location.X - pathLoc.X) < 1 && Math.Abs(player.location.Y - pathLoc.Y) < 1 && Math.Abs(player.location.Z - pathLoc.Z) < .1f)
-                {
-                    player.location = pathLoc;
-                    try
-                    {
-                        path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)target.location.Z), AStar.ManhattanDistance, null);
-                    }
-                    catch(Exception e)
-                    {
-                        //If for some reason the pathfinding fails, just continue along the current path until we can path again
-                    }
-                    path = path.PreviousSteps;
-                    lastNodeLoc = player.location;
-                    
-                }
-            }
-            else
-                //If we are out of path, try to path again
-                try
-                {
-                    path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)player.location.Z), AStar.ManhattanDistance, null);
-                }
-                catch (Exception e)
-                {
-                    //If we are out of path and can't path, then just sit in place until we can path again.
-                }*/
-
-            
             base.Update(gameTime);
         }
 
