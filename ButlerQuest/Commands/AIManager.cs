@@ -27,7 +27,7 @@ namespace ButlerQuest
         //The stored map that this AIManager is working from
         public Map map;
         //The level which this AIManager is working on
-        //private Level level;
+        public Level level;
         //The graph which this AIManager is working on
         public SquareGraph graph;
         //The priority queue of enemies to path. It would be a list, but if we run out of time per frame then we have to keep the ones that still need pathing on the next frame.
@@ -45,6 +45,15 @@ namespace ButlerQuest
                 else
                     return new AIManager();
             }
+        }
+
+        public static void DebugInitialize(Level level)
+        {
+#if DEBUG
+            SharedAIManager.level = level;
+            SharedAIManager.map = SharedAIManager.level.levelMap;
+            SharedAIManager.graph = SharedAIManager.map.Graph;
+#endif
         }
 
         /// <summary>
@@ -75,9 +84,9 @@ namespace ButlerQuest
         
         //If we run it async, use this. If we don't run it async, run this in a while loop with the condition "!enemiesToPath.IsEmpty"
         /// <summary>
-        /// Makes or resets all paths for any enemy in the PriorityQueue
+        /// Makes or resets one path for an enemy in the PriorityQueue
         /// </summary>
-        public void MakePaths()
+        private void MakePath()
         {
             Enemy currentEnemy = enemiesToPath.Dequeue();
             if (currentEnemy != null)
@@ -107,6 +116,17 @@ namespace ButlerQuest
                         currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, (int)Math.Ceiling(((Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y))/ 32)));
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Makes or resets all paths for any enemy in the PriorityQueue
+        /// </summary>
+        public void MakePaths()
+        {
+            while (!enemiesToPath.IsEmpty)
+            {
+                MakePath();
             }
         }
 

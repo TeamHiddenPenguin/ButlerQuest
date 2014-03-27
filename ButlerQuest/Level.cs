@@ -14,7 +14,7 @@ namespace ButlerQuest
         // properties
         public Player player; // the player. It's public so we can transfer info from one level to another (lives remaining, possibly score) without having to make the player in the gamestate management.
         List<Enemy> basicEnemies; // a list to hold all of the normal butlers for the level
-        Map levelMap; // parses the map and tiles used for the specific level
+        public Map levelMap; // parses the map and tiles used for the specific level
         Rectangle windowSpace; // window space used for drawing the map
         int floor; // the floor the player is on.
         GameTime gameTime;

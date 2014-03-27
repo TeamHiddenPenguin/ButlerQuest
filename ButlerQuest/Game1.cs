@@ -131,10 +131,7 @@ namespace ButlerQuest
             }
             player.Update(gameTime);
             AIManager.SharedAIManager.lastKnownPlayerLoc = target.location;
-            while (!AIManager.SharedAIManager.enemiesToPath.IsEmpty)
-            {
-                AIManager.SharedAIManager.MakePaths();
-            }
+            AIManager.SharedAIManager.MakePaths();
             base.Update(gameTime);
         }
 

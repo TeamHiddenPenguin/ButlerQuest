@@ -51,7 +51,7 @@
     <Compile Include="Level.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="GameObject Hierarchy\MovableGameObject.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="GameObject Hierarchy\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
