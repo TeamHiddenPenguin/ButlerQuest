@@ -21,6 +21,7 @@ namespace ButlerQuest
         {
             commandQueue = new Queue<ICommand>();
             defaultCommands = new Queue<ICommand>();
+            startLocation = loc;
         }
 
         public void ChangeCommand()
