@@ -374,7 +374,7 @@ namespace ButlerQuest
         public int Y { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public Dictionary<string, string> Properties { get; private set; }
+        public List<Tuple<string, string>> Properties { get; private set; }
 
         public TiledObject(XElement xObject)
         {
@@ -400,13 +400,13 @@ namespace ButlerQuest
             int? height = (int?)xObject.Attribute("height");
             Height = (height != null) ? (int)height : 0;
 
-            Properties = new Dictionary<string, string>();
+            Properties = new List<Tuple<string, string>>();
             XElement properties = xObject.Element("properties");
             if (properties != null)
             {
                 foreach (XElement property in xObject.Element("properties").Elements("property"))
                 {
-                    Properties.Add((string)property.Attribute("name"), (string)property.Attribute("value"));
+                    Properties.Add(new Tuple<string, string>((string)properties.Attribute("name"), (string)properties.Attribute("type")));
                 }
             }
         }

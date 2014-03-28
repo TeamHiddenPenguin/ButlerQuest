@@ -8,7 +8,7 @@ namespace ButlerQuest
 {
     static class EntityGenerator
     {
-        public static Enemy GenerateEnemy(Vector3 position, Dictionary<string, string> commands)
+        public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands)
         {
             Enemy temp = new Enemy(
                 new Vector3(1, 1, 1),
@@ -20,14 +20,14 @@ namespace ButlerQuest
                     (int)position.Y,
                     32, 32));
 
-            foreach (var parseable in commands.Keys)
+            foreach (var parseable in commands)
             {
-                switch (parseable.ToUpper())
+                switch (parseable.Item1.ToUpper())
                 {
                     case "MOVE":
                         //format is "X,Y,Z"
                         Vector3 moveTo = new Vector3();
-                            string[] coords = commands[parseable].Split(',');
+                            string[] coords = parseable.Item2.Split(',');
                             float.TryParse(coords[0], out moveTo.X);
                             float.TryParse(coords[1], out moveTo.Y);
                             float.TryParse(coords[2], out moveTo.Z);
@@ -35,7 +35,7 @@ namespace ButlerQuest
                         break;
                     case "WAIT":
                         int time = 0;
-                        int.TryParse(commands[parseable], out time);
+                        int.TryParse(parseable.Item2, out time);
                         temp.defaultCommands.Enqueue(new CommandWait(time));
                         break;
                     case "END":
