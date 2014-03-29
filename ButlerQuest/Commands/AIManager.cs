@@ -113,7 +113,7 @@ namespace ButlerQuest
                         //DO LATER THIS IS GONNA BE HARD
                     case AI_STATE.PURSUIT:
                         //build the path, factoring in the distance between the current location and the last known player location.
-                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, (int)Math.Ceiling(((Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y))/ 32)));
+                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, (int)Math.Ceiling(((Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y))/ graph.scaleFactor)));
                         break;
                 }
             }
@@ -141,13 +141,13 @@ namespace ButlerQuest
         private Queue<ICommand> BuildPath(Vector3 start, Vector3 end, Enemy reference, int commandsToCopy)
         {
             //Build the path.
-            List<SquareGraphNode> path = AStar.FindPath(graph.GetNode((int)start.X, (int)start.Y, (int)start.Z), graph.GetNode((int)end.X, (int)end.Y, (int)end.Z), AStar.ManhattanDistance, AStar.ManhattanDistance);
+            List<IGraphNode> path = AStar.FindPath(graph.GetNode((int)start.X, (int)start.Y, (int)start.Z), graph.GetNode((int)end.X, (int)end.Y, (int)end.Z), AStar.ManhattanDistance, AStar.ManhattanDistance);
             //create a list of commands to translate between a list of nodes and a queue of commands
             List<ICommand> translationList = new List<ICommand>();
             //Populate the translation list with commands from the graph nodes.
             foreach (var item in path)
             {
-                translationList.Add(new CommandMove(new Vector3(item.X * 32, item.Y * 32, item.Z), reference));
+                translationList.Add(new CommandMove(new Vector3(item.X * graph.nodeWidth, item.Y * graph.nodeHeight, item.Z), reference));
             }
             
             //if commandsToCopy is less than or equal to 0, then we don't want to add any extra commands in because it will be gotten elsewhere.

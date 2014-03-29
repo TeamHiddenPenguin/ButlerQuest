@@ -200,10 +200,19 @@ namespace ButlerQuest
         }
     }
 
+    interface IGraphNode
+    {
+        int X { get; set; }
+        int Y { get; set; }
+        int Z { get; set; }
+        int Cost { get; set; }
+        List<IGraphNode> Neighbors { get; set; }
+    }
+
     /// <summary>
     /// A node to be used in a SquareGraph. It itself has no operations, but it contains all of the information required of it
     /// </summary>
-    class SquareGraphNode
+    class SquareGraphNode : IGraphNode
     {
         //The X coordinate of the node
         public int X { get; set; }
@@ -220,7 +229,7 @@ namespace ButlerQuest
         //The cost of traversing this node
         public int Cost { get; set; }
         //This node's neighbors
-        public List<SquareGraphNode> Neighbors { get; set; }
+        public List<IGraphNode> Neighbors { get; set; }
 
         /// <summary>
         /// Basic constructor
@@ -237,23 +246,25 @@ namespace ButlerQuest
             Cost = cost;
             HasConnectionDownwards = false;
             HasConnectionUpwards = false;
-            Neighbors = new List<SquareGraphNode>();
+            Neighbors = new List<IGraphNode>();
         }
     }
     class SquareGraph
     {
         int Width;
         int Height;
-        int xSpace;
-        int ySpace;
-        List<SquareGraphNode> nodes;
+        public int nodeWidth;
+        public int nodeHeight;
+        public int scaleFactor;
+        List<SquareGraphNode> nodes { get; set; }
 
-        public SquareGraph(int width, int height, int xSpace, int ySpace)
+        public SquareGraph(int width, int height, int nodeWidth, int nodeHeight)
         {
             Width = width;
             Height = height;
-            this.xSpace = xSpace;
-            this.ySpace = ySpace;
+            this.nodeWidth = nodeWidth;
+            this.nodeHeight = nodeHeight;
+            scaleFactor = nodeWidth / nodeHeight;
         }
 
         public SquareGraph(int width, int height, int xSpace, int ySpace, List<SquareGraphNode> nodes) : this(width, height, xSpace, ySpace)
@@ -333,7 +344,7 @@ namespace ButlerQuest
 
         public SquareGraphNode GetNode(int x, int y, int z)
         {
-            return GetNodeFromGraphCoords(x / xSpace, y / ySpace, z);
+            return GetNodeFromGraphCoords(x / nodeWidth, y / nodeHeight, z);
         }
     }
 

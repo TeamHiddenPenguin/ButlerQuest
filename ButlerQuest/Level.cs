@@ -26,8 +26,6 @@ namespace ButlerQuest
         {
             gameTime = new GameTime();
 
-            AIManager.DebugInitialize(this);
-
             graphics = new GraphicsDevice();
             spriteBatch = new SpriteBatch(graphics);
 
@@ -39,7 +37,7 @@ namespace ButlerQuest
 
             for (int i = 0; i < levelMap.ObjectGroups["Enemy"].Count; i++)
             {
-                basicEnemies.Add(EntityGenerator.GenerateEnemy(new Vector3(levelMap.ObjectGroups["Enemy"][i].X, levelMap.ObjectGroups["Enemy"][i].Y, 0), ));
+                basicEnemies.Add(EntityGenerator.GenerateEnemy(new Vector3(levelMap.ObjectGroups["Enemy"][i].X, levelMap.ObjectGroups["Enemy"][i].Y, 0), levelMap.ObjectGroups["Enemy"][i].Properties));
             }
 
             for (int i = 0; i < levelMap.ObjectGroups["Wall"].Count; i++)
@@ -47,6 +45,7 @@ namespace ButlerQuest
                 walls.Add(EntityGenerator.GenerateWall(new Vector3(levelMap.ObjectGroups["Wall"][i].X, levelMap.ObjectGroups["Wall"][i].Y, 0), levelMap.ObjectGroups["Wall"][i].Width, levelMap.ObjectGroups["Wall"][i].Height));
             }
 
+            AIManager.DebugInitialize(this);
 
         }
 

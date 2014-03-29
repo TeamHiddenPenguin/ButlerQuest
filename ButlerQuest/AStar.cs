@@ -22,15 +22,15 @@ namespace ButlerQuest
         /// <param name="distance">The function used to find the distance between two points</param>
         /// <param name="estimate">The function used to estimate the distance between the current node and another node</param>
         /// <returns>A list of nodes representing the path between the two nodes</returns>
-        public static List<SquareGraphNode> FindPath(SquareGraphNode start, SquareGraphNode end, Func<SquareGraphNode, SquareGraphNode, double> distance, Func<SquareGraphNode, SquareGraphNode, double> estimate)
+        public static List<IGraphNode> FindPath(IGraphNode start, IGraphNode end, Func<IGraphNode, IGraphNode, double> distance, Func<IGraphNode, IGraphNode, double> estimate)
         {
             //The set of nodes we have already looked at
             //Is a hashset because it has O(1) time add and O(1) time Contains
-            HashSet<SquareGraphNode> closedSet = new HashSet<SquareGraphNode>();
+            HashSet<IGraphNode> closedSet = new HashSet<IGraphNode>();
             //A PriorityQueue of paths to evaluate. the priority is the total cost of the current node plus the estimated distance to the end node
-            PriorityQueue<double, List<SquareGraphNode>> queue = new PriorityQueue<double, List<SquareGraphNode>>();
+            PriorityQueue<double, List<IGraphNode>> queue = new PriorityQueue<double, List<IGraphNode>>();
             //The initial path, from which all other paths will be calculated
-            List<SquareGraphNode> initialPath = new List<SquareGraphNode>();
+            List<IGraphNode> initialPath = new List<IGraphNode>();
             
             //Add the start node to the initial path, and the initial path to the queue of things to be evaluated
             initialPath.Add(start);
@@ -40,8 +40,8 @@ namespace ButlerQuest
             while (!queue.IsEmpty)
             {
                 //Get the current node to be evaluated
-                List<SquareGraphNode> currentPath = queue.Dequeue();
-                SquareGraphNode currentNode = currentPath.Last();
+                List<IGraphNode> currentPath = queue.Dequeue();
+                IGraphNode currentNode = currentPath.Last();
 
                 //If the current node has already been evaluated, then this path is definitely not the shortest path and we can skip evaluating it.
                 if (closedSet.Contains(currentNode))
@@ -60,7 +60,7 @@ namespace ButlerQuest
                     //find the distance between the two points.
                     double dist = distance(currentNode, node);
                     //Create a new path, contiaining the old path plus this path.
-                    List<SquareGraphNode> newPath = new List<SquareGraphNode>(currentPath);
+                    List<IGraphNode> newPath = new List<IGraphNode>(currentPath);
                     newPath.Add(node);
                     //Add this path to the queue
                     queue.Enqueue(CalculatePathCost(currentPath) + dist + estimate(node, end), newPath);
@@ -75,7 +75,7 @@ namespace ButlerQuest
         /// </summary>
         /// <param name="list">The list of nodes to be evaluated</param>
         /// <returns>The total cost of the path.</returns>
-        public static int CalculatePathCost(List<SquareGraphNode> list)
+        public static int CalculatePathCost(List<IGraphNode> list)
         {
             int totalCost = 0;
             foreach (var node in list)
@@ -93,7 +93,7 @@ namespace ButlerQuest
         /// <param name="start">The starting node to evaluate</param>
         /// <param name="end">The ending node to evaluate</param>
         /// <returns>The manhattan distance between the two nodes</returns>
-        public static double ManhattanDistance(SquareGraphNode start, SquareGraphNode end)
+        public static double ManhattanDistance(IGraphNode start, IGraphNode end)
         {
             return Math.Abs(end.X - start.X) + Math.Abs(end.Y - start.Y) + Math.Abs(end.Z - start.Z);
         }
@@ -105,7 +105,7 @@ namespace ButlerQuest
         /// <param name="start">The starting node to evaluate</param>
         /// <param name="end">The ending node to evaluate</param>
         /// <returns>The euclidean distance between two nodes.</returns>
-        public static double EuclideanDistance(SquareGraphNode start, SquareGraphNode end)
+        public static double EuclideanDistance(IGraphNode start, IGraphNode end)
         {
             return Math.Sqrt(Math.Pow(end.X - start.X, 2) + Math.Pow(end.Y - start.Y, 2) + Math.Pow(end.Z - start.Z, 2));
         }
