@@ -33,7 +33,7 @@ namespace ButlerQuest
 
             player = EntityGenerator.GeneratePlayer(new Vector3(levelMap.ObjectGroups["Player"][0].X, levelMap.ObjectGroups["Player"][0].Y, 0), 5, 500);
 
-            windowSpace = new Rectangle((int)player.location.X, (int)player.location.Y, 1200, 720);
+            windowSpace = new Rectangle((int)player.location.X, (int)player.location.Y, graphics.Viewport.Width, graphics.Viewport.Height);
 
             for (int i = 0; i < levelMap.ObjectGroups["Enemy"].Count; i++)
             {
@@ -71,23 +71,24 @@ namespace ButlerQuest
 
             AIManager.SharedAIManager.MakePaths();
 
+            //Enemy updates and collision
             foreach (Enemy enemy in basicEnemies) // updates enemies and checks for collision with player if on the same floor.
             {
                 enemy.Update(gameTime);
-
-                if (player.location.Z == enemy.location.Z)
+                //Only worry about collision if they are hunting the player, otherwise don't worry about it
+                if (enemy.state >= AI_STATE.HUNTING)
                 {
-                    int collision = player.CollisionSide(enemy);
-                    switch (collision)
-                    {
-                        case -1: break;
-                        default: player.lives--;
-                            player.location = player.startLoc;
-                            break;
-                    }
+                        int collision = player.CollisionSide(enemy);
+                        switch (collision)
+                        {
+                            case -1: break;
+                            default: player.lives--;
+                                player.location = player.startLoc;
+                                break;
+                        }
                 }
             }
-
+            // wall collision
             foreach (Wall block in walls)
             {
                 int collision = player.CollisionSide(block);
