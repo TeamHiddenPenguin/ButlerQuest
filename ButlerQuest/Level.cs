@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +16,7 @@ namespace ButlerQuest
         List<Enemy> basicEnemies; // a list to hold all of the normal butlers for the level
         List<Wall> walls; // a list to hold all of the walls for the level
         public Map levelMap; // parses the map and tiles used for the specific level
-        Rectangle windowSpace; // window space used for drawing the map
+        public Rectangle windowSpace; // window space used for drawing the map
         GameTime gameTime;
         GraphicsDevice graphics;
         SpriteBatch spriteBatch;
@@ -34,6 +34,9 @@ namespace ButlerQuest
             player = EntityGenerator.GeneratePlayer(new Vector3(levelMap.ObjectGroups["Player"][0].X, levelMap.ObjectGroups["Player"][0].Y, 0), 5, 500);
 
             windowSpace = new Rectangle((int)player.location.X, (int)player.location.Y, graphics.Viewport.Width, graphics.Viewport.Height);
+
+            windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
+            windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
 
             for (int i = 0; i < levelMap.ObjectGroups["Enemy"].Count; i++)
             {
@@ -53,9 +56,10 @@ namespace ButlerQuest
         // calls the draw method of everything that is drawn
         public void Draw(SpriteBatch spritebatch)
         {
-            levelMap.DrawToTexture(windowSpace, (int)player.location.Z);
+            levelMap.Draw(windowSpace, (int)player.location.Z);
 
-            spritebatch.Begin();
+            Matrix translation = Matrix.CreateTranslation(-windowSpace.X, -windowSpace.Y, 0);
+            spritebatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, translation);
 
             foreach (Enemy enemy in basicEnemies) enemy.Draw(spritebatch);
 
@@ -95,24 +99,22 @@ namespace ButlerQuest
                 switch (collision)
                 {
                     case 0: player.location.Y -= player.velocity.Y;
-                        windowSpace.Y -= (int)player.velocity.Y;
                         break;
 
                     case 1: player.location.X -= player.velocity.X;
-                        windowSpace.X -= (int)player.velocity.X;
                         break;
 
                     case 2: player.location.Y += player.velocity.Y;
-                        windowSpace.Y += (int)player.velocity.Y;
                         break;
 
                     case 3: player.location.X += player.velocity.X;
-                        windowSpace.X += (int)player.velocity.X;
                         break;
 
                     default: break;
                 }
             }
+            windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
+            windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
         }
     }
 }
