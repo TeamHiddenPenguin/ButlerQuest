@@ -9,7 +9,11 @@
   </data>
  </layer>
  <objectgroup name="Floor1Entities" width="20" height="20">
-  <object name="Start" type="Enemy" x="96" y="96" width="32" height="32"/>
+  <object name="Start" type="Enemy" x="96" y="96" width="32" height="32">
+   <properties>
+    <property name="MOVE" value="32,32,0"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Floor1RoomGraph" width="20" height="20"/>
  <layer name="Floor2" width="20" height="20">
