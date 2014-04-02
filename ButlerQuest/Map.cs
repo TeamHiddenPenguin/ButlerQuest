@@ -406,7 +406,7 @@ namespace ButlerQuest
             {
                 foreach (XElement property in xObject.Element("properties").Elements("property"))
                 {
-                    Properties.Add(new Tuple<string, string>((string)properties.Attribute("name"), (string)properties.Attribute("type")));
+                    Properties.Add(new Tuple<string, string>((string)property.Attribute("name"), (string)property.Attribute("value")));
                 }
             }
         }
