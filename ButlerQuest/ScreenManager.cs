@@ -93,9 +93,11 @@ namespace ButlerQuest
     {
         Level level;
         string levelName;
+        KeyboardState kState;
         public GameScreen(string toLoad)
         {
             levelName = toLoad;
+            kState = Keyboard.GetState();
         }
 
         public void Initialize()
@@ -106,11 +108,34 @@ namespace ButlerQuest
         public override void Update(GameTime time)
         {
             level.Update(time);
+            HandleInput();
         }
 
         public override void Draw(GameTime time)
         {
             level.Draw(time);
+        }
+
+        public override void HandleInput()
+        {
+            kState = Keyboard.GetState();
+            base.HandleInput();
+            if (kState.IsKeyDown(Keys.W))
+            {
+                level.player.Move(new Vector3(0, -1, 0));
+            }
+            if (kState.IsKeyDown(Keys.A))
+            {
+                level.player.Move(new Vector3(-1, 0, 0));
+            }
+            if (kState.IsKeyDown(Keys.S))
+            {
+                level.player.Move(new Vector3(0, 1, 0));
+            }
+            if (kState.IsKeyDown(Keys.D))
+            {
+                level.player.Move(new Vector3(1, 0, 0));
+            }
         }
     }
 

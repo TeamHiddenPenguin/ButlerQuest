@@ -84,7 +84,7 @@ namespace ButlerQuest
         {
             player.Update(gameTime);
 
-            AIManager.SharedAIManager.MakePaths();
+            //AIManager.SharedAIManager.MakePaths();
 
             //Enemy updates and collision
             foreach (Enemy enemy in basicEnemies) // updates enemies and checks for collision with player if on the same floor.
