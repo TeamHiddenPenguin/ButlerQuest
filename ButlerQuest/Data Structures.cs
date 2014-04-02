@@ -28,7 +28,7 @@ namespace ButlerQuest
     /// </summary>
     /// <typeparam name="TPriority">The type that will be used to determine the priority a value will be placed at</typeparam>
     /// <typeparam name="TValue">The type of the value that will be stored</typeparam>
-    class PriorityQueue<TPriority, TValue>
+    public class PriorityQueue<TPriority, TValue>
     {
         //How we're storing the PriorityQueue. Horribly inefficient in comparison to some other ways of doing things, but this is still fairly quick for our purposes
         SortedDictionary<TPriority, Queue<TValue>> storage;
@@ -200,7 +200,7 @@ namespace ButlerQuest
         }
     }
 
-    interface IGraphNode
+    public interface IGraphNode
     {
         int X { get; set; }
         int Y { get; set; }
@@ -212,7 +212,7 @@ namespace ButlerQuest
     /// <summary>
     /// A node to be used in a SquareGraph. It itself has no operations, but it contains all of the information required of it
     /// </summary>
-    class SquareGraphNode : IGraphNode
+    public class SquareGraphNode : IGraphNode
     {
         //The X coordinate of the node
         public int X { get; set; }
@@ -249,7 +249,7 @@ namespace ButlerQuest
             Neighbors = new List<IGraphNode>();
         }
     }
-    class SquareGraph
+    public class SquareGraph
     {
         int Width;
         int Height;

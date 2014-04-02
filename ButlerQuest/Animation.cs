@@ -8,7 +8,7 @@ using System.Text;
 namespace ButlerQuest
 {
     // 
-    class Animation
+    public class Animation
     {
         // attributes
         Texture2D image;

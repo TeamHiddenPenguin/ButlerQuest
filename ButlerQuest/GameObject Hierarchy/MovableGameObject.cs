@@ -9,13 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 namespace ButlerQuest
 {
     // abstract class for all GamePieceObjects that have the ability to move.
-    abstract class MovableGameObject : DrawableGameObject
+    public abstract class MovableGameObject : DrawableGameObject
     {
         // attributes
         public Vector3 velocity;// amount the object moves in a single move method
 
         // constructor
-        protected MovableGameObject(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
+        public MovableGameObject(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
             : base(animations, names, loc, rect)
         {
             velocity = vel;

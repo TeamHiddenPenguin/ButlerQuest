@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace ButlerQuest
 {
     // abstract class used by all objects in the game
-    abstract class GameObject
+    public abstract class GameObject
     {
         // attirbutes
         public Vector3 location; // position of the object in the game space

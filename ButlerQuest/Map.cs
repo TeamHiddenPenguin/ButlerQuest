@@ -11,7 +11,7 @@ using System.Globalization;
 
 namespace ButlerQuest
 {
-    class Map
+    public class Map
     {
         //A list that uses the gid of the tile as an index to reference the tile's texture map.
         List<Texture2D> gidToTileSet;

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace ButlerQuest
 {
     // holds all the info for the player; textures, lives, location, etc
-    class Player : MovableGameObject
+    public class Player : MovableGameObject
     {
         // properties
         public int lives; // the number of lives the player has remaining. if it drops to 0, game ends.

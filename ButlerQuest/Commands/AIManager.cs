@@ -49,11 +49,9 @@ namespace ButlerQuest
 
         public static void DebugInitialize(Level level)
         {
-#if DEBUG
             SharedAIManager.level = level;
             SharedAIManager.map = SharedAIManager.level.levelMap;
             SharedAIManager.graph = SharedAIManager.map.Graph;
-#endif
         }
 
         /// <summary>
@@ -69,20 +67,17 @@ namespace ButlerQuest
                 throw new WTFException("An instance of AIManager already exists. This should never happen. If it does, congrats you just called a private method outside of the class it exists in.");
 
             //Get our level, map, and graph, otherwise throw exceptions because we're doing something wrong
-            /*if ((level = (ScreenManager.GetCurrentScreen() as GameScreen).level;) == null)
+            if ((level = ScreenManager.SharedManager.GetCurrentGameScreen().level) == null)
                 throw new WTFException("We are currently not inside a GameScreen and cannot create an AIManager, or the level has not been initiated yet. Stop trying to get the AIManager before creating the level!");
-            if((map = level.map) == null)
+            if((map = level.levelMap) == null)
                 throw new WTFException("The current map has not been initialized yet. Stop trying to get the AIManager before finishing building the level.");
             if((graph = map.Graph) == null)
                 throw new WTFException("The graph for the current map has not been built yet. Stop trying to get the AIManager before finishing building the level.");
              
-             */
             //Create the PriorityQueue
             enemiesToPath = new PriorityQueue<int, Enemy>();
         }
 
-        
-        //If we run it async, use this. If we don't run it async, run this in a while loop with the condition "!enemiesToPath.IsEmpty"
         /// <summary>
         /// Makes or resets one path for an enemy in the PriorityQueue
         /// </summary>

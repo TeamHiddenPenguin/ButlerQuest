@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace ButlerQuest
 {
     // abstract class for all GamePiece objects with a visual component
-    abstract class DrawableGameObject : GameObject
+    public abstract class DrawableGameObject : GameObject
     {
         // attributes
         Dictionary<string, Animation> sprites; // a dictionary of all of the animations for a single DGO.
@@ -32,7 +32,7 @@ namespace ButlerQuest
         }
 
         // constructor
-        protected DrawableGameObject(Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
+        public DrawableGameObject(Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
             : base(loc, rect)
         {
             sprites = new Dictionary<string, Animation>();

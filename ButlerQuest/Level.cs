@@ -9,7 +9,7 @@ namespace ButlerQuest
 {
     // holds everything needed for a single level.
     // Player class does not yet exist, so that will be added in later.
-    class Level
+    public class Level
     {
         // properties
         public Player player; // the player. It's public so we can transfer info from one level to another (lives remaining, possibly score) without having to make the player in the gamestate management.
@@ -59,7 +59,7 @@ namespace ButlerQuest
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
 
-            AIManager.DebugInitialize(this);
+            //AIManager.DebugInitialize(this);
 
         }
 
@@ -84,7 +84,7 @@ namespace ButlerQuest
         {
             player.Update(gameTime);
 
-            //AIManager.SharedAIManager.MakePaths();
+            AIManager.SharedAIManager.MakePaths();
 
             //Enemy updates and collision
             foreach (Enemy enemy in basicEnemies) // updates enemies and checks for collision with player if on the same floor.

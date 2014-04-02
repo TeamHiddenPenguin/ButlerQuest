@@ -20,13 +20,13 @@ namespace ButlerQuest
         {
             sharedManager = this;
             screenState = new Stack<Screen>();
-            currentScreen = new LoadingGameScreen("AStarTest.tmx");
+            screenState.Push(new LoadingGameScreen("AStarTest.tmx"));
         }
         public SpriteBatch sBatch;
         public GraphicsDevice gDevice;
         public ContentManager Content;
         static ScreenManager sharedManager;
-        private Screen currentScreen;
+        public Screen CurrentScreen { get { return screenState.Peek(); } }
         public static ScreenManager SharedManager
         {
             get
@@ -59,24 +59,35 @@ namespace ButlerQuest
         //Makes the current screen equal to the new screen
         public void NextScreen()
         {
-            currentScreen = screenState.Pop();
+            screenState.Pop();
         }
 
         //Adds a new screen, saving the current screen on the stack
         public void AddScreen(Screen screen)
         {
-            PushScreen(currentScreen);
-            currentScreen = screen;
+            PushScreen(screen);
         }
 
         public void UpdateCurrentScreen(GameTime gameTime)
         {
-            currentScreen.Update(gameTime);
+            CurrentScreen.Update(gameTime);
         }
 
         public void DrawCurrentScreen(GameTime gameTime)
         {
-            currentScreen.Draw(gameTime);
+            CurrentScreen.Draw(gameTime);
+        }
+
+        public GameScreen GetCurrentGameScreen()
+        {
+            foreach (var screen in screenState)
+            {
+                if (screen is GameScreen)
+                {
+                    return (GameScreen)screen;
+                }
+            }
+            return null;
         }
     }
 
@@ -91,18 +102,18 @@ namespace ButlerQuest
 
     public class GameScreen : Screen
     {
-        Level level;
+        public Level level;
         string levelName;
         KeyboardState kState;
         public GameScreen(string toLoad)
         {
             levelName = toLoad;
-            kState = Keyboard.GetState();
         }
 
         public void Initialize()
         {
             level = new Level(levelName);
+            kState = Keyboard.GetState();
         }
 
         public override void Update(GameTime time)
