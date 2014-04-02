@@ -46,12 +46,14 @@ namespace ButlerQuest
         // methods
         public void Draw(SpriteBatch spriteBatch) // draws the current animation
         {
-            sprites[currentAnimation].Draw(spriteBatch, rectangle);
+            if(currentAnimation != null && sprites[currentAnimation] != null)
+                sprites[currentAnimation].Draw(spriteBatch, rectangle);
         }
 
         public virtual void Update(GameTime gameTime) // updates the current animation
         {
-            sprites[currentAnimation].Update();
+            if (currentAnimation != null && sprites[currentAnimation] != null)
+                sprites[currentAnimation].Update();
         }
     }
 }

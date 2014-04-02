@@ -19,17 +19,6 @@ namespace ButlerQuest
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        KeyboardState kState = new KeyboardState();
-        KeyboardState oldState = new KeyboardState();
-        Map test;
-        Rectangle viewport;
-        Enemy target;
-        Enemy player;
-        Enemy colTest;
-        Vector3 lastNodeLoc;
-        Texture2D playertx;
-        Texture2D targettx;
-
         public Game1()
             : base()
         {
@@ -52,14 +41,6 @@ namespace ButlerQuest
             // TODO: Add your initialization logic here
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            viewport = new Rectangle(0, 0, 1200, 720);
-            test = new Map("Content\\AstarTest.tmx", GraphicsDevice, spriteBatch);
-            player = new Enemy(new Vector3(6, 6, 1), null, null, new Vector3(test.ObjectGroups["Start"][0].X, test.ObjectGroups["Start"][0].Y, 0), new Rectangle(0, 0, 32, 32));
-            lastNodeLoc = player.location;
-            target = new Enemy(new Vector3(6,6,1), null, null, new Vector3(test.ObjectGroups["Target"][0].X, test.ObjectGroups["Target"][0].Y, 1), new Rectangle(0, 0, 32, 32));
-            colTest = new Enemy(new Vector3(6,6,1), null, null, new Vector3(100, 100, 1), new Rectangle(100, 100, 32, 32));
-            player.state = AI_STATE.PURSUIT;
-            AIManager.SharedAIManager.graph = test.Graph;
             //path = AStar.FindPath<SquareGraphNode>(test.Graph.GetNode((int)target.location.X, (int)target.location.Y, (int)target.location.Z), test.Graph.GetNode((int)player.location.X, (int)player.location.Y, (int)player.location.Z), AStar.ManhattanDistance, null);
             base.Initialize();
         }
@@ -71,8 +52,9 @@ namespace ButlerQuest
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
-            playertx = Content.Load<Texture2D>("player.png");
-            targettx = Content.Load<Texture2D>("target.png");
+            ScreenManager.SharedManager.Content = Content;
+            ScreenManager.SharedManager.gDevice = GraphicsDevice;
+            ScreenManager.SharedManager.sBatch = spriteBatch;
         }
 
         /// <summary>
@@ -94,44 +76,8 @@ namespace ButlerQuest
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            oldState = kState;
-            kState = Keyboard.GetState();
+            ScreenManager.SharedManager.UpdateCurrentScreen(gameTime);
 
-            if (kState.IsKeyDown(Keys.W))
-            {
-                target.Move(new Vector3(0, -6, 0));
-            }
-            if (kState.IsKeyDown(Keys.A))
-            {
-                target.Move(new Vector3(-6, 0, 0));
-            }
-            if (kState.IsKeyDown(Keys.S))
-            {
-                target.Move(new Vector3(0, 6, 0));
-            }
-            if (kState.IsKeyDown(Keys.D))
-            {
-                target.Move(new Vector3(6, 0, 0));
-            }
-            if(kState.IsKeyDown(Keys.Up))
-            {
-                viewport.Y -= 6;
-            }
-            if(kState.IsKeyDown(Keys.Left))
-            {
-                viewport.X -= 6;
-            }
-            if (kState.IsKeyDown(Keys.Down))
-            {
-                viewport.Y += 6;
-            }
-            if (kState.IsKeyDown(Keys.Right))
-            {
-                viewport.X += 6;
-            }
-            player.Update(gameTime);
-            AIManager.SharedAIManager.lastKnownPlayerLoc = target.location;
-            AIManager.SharedAIManager.MakePaths();
             base.Update(gameTime);
         }
 
@@ -141,20 +87,11 @@ namespace ButlerQuest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(test.BackgroundColor);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            Matrix cameraMatrix = Matrix.CreateTranslation(-(int)viewport.X, -(int)viewport.Y, 0);
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cameraMatrix);
-            test.Draw(viewport, 0);
-            if(player.location.Z < .9f)
-                spriteBatch.Draw(playertx, new Vector2(player.location.X, player.location.Y), Color.White);
-            test.Draw(viewport, 1);
-            if(player.location.Z >.89f)
-                spriteBatch.Draw(playertx, new Vector2(player.location.X, player.location.Y), Color.White);
-            spriteBatch.Draw(targettx, new Vector2(target.location.X, target.location.Y), Color.White);
-            //spriteBatch.Draw(playertx, colTest.rectangle, Color.White);
-            spriteBatch.End();
+            ScreenManager.SharedManager.DrawCurrentScreen(gameTime);
+            
             base.Draw(gameTime);
         }
     }

@@ -17,36 +17,47 @@ namespace ButlerQuest
         List<Wall> walls; // a list to hold all of the walls for the level
         public Map levelMap; // parses the map and tiles used for the specific level
         public Rectangle windowSpace; // window space used for drawing the map
-        GameTime gameTime;
         GraphicsDevice graphics;
         SpriteBatch spriteBatch;
 
         // constructor
         public Level(string mapFile)
         {
-            gameTime = new GameTime();
-
-            graphics = new GraphicsDevice();
-            spriteBatch = new SpriteBatch(graphics);
+            basicEnemies = new List<Enemy>();
+            walls = new List<Wall>();
+            graphics = ScreenManager.SharedManager.gDevice;
+            spriteBatch = ScreenManager.SharedManager.sBatch;
 
             levelMap = new Map(mapFile, graphics, spriteBatch);
 
-            player = EntityGenerator.GeneratePlayer(new Vector3(levelMap.ObjectGroups["Player"][0].X, levelMap.ObjectGroups["Player"][0].Y, 0), 5, 500);
+            foreach (var groupname in levelMap.ObjectGroups.Keys)
+            {
+                int currentFloor = int.Parse(groupname[5].ToString()) - 1;
+                if (groupname.Substring(6, 8) == "Entities")
+                {
+                    foreach (var entity in levelMap.ObjectGroups[groupname])
+                    {
+                        if (entity.Type == "Enemy")
+                        {
+                            basicEnemies.Add(EntityGenerator.GenerateEnemy(new Vector3(entity.X, entity.Y, currentFloor), entity.Properties));
+                        }
+                        else if (entity.Type == "Player")
+                        {
+                            player = EntityGenerator.GeneratePlayer(new Vector3(entity.X, entity.Y, currentFloor), 5, 500);
+                        }
+                        else if (entity.Type == "Wall")
+                        {
+                            walls.Add(EntityGenerator.GenerateWall(new Vector3(entity.X, entity.Y, currentFloor), entity.Width, entity.Height));
+                        }
+                    }
+                }
+                //Otherwise it's a floor graph and sam will write this code later when it's relevant
+            }
 
             windowSpace = new Rectangle((int)player.location.X, (int)player.location.Y, graphics.Viewport.Width, graphics.Viewport.Height);
 
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
-
-            for (int i = 0; i < levelMap.ObjectGroups["Enemy"].Count; i++)
-            {
-                basicEnemies.Add(EntityGenerator.GenerateEnemy(new Vector3(levelMap.ObjectGroups["Enemy"][i].X, levelMap.ObjectGroups["Enemy"][i].Y, 0), levelMap.ObjectGroups["Enemy"][i].Properties));
-            }
-
-            for (int i = 0; i < levelMap.ObjectGroups["Wall"].Count; i++)
-            {
-                walls.Add(EntityGenerator.GenerateWall(new Vector3(levelMap.ObjectGroups["Wall"][i].X, levelMap.ObjectGroups["Wall"][i].Y, 0), levelMap.ObjectGroups["Wall"][i].Width, levelMap.ObjectGroups["Wall"][i].Height));
-            }
 
             AIManager.DebugInitialize(this);
 
@@ -54,22 +65,22 @@ namespace ButlerQuest
 
         // methods
         // calls the draw method of everything that is drawn
-        public void Draw(SpriteBatch spritebatch)
+        public void Draw(GameTime gameTime)
         {
+            Matrix translation = Matrix.CreateTranslation(-windowSpace.X, -windowSpace.Y, 0);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, translation);
+
             levelMap.Draw(windowSpace, (int)player.location.Z);
 
-            Matrix translation = Matrix.CreateTranslation(-windowSpace.X, -windowSpace.Y, 0);
-            spritebatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, translation);
+            foreach (Enemy enemy in basicEnemies) enemy.Draw(spriteBatch);
 
-            foreach (Enemy enemy in basicEnemies) enemy.Draw(spritebatch);
+            player.Draw(spriteBatch);
 
-            player.Draw(spritebatch);
-
-            spritebatch.End();
+            spriteBatch.End();
         }
 
         // calls the update methods for every object that has one. Checks player's collison with all objects.
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             player.Update(gameTime);
 
@@ -115,6 +126,8 @@ namespace ButlerQuest
             }
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
+
+            AIManager.SharedAIManager.lastKnownPlayerLoc = player.location;
         }
     }
 }

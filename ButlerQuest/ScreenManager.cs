@@ -20,12 +20,13 @@ namespace ButlerQuest
         {
             sharedManager = this;
             screenState = new Stack<Screen>();
+            currentScreen = new LoadingGameScreen("AStarTest.tmx");
         }
         public SpriteBatch sBatch;
         public GraphicsDevice gDevice;
         public ContentManager Content;
         static ScreenManager sharedManager;
-        public Screen currentScreen;
+        private Screen currentScreen;
         public static ScreenManager SharedManager
         {
             get
@@ -55,15 +56,33 @@ namespace ButlerQuest
             return screenState.Pop();
         }
 
-        public Screen NextScreen()
+        //Makes the current screen equal to the new screen
+        public void NextScreen()
         {
-            return screenState.Peek();
+            currentScreen = screenState.Pop();
+        }
+
+        //Adds a new screen, saving the current screen on the stack
+        public void AddScreen(Screen screen)
+        {
+            PushScreen(currentScreen);
+            currentScreen = screen;
+        }
+
+        public void UpdateCurrentScreen(GameTime gameTime)
+        {
+            currentScreen.Update(gameTime);
+        }
+
+        public void DrawCurrentScreen(GameTime gameTime)
+        {
+            currentScreen.Draw(gameTime);
         }
     }
 
     public abstract class Screen
     {
-        public abstract void HandleInput();
+        public virtual void HandleInput() { }
 
         public abstract void Draw(GameTime time);
 
@@ -86,12 +105,12 @@ namespace ButlerQuest
 
         public override void Update(GameTime time)
         {
-            
+            level.Update(time);
         }
 
         public override void Draw(GameTime time)
         {
-            
+            level.Draw(time);
         }
     }
 
@@ -122,13 +141,13 @@ namespace ButlerQuest
         }
     }
 
-    public class LoadingScreen : Screen
+    public class LoadingGameScreen : Screen
     {
         Thread loadThread;
         GameScreen gameScreen;
-        public LoadingScreen()
+        public LoadingGameScreen(string level)
         {
-            gameScreen = new GameScreen("AStarTest.tmx");
+            gameScreen = new GameScreen(level);
             ScreenManager.SharedManager.PushScreen(gameScreen);
             loadThread = new Thread(gameScreen.Initialize);
             loadThread.Start();
@@ -144,7 +163,7 @@ namespace ButlerQuest
         {
             if (!loadThread.IsAlive)
             {
-                ScreenManager.SharedManager.currentScreen = ScreenManager.SharedManager.NextScreen();
+                ScreenManager.SharedManager.NextScreen();
             }
         }
     }

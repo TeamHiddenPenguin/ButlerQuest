@@ -83,7 +83,7 @@ namespace ButlerQuest
             ObjectGroups = new Dictionary<string, List<TiledObject>>();
 
             //The map file (as a .tmx), interpreted as an XML file.
-            XDocument xDoc = XDocument.Load(filepath);
+            XDocument xDoc = XDocument.Load("Content\\" + filepath);
 
             //The root node of the XML document for the map.
             XElement xMap = xDoc.Element("map");
