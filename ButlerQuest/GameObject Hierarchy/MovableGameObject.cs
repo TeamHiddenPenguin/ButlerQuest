@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Drew Stanton
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,9 @@ namespace ButlerQuest
         {
             Vector3 dirUnit; // Vector2 to hold the unit vector of the direction given.
             dirUnit = Vector3.Normalize(direction); // normalizes the direction vector and stores it in dirUnit.
-            location = location + (velocity * dirUnit);
+            location = location + (velocity * dirUnit); // changes the location by velocity as a unit vector based on direction
+
+            // updates the rectangle to match the new location
             rectangle.X = (int)location.X;
             rectangle.Y = (int)location.Y;
         } 
