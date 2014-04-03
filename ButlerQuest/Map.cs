@@ -24,57 +24,27 @@ namespace ButlerQuest
 
         //Map info
         //The width of the map
-        public int Width
-        {
-            get;
-            private set;
-        }
+        public int Width { get; private set; }
 
         //The height of the map
-        public int Height
-        {
-            get;
-            private set;
-        }
+        public int Height { get; private set; }
 
         //The default tile width of the map
-        public int TileWidth
-        {
-            get;
-            private set;
-        }
+        public int TileWidth { get; private set; }
 
         //The default tile height of the map
-        public int TileHeight
-        {
-            get;
-            private set;
-        }
-
-        //The background color of the map, also used to define "invisible". Chances are this will go unused, but I am supporting it just in case.
-        public Color BackgroundColor
-        {
-            get;
-            private set;
-        }
+        public int TileHeight { get; private set; }
 
         SpriteBatch spriteBatch; //spritebatch reference
         GraphicsDevice graphicsDevice; //graphicsdevice reference
 
-        //The current scale of the tiles.
-        public float TileScale
-        {
-            get;
-            set;
-        }
-
         //The graph object for this map
         public SquareGraph Graph { get; private set; }
 
-        public Map(string filepath, GraphicsDevice gDevice, SpriteBatch sBatch)
+        public Map(string filepath)
         {
-            spriteBatch = sBatch;
-            graphicsDevice = gDevice;
+            spriteBatch = ScreenManager.SharedManager.sBatch;
+            graphicsDevice = ScreenManager.SharedManager.gDevice;
 
             //Create all of those data structures from before.
             gidToTileSet = new List<Texture2D>();
@@ -88,14 +58,19 @@ namespace ButlerQuest
             //The root node of the XML document for the map.
             XElement xMap = xDoc.Element("map");
 
+            //Parse map info
             ParseInfo(xMap);
 
+            //Make the tilesets
             MakeTileset(xMap);
 
+            //Fill the 2D arrays of tile maps
             MakeTilemap(xMap);
 
+            //Fill the Object Groups
             MakeObjects(xMap);
 
+            //constrcut a "graph". I put graph in quotes because it's a pretty bad implementation
             Graph = CreateSquareGraph(new int[3]{1,0,0});
         }
 
@@ -110,34 +85,6 @@ namespace ButlerQuest
             Height = (int)xMap.Attribute("height");
             TileWidth = (int)xMap.Attribute("tilewidth");
             TileHeight = (int)xMap.Attribute("tileheight");
-
-            //Get the Color attribute, as a hexadecimal number
-            XAttribute xColor = xMap.Attribute("backgroundcolor");
-
-            //If color is null, then we're about to throw a bunch of errors. Avoid those.
-            if (xColor != null)
-            {
-                //Get the string from the color's attribute, and trim the # sign from the beginning.
-                string colorStr = ((string)xColor).Substring(1,((string)xColor).Length - 1);
-                //Create 3 ints to store RGB values.
-                int R, G, B;
-                //Parse the RGB values
-                int.TryParse(colorStr.Substring(0, 2), out R);
-                int.TryParse(colorStr.Substring(2, 2), out G);
-                int.TryParse(colorStr.Substring(4, 2), out B);
-
-                //Set the background color to those RGB values.
-                BackgroundColor = new Color(R, G, B);
-            }
-            else
-            {
-                //Set the background color to the default clear color.
-                BackgroundColor = Color.CornflowerBlue;
-            }
-
-            //Set the tile scale equal to 1
-            TileScale = 1;
-
         }
 
         /// <summary>
@@ -274,9 +221,9 @@ namespace ButlerQuest
         public void Draw(Rectangle visibleArea, int layerNumber)
         {
             int[,] idMap = layerGidMaps[layerNumber];
-            for (int y = visibleArea.Y / (int)(TileHeight * TileScale); y < ((visibleArea.Y + visibleArea.Height) / TileHeight) + 1; y++)
+            for (int y = visibleArea.Y / (int)(TileHeight); y < ((visibleArea.Y + visibleArea.Height) / TileHeight) + 1; y++)
             {
-                for (int x = visibleArea.X / (int)(TileWidth * TileScale); x < ((visibleArea.X + visibleArea.Width) / TileWidth) + 1; x++)
+                for (int x = visibleArea.X / (int)(TileWidth); x < ((visibleArea.X + visibleArea.Width) / TileWidth) + 1; x++)
                 {
                     if (y > -1 && x > -1 && y < Height && x < Width)
                     {
@@ -285,11 +232,11 @@ namespace ButlerQuest
                         // if the cell is unmapped, don't draw it
                         if (id > -1)
                         {
-                            //Calculate position of the tile. Would pre-calculate if not for TileScale being a changing thing
-                            Vector2 position = new Vector2(TileWidth * TileScale * x, TileHeight * TileScale * y);
+                            //Calculate position of the tile
+                            Vector2 position = new Vector2(TileWidth * x, TileHeight * y);
 
                             //Draw it
-                            spriteBatch.Draw(gidToTileSet[id], position, gidToRect[id], Color.White, 0.0f, Vector2.Zero, TileScale, SpriteEffects.None, 0);
+                            spriteBatch.Draw(gidToTileSet[id], position, gidToRect[id], Color.White, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0);
                         }
                     }
                 }

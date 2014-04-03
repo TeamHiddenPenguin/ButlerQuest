@@ -12,6 +12,9 @@ using ButlerQuest;
 
 namespace ButlerQuest
 {
+    /// <summary>
+    /// Global enum representing the state of the AI
+    /// </summary>
     enum AI_STATE
     {
         UNAWARE = 0,
@@ -88,6 +91,7 @@ namespace ButlerQuest
             {
                 switch (currentEnemy.state)
                 {
+                    //If the enemy is not actively doing something to the player, run the normal path
                     case AI_STATE.UNAWARE:
                     case AI_STATE.AWARE:
                         if (currentEnemy.location == currentEnemy.startLocation)
@@ -119,6 +123,7 @@ namespace ButlerQuest
         /// </summary>
         public void MakePaths()
         {
+            //While we still have enemies to path, keep pathing!
             while (!enemiesToPath.IsEmpty)
             {
                 MakePath();

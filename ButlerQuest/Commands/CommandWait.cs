@@ -6,6 +6,7 @@ using System.Text;
 
 namespace ButlerQuest
 {
+    //This class initializes an update-based timer, and when it is finished it ends.
     class CommandWait : ICommand
     {
         public bool IsFinished

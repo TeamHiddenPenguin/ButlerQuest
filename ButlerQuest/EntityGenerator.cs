@@ -8,6 +8,12 @@ namespace ButlerQuest
 {
     static class EntityGenerator
     {
+        /// <summary>
+        /// Makes an enemy object
+        /// </summary>
+        /// <param name="position">position to make the enemy at</param>
+        /// <param name="commands">default commands</param>
+        /// <returns>An enemy</returns>
         public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands)
         {
             Enemy temp = new Enemy(
@@ -50,11 +56,25 @@ namespace ButlerQuest
             return temp;
         }
 
+        /// <summary>
+        /// Makes a wall with a given width and height
+        /// </summary>
+        /// <param name="position">position of the wall</param>
+        /// <param name="width">width of the wall</param>
+        /// <param name="height">height of the wall</param>
+        /// <returns>A wall</returns>
         public static Wall GenerateWall(Vector3 position, int width, int height)
         {
             return new Wall(position, width, height);
         }
 
+        /// <summary>
+        /// Generates a Player object
+        /// </summary>
+        /// <param name="position">The position of the player</param>
+        /// <param name="lives">the number of lives the player has</param>
+        /// <param name="goal">The final goal of the player</param>
+        /// <returns>A player object</returns>
         public static Player GeneratePlayer(Vector3 position, int lives, int goal)
         {
             return new Player(

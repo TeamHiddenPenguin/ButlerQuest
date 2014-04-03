@@ -8,13 +8,15 @@ namespace ButlerQuest
 {
     interface ICommand
     {
-        //Showing people how to use git stuff
+        //Tells whether or not the command is finished executing
         bool IsFinished
         {
             get;
             set;
         }
+        //Update the command
         void Update(GameTime gameTime);
+        //Initialize the command, replaces the constructor because we need to finish constructing the command when it activates first
         void Initialize();
     }
 }

@@ -7,17 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace ButlerQuest
 {
-/* 
- * The PriorityQueue is a well-known data structure. It's essentially a weighted Queue, where instead of being strictly "First In, First Out", it is "First Highest-Priority In, First Highest-Priority Out", if that makes any sense.
- * Basically what that means is that no matter what order it is enqueued in, the highest priority value will be dequeued before anything else (unless the priority is specified). If two things of the same priority exist, then the
- * first value to be added to the priority queue would be dequeued. If a priority is specified when dequeueing, then the first value to enqueued at that priority is dequeued.
- * 
- * This particular implementation of the PriorityQueue data structure was written quickly, and is horribly inefficient. Unfortunately I don't know enough about data structures to calculate how inefficient it is, or figure out
- * how to make it more efficient.
- * 
- * Written by Samuel Sternklar on 3/1/2014
- * 
- */ 
+
     /// <summary>
     /// The PriorityQueue is a well-known data structure. It's essentially a weighted Queue, where instead of being strictly "First In, First Out", it is "First Highest-Priority In,
     /// First Highest-Priority Out", if that makes any sense. Basically what that means is that no matter what order it is enqueued in, the highest priority value will be dequeued
@@ -30,7 +20,8 @@ namespace ButlerQuest
     /// <typeparam name="TValue">The type of the value that will be stored</typeparam>
     public class PriorityQueue<TPriority, TValue>
     {
-        //How we're storing the PriorityQueue. Horribly inefficient in comparison to some other ways of doing things, but this is still fairly quick for our purposes
+        //How we're storing the PriorityQueue. SortedDictionary has worst case O(log(n)) add, remove, and lookup, the same as a Heap, which is normally used for PriorityQueues
+        //As such, it's easier to use a SortedDictionary than it would be to write my own Heap implementation
         SortedDictionary<TPriority, Queue<TValue>> storage;
         
         /// <summary>
@@ -200,6 +191,10 @@ namespace ButlerQuest
         }
     }
 
+    /// <summary>
+    /// A graph nod interface so that we can assure certain standard pieces between all types of graph nodes that we create
+    /// so that we can re-use code (such as the A* implementation, if necessary)
+    /// </summary>
     public interface IGraphNode
     {
         int X { get; set; }
@@ -215,11 +210,11 @@ namespace ButlerQuest
     public class SquareGraphNode : IGraphNode
     {
         //The X coordinate of the node
-        public int X { get; set; }
+        public int X { get; private set; }
         //The Y coordinate
-        public int Y { get; set; }
+        public int Y { get; private set; }
         //The Z coordinate
-        public int Z { get; set; }
+        public int Z { get; private set; }
 
         //Tells whether or not there is a node at a Z coordinate directly above this node
         public bool HasConnectionUpwards { get; set; }
@@ -249,49 +244,79 @@ namespace ButlerQuest
             Neighbors = new List<IGraphNode>();
         }
     }
+
+    /// <summary>
+    /// A "square graph", basically a grid
+    /// </summary>
     public class SquareGraph
     {
+        //The width of this graph (in nodes)
         int Width;
+        //The height of this graph (in nodes)
         int Height;
+        //The width of a node (in pixels)
         public int nodeWidth;
+        //The height of a node (in pixels)
         public int nodeHeight;
-        public int scaleFactor;
         List<SquareGraphNode> nodes { get; set; }
 
+        /// <summary>
+        /// Create a square graph with no nodes in it
+        /// </summary>
+        /// <param name="width">the width of this graph</param>
+        /// <param name="height">the heght of this graph</param>
+        /// <param name="nodeWidth">the width of a node</param>
+        /// <param name="nodeHeight">the height of a node</param>
         public SquareGraph(int width, int height, int nodeWidth, int nodeHeight)
         {
             Width = width;
             Height = height;
             this.nodeWidth = nodeWidth;
             this.nodeHeight = nodeHeight;
-            scaleFactor = nodeWidth / nodeHeight;
         }
 
-        public SquareGraph(int width, int height, int xSpace, int ySpace, List<SquareGraphNode> nodes) : this(width, height, xSpace, ySpace)
+        /// <summary>
+        /// Create a square graph with nodes in it
+        /// </summary>
+        /// <param name="width">the width of this graph</param>
+        /// <param name="height">the heght of this graph</param>
+        /// <param name="nodeWidth">the width of a node</param>
+        /// <param name="nodeHeight">the height of a node</param>
+        /// <param name="nodes">An existing list of nodes to form connections between</param>
+        public SquareGraph(int width, int height, int nodeWidth, int nodeHeight, List<SquareGraphNode> nodes) : this(width, height, nodeWidth, nodeHeight)
         {
             this.nodes = nodes;
             CreateNeighborLists();
         }
 
+        /// <summary>
+        /// Create connections between nodes
+        /// </summary>
         public void CreateNeighborLists()
         {
+            //Loop through every node
             foreach (SquareGraphNode node in nodes)
             {
+                //Find the nodes directly left, up, and down from this node.
                 SquareGraphNode tempNode;
                 SquareGraphNode left = nodes.Find(x => x.X == node.X - 1 && x.Y == node.Y && x.Z == node.Z);
                 SquareGraphNode right = nodes.Find(x => x.X == node.X + 1 && x.Y == node.Y && x.Z == node.Z);
                 SquareGraphNode up = nodes.Find(x => x.X == node.X && x.Y == node.Y - 1 && x.Z == node.Z);
                 SquareGraphNode down = nodes.Find(x => x.X == node.X && x.Y == node.Y + 1 && x.Z == node.Z);
+                
+                //If the node to the left of this one is not equal to null,
                 if (left != null)
                 {
                     //Add left to the list
                     node.Neighbors.Add(left);
+                    //And if up is not equal to null, 
                     if (up != null)
                     {
                         //Add the upper left node if it exists
                         if ((tempNode = nodes.Find(x => x.X == node.X - 1 && x.Y == node.Y - 1 && x.Z == node.Z)) != null)
                             node.Neighbors.Add(tempNode);
                     }
+                    //And if down is not equal to null,
                     if (down != null)
                     {
                         //Add the lower left node if it exists
@@ -299,16 +324,19 @@ namespace ButlerQuest
                             node.Neighbors.Add(tempNode);
                     }
                 }
+                //If the right node is not equal to null,
                 if (right != null)
                 {
                     //Add right to the list
                     node.Neighbors.Add(right);
+                    //And if up is not equal to null,
                     if (up != null)
                     {
                         //Add the upper left node if it exists
                         if ((tempNode = nodes.Find(x => x.X == node.X + 1 && x.Y == node.Y - 1 && x.Z == node.Z)) != null)
                             node.Neighbors.Add(tempNode);
                     }
+                    //And if down is not equal to null,
                     if (down != null)
                     {
                         //Add the lower left node if it exists
@@ -316,13 +344,14 @@ namespace ButlerQuest
                             node.Neighbors.Add(tempNode);
                     }
                 }
-                //check up and down
+                //Actually add up and down, did not want to before because it would be more checks.
                 if (up != null)
                     node.Neighbors.Add(up);
 
                 if (down != null)
                     node.Neighbors.Add(down);
 
+                //If we have marked this node as having a z-axis connection, try to find it and add it to the list.
                 if (node.HasConnectionDownwards)
                     if ((tempNode = nodes.Find(x => x.X == node.X && x.Y == node.Y && x.Z == node.Z + 1)) != null)
                         node.Neighbors.Add(tempNode);
@@ -333,6 +362,13 @@ namespace ButlerQuest
             }
         }
 
+        /// <summary>
+        /// Attempts to get a graph node from the list from node space, throws an error if one cannot be found
+        /// </summary>
+        /// <param name="x">X position in node space</param>
+        /// <param name="y">Y position in node space</param>
+        /// <param name="z">Z position in node space</param>
+        /// <returns>The node at a given space, or an error</returns>
         public SquareGraphNode GetNodeFromGraphCoords(int x, int y, int z)
         {
             SquareGraphNode tempNode = nodes.Find(n => n.X == x && n.Y == y && n.Z == z);
@@ -342,6 +378,13 @@ namespace ButlerQuest
                 throw new KeyNotFoundException("Could not find a node at this point");
         }
 
+        /// <summary>
+        /// Attempts to get a graph world from the list from world space, throws an error if one cannot
+        /// </summary>
+        /// <param name="x">X position in world space</param>
+        /// <param name="y">Y position in world space</param>
+        /// <param name="z">Z position in world space</param>
+        /// <returns>The node at a given space, or an error</returns>
         public SquareGraphNode GetNode(int x, int y, int z)
         {
             return GetNodeFromGraphCoords(x / nodeWidth, y / nodeHeight, z);
@@ -349,7 +392,8 @@ namespace ButlerQuest
     }
 
     /// <summary>
-    /// Well That Failed Exception
+    /// Well That Failed Exception, used anywhere in this project where a better exception
+    /// to throw could not be found, and when the writer is too lazy to make another exception
     /// </summary>
     class WTFException : Exception
     {
