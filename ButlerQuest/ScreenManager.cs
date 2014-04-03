@@ -16,6 +16,7 @@ namespace ButlerQuest
 {
     class ScreenManager
     {
+        // Constructor for screenmanager
         private ScreenManager()
         {
             sharedManager = this;
@@ -27,6 +28,8 @@ namespace ButlerQuest
         public ContentManager Content;
         static ScreenManager sharedManager;
         public Screen CurrentScreen { get { return screenState.Peek(); } }
+
+        // Create the SharedManager as a singleton using a get set
         public static ScreenManager SharedManager
         {
             get
@@ -68,16 +71,19 @@ namespace ButlerQuest
             PushScreen(screen);
         }
 
+        // Updates the screen
         public void UpdateCurrentScreen(GameTime gameTime)
         {
             CurrentScreen.Update(gameTime);
         }
 
+        // Draws the current screen
         public void DrawCurrentScreen(GameTime gameTime)
         {
             CurrentScreen.Draw(gameTime);
         }
 
+        // Checks for the GameScreen
         public GameScreen GetCurrentGameScreen()
         {
             foreach (var screen in screenState)
@@ -91,6 +97,7 @@ namespace ButlerQuest
         }
     }
 
+    // Structural class to be inherited by screens
     public abstract class Screen
     {
         public virtual void HandleInput() { }
@@ -100,6 +107,7 @@ namespace ButlerQuest
         public abstract void Update(GameTime time);
     }
 
+    // Main game Screen to be used, contains level information and the keyboard state
     public class GameScreen : Screen
     {
         public Level level;
@@ -110,23 +118,27 @@ namespace ButlerQuest
             levelName = toLoad;
         }
 
+        // Initializes the level
         public void Initialize()
         {
             level = new Level(levelName);
             kState = Keyboard.GetState();
         }
 
+        // Updates the level
         public override void Update(GameTime time)
         {
             level.Update(time);
             HandleInput();
         }
 
+        // Draws the level
         public override void Draw(GameTime time)
         {
             level.Draw(time);
         }
 
+        // Handle the movement input from the keyboard for controlling the player
         public override void HandleInput()
         {
             kState = Keyboard.GetState();
@@ -150,6 +162,7 @@ namespace ButlerQuest
         }
     }
 
+    // Debug Screen for testing purposes
     public class DebugScreen : Screen
     {
         Texture2D thing1;
@@ -177,6 +190,7 @@ namespace ButlerQuest
         }
     }
 
+    // Loading Screen to display while setting up the Game Screen
     public class LoadingGameScreen : Screen
     {
         Thread loadThread;
@@ -195,6 +209,7 @@ namespace ButlerQuest
             //do stuff
         }
 
+        // Goes to the next screen once the thread for loading is finished
         public override void Update(GameTime time)
         {
             if (!loadThread.IsAlive)
