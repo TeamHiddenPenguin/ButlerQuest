@@ -1,3 +1,4 @@
+// Drew Stanton
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,14 @@ namespace ButlerQuest
         {
             basicEnemies = new List<Enemy>();
             walls = new List<Wall>();
+
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
 
             levelMap = new Map(mapFile, new int[2] { 1, int.MaxValue });
 
-            foreach (var groupname in levelMap.ObjectGroups.Keys)
+            
+            foreach (var groupname in levelMap.ObjectGroups.Keys) // Sam did this loop and everything inside it.
             {
                 int currentFloor = int.Parse(groupname[5].ToString()) - 1;
                 if (groupname.Substring(6, 8) == "Entities")
@@ -54,10 +57,7 @@ namespace ButlerQuest
                 //Otherwise it's a floor graph and sam will write this code later when it's relevant
             }
 
-            windowSpace = new Rectangle((int)player.location.X, (int)player.location.Y, graphics.Viewport.Width, graphics.Viewport.Height);
-
-            windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
-            windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
+            windowSpace = new Rectangle((int)(player.location.X + (player.rectangle.Width / 2)) - (graphics.Viewport.Width / 2), (int)(player.location.Y + (player.rectangle.Height / 2)) - (graphics.Viewport.Height / 2), graphics.Viewport.Width, graphics.Viewport.Height);
 
             //AIManager.DebugInitialize(this);
 

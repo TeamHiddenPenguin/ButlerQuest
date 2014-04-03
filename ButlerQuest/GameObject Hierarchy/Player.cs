@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Drew Stanton
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,10 +20,12 @@ namespace ButlerQuest
         public Player(Vector3 velocity, Animation[] animations, string[] names, Vector3 location, Rectangle rectangle, int life, int moneyGoal)
             : base (velocity, animations, names, location, rectangle)
         {
+            startLoc = location;
+
+            // not currently used for anything, but will be implemented by next milestone.
             lives = life;
             moneyNeeded = moneyGoal;
             moneyCollected = 0;
-            startLoc = location;
         }
 
         // methods
