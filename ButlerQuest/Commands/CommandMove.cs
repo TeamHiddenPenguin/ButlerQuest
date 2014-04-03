@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿//Written by Samuel Sternklar
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Written by Samuel Sternklar
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -13,8 +14,6 @@ namespace ButlerQuest
     /// First Highest-Priority Out", if that makes any sense. Basically what that means is that no matter what order it is enqueued in, the highest priority value will be dequeued
     /// before anything else (unless the priority is specified). If two things of the same priority exist, then the first value to be added to the priority queue would be dequeued.
     /// If a priority is specified when dequeueing, then the first value to enqueued at that priority is dequeued.
-    /// 
-    /// Written by Samuel Sternklar.
     /// </summary>
     /// <typeparam name="TPriority">The type that will be used to determine the priority a value will be placed at</typeparam>
     /// <typeparam name="TValue">The type of the value that will be stored</typeparam>
@@ -210,11 +209,11 @@ namespace ButlerQuest
     public class SquareGraphNode : IGraphNode
     {
         //The X coordinate of the node
-        public int X { get; private set; }
+        public int X { get; set; }
         //The Y coordinate
-        public int Y { get; private set; }
+        public int Y { get; set; }
         //The Z coordinate
-        public int Z { get; private set; }
+        public int Z { get; set; }
 
         //Tells whether or not there is a node at a Z coordinate directly above this node
         public bool HasConnectionUpwards { get; set; }

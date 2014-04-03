@@ -28,7 +28,7 @@ namespace ButlerQuest
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
 
-            levelMap = new Map(mapFile);
+            levelMap = new Map(mapFile, new int[2] { 1, int.MaxValue });
 
             foreach (var groupname in levelMap.ObjectGroups.Keys)
             {

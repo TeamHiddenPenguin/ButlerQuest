@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Written by Samuel Sternklar
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,7 +42,7 @@ namespace ButlerQuest
         //The graph object for this map
         public SquareGraph Graph { get; private set; }
 
-        public Map(string filepath)
+        public Map(string filepath, int[] gidCostMap)
         {
             spriteBatch = ScreenManager.SharedManager.sBatch;
             graphicsDevice = ScreenManager.SharedManager.gDevice;
@@ -71,7 +72,7 @@ namespace ButlerQuest
             MakeObjects(xMap);
 
             //constrcut a "graph". I put graph in quotes because it's a pretty bad implementation
-            Graph = CreateSquareGraph(new int[3]{1,0,0});
+            Graph = CreateSquareGraph(gidCostMap);
         }
 
         /// <summary>
@@ -270,7 +271,9 @@ namespace ButlerQuest
                                 node.HasConnectionDownwards = true;
                             }
                         }
-                        nodes.Add(node);
+                        //if the cost of the node is the max value of an int, don't add it in.
+                        if(node.Cost != int.MaxValue)
+                            nodes.Add(node);
                     }
                 }
             }

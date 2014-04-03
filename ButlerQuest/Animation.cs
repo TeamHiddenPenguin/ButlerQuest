@@ -23,7 +23,7 @@ namespace ButlerQuest
         public int latency;
 
         // constructor
-        public Animation(int firstFrame, int lastFrame, int frameW, int frameH, int row, int cols, int maxCounter, Texture2D spriteSheet)
+        public Animation(int firstFrame, int lastFrame, int frameW, int frameH, int row, int cols, int speedLimiter, Texture2D spriteSheet)
         {
             startFrame = firstFrame;
             endFrame = lastFrame;
@@ -34,7 +34,7 @@ namespace ButlerQuest
             columns = cols;
             image = spriteSheet;
             counter = 0;
-            latency = maxCounter;
+            latency = speedLimiter;
         }
 
         // methods
@@ -63,7 +63,8 @@ namespace ButlerQuest
             spriteBatch.Draw(image, destinationRect, source, Color.White);
         }
 
-        //Sam told me to do this
+        //Sam was here
+        //Do not use unless you plan on doing pixel perfect collision (I don't think we will but just in case)
         public Texture2D GetTexture(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
             RenderTarget2D renderTarget = new RenderTarget2D(graphicsDevice, frameWidth, frameHeight);

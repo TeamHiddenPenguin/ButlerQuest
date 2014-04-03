@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Written by Drew Stanton and Jesse Florio
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,49 +12,55 @@ namespace ButlerQuest
     public abstract class DrawableGameObject : GameObject
     {
         // attributes
-        Dictionary<string, Animation> sprites; // a dictionary of all of the animations for a single DGO.
-        string currentAnimation; // represents the animation to be drawn on the screen. Used as a key in the sprites Dictionary.
+        // this is a dictionary of all the animations with the key being the name of the animations
+        Dictionary<string, Animation> anims;
+        // the name of the animation currently being displayed
+        string currentAnimation;
 
 
         // properties
-        string CurrentAnimation
+        // property for current animation
+        public string CurrentAnimation
         {
             get { return currentAnimation; }
 
             set // if the given value exists in the animation dictionary, changes the current animation, otherwise sets the animation to the default
             {
-                if (sprites.ContainsKey(value))
+                if (anims.ContainsKey(value))
                 {
                     currentAnimation = value;
-                    sprites[currentAnimation].Reset();
+                    anims[currentAnimation].Reset();
                 }
                 else currentAnimation = "default";
             }
         }
 
         // constructor
+        // takes the names and animations and adds them to the anims dictionary
         public DrawableGameObject(Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
             : base(loc, rect)
         {
-            sprites = new Dictionary<string, Animation>();
+            anims = new Dictionary<string, Animation>();
 
-            /*for (int i = 0; i < names.Length; i++)
+            for (int i = 0; i < names.Length; i++)
             {
-                sprites.Add(names[i], animations[i]);
-            }*/
+                anims.Add(names[i], animations[i]);
+            }
+            CurrentAnimation = "default";
         }
 
         // methods
+        // draws the current animation from the anim dictionary
         public void Draw(SpriteBatch spriteBatch) // draws the current animation
         {
-            if(currentAnimation != null && sprites[currentAnimation] != null)
-                sprites[currentAnimation].Draw(spriteBatch, rectangle);
+            if(currentAnimation != null && anims[currentAnimation] != null)
+                anims[currentAnimation].Draw(spriteBatch, rectangle);
         }
 
         public virtual void Update(GameTime gameTime) // updates the current animation
         {
-            if (currentAnimation != null && sprites[currentAnimation] != null)
-                sprites[currentAnimation].Update();
+            if (currentAnimation != null && anims[currentAnimation] != null)
+                anims[currentAnimation].Update();
         }
     }
 }

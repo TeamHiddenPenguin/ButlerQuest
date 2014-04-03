@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿//Written by Sam Sternklar (mostly), and Jesse Florio
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +18,23 @@ namespace ButlerQuest
         /// <returns>An enemy</returns>
         public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands)
         {
+            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("SpriteSheetEnemies.png");
+
             Enemy temp = new Enemy(
-                new Vector3(1, 1, 1),
-                null,
-                new string[4] { "WalkUp", "WalkRight", "WalkDown", "WalkLeft" },
+                new Vector3(2, 2, 1),
+                new Animation[5]{
+                    new Animation(0,0,40,40,4,4,1, tex), //default
+                    new Animation(4,5,40,40,4,4,15, tex), //WalkUp
+                    new Animation(11,15,40,40,4,4,5,tex), //WalkRight
+                    new Animation(1,2,40,40,4,4,15, tex), //WalkDown
+                    new Animation(6,10,40,40,4,4,5,tex) //WalkLeft
+                },
+                new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" },
                 position,
                 new Rectangle(
                     (int)position.X,
                     (int)position.Y,
-                    32, 32));
+                    40, 40));
 
             foreach (var parseable in commands)
             {
@@ -77,18 +87,29 @@ namespace ButlerQuest
         /// <returns>A player object</returns>
         public static Player GeneratePlayer(Vector3 position, int lives, int goal)
         {
-            return new Player(
-                new Vector3(1, 1, 1),
-                null,
-                new string[8] { "WalkUp", "WalkRight", "WalkDown", "WalkLeft", "AttackUp", "AttackRight", "AttackDown", "AttackLeft" },
+            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("SpriteSheetAlfredJeevesIII.png");
+
+            Player player = new Player(
+                new Vector3(2, 2, 1),
+                new Animation[5] {
+                    new Animation(0,0,40,40,4,4,1, tex), //default
+                    new Animation(4,5,40,40,4,4,15, tex), //WalkUp
+                    new Animation(11,15,40,40,4,4,5,tex), //WalkRight
+                    new Animation(1,2,40,40,4,4,15, tex), //WalkDown
+                    new Animation(6,10,40,40,4,4,5,tex) //WalkLeft
+                },
+                new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" },
                 position,
                 new Rectangle(
                     (int)position.X,
                     (int)position.Y,
-                    32, 32),
+                    40, 40),
                 lives,
                 goal);
-        }
 
+            
+
+            return player;
+        }
     }
 }

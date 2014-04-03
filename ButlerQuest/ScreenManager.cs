@@ -20,7 +20,6 @@ namespace ButlerQuest
         {
             sharedManager = this;
             screenState = new Stack<Screen>();
-            screenState.Push(new LoadingGameScreen("AStarTest.tmx"));
         }
         public SpriteBatch sBatch;
         public GraphicsDevice gDevice;

@@ -52,9 +52,13 @@ namespace ButlerQuest
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
+
+            //I'm not fixing this. Feel free to try yourselves.
+            //-Sam
             ScreenManager.SharedManager.Content = Content;
             ScreenManager.SharedManager.gDevice = GraphicsDevice;
             ScreenManager.SharedManager.sBatch = spriteBatch;
+            ScreenManager.SharedManager.PushScreen(new LoadingGameScreen("DebugMap.tmx"));
         }
 
         /// <summary>
