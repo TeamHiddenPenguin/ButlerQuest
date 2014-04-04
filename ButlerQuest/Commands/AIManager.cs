@@ -142,7 +142,7 @@ namespace ButlerQuest
         private Queue<ICommand> BuildPath(Vector3 start, Vector3 end, Enemy reference, int commandsToCopy)
         {
             //Build the path.
-            List<IGraphNode> path = AStar.FindPath(graph.GetNode((int)start.X, (int)start.Y, (int)start.Z), graph.GetNode((int)end.X, (int)end.Y, (int)end.Z), AStar.ManhattanDistance, AStar.ManhattanDistance);
+            List<IGraphNode> path = AStar.FindPath(graph.GetNode((int)start.X, (int)start.Y, (int)start.Z), graph.GetNode((int)end.X, (int)end.Y, (int)end.Z));
             //create a list of commands to translate between a list of nodes and a queue of commands
             List<ICommand> translationList = new List<ICommand>();
             //Populate the translation list with commands from the graph nodes.

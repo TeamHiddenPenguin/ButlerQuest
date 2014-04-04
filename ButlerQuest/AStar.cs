@@ -22,7 +22,7 @@ namespace ButlerQuest
         /// <param name="distance">The function used to find the distance between two points</param>
         /// <param name="estimate">The function used to estimate the distance between the current node and another node</param>
         /// <returns>A list of nodes representing the path between the two nodes</returns>
-        public static List<IGraphNode> FindPath(IGraphNode start, IGraphNode end, Func<IGraphNode, IGraphNode, double> distance, Func<IGraphNode, IGraphNode, double> estimate)
+        public static List<IGraphNode> FindPath(IGraphNode start, IGraphNode end)
         {
             //The set of nodes we have already looked at
             //Is a hashset because it has O(1) time add and O(1) time Contains
@@ -58,12 +58,12 @@ namespace ButlerQuest
                 foreach (var node in currentNode.Neighbors)
                 {
                     //find the distance between the two points.
-                    double dist = distance(currentNode, node);
+                    double dist = ManhattanDistance(currentNode, node);
                     //Create a new path, contiaining the old path plus this path.
                     List<IGraphNode> newPath = new List<IGraphNode>(currentPath);
                     newPath.Add(node);
                     //Add this path to the queue
-                    queue.Enqueue(CalculatePathCost(currentPath) + dist + estimate(node, end), newPath);
+                    queue.Enqueue(CalculatePathCost(currentPath) + dist + ManhattanDistance(node, end), newPath);
                 }
             }
             //if no valid path exists, return null.
