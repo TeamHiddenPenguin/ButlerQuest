@@ -14,6 +14,7 @@ namespace ButlerMindControlAgent
 {
     public partial class Form1 : Form
     {
+        int lastCommandNumber;
         XDocument xDoc;
         XElement rootObjectListElement;
         List<XElement> floors;
@@ -109,6 +110,7 @@ namespace ButlerMindControlAgent
             var selected = currentFloorObjects[EnemySelectBox.SelectedIndex];
 
             XElement propertiesList;
+            lastCommandNumber = 1;
             if ((propertiesList = selected.Element("properties")) != null)
             {
                 foreach (var property in propertiesList.Elements("property"))
@@ -116,8 +118,9 @@ namespace ButlerMindControlAgent
                     string name = (string)property.Attribute("name");
                     string value = (string)property.Attribute("value");
 
-                    CommandList.Items.Add(name + "|" + value);
+                    CommandList.Items.Add(name.Substring(0,4) + "|" + value);
                     currentCommands.Add(property);
+                    lastCommandNumber++;
                 }
             }
 
@@ -143,7 +146,8 @@ namespace ButlerMindControlAgent
             int X, Y, Z;
             if (int.TryParse(MoveXPosBox.Text, out X) && int.TryParse(MoveYPosBox.Text, out Y) && int.TryParse(MoveZPosBox.Text, out Z))
             {
-                var newNode = new XElement("property", new XAttribute("name", "MOVE"), new XAttribute("value", ""+X+","+Y+","+Z));
+                var newNode = new XElement("property", new XAttribute("name", "MOVE" + lastCommandNumber), new XAttribute("value", ""+X+","+Y+","+Z));
+                lastCommandNumber++;
                 currentFloorObjects[EnemySelectBox.SelectedIndex].Element("properties").Add(newNode);
                 currentCommands.Add(newNode);
                 CommandList.Items.Add("MOVE|" + X + "," + Y + "," + Z);
@@ -155,7 +159,8 @@ namespace ButlerMindControlAgent
             int waitTime;
             if (int.TryParse(WaitCommandTextBox.Text, out waitTime))
             {
-                var newNode = new XElement("property", new XAttribute("name", "WAIT"), new XAttribute("value", "" + waitTime));
+                var newNode = new XElement("property", new XAttribute("name", "WAIT" + lastCommandNumber), new XAttribute("value", "" + waitTime));
+                lastCommandNumber++;
                 currentFloorObjects[EnemySelectBox.SelectedIndex].Element("properties").Add(newNode);
                 currentCommands.Add(newNode);
                 CommandList.Items.Add("WAIT|" + waitTime);

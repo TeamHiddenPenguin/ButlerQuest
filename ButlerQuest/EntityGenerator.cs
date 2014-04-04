@@ -38,7 +38,7 @@ namespace ButlerQuest
 
             foreach (var parseable in commands)
             {
-                switch (parseable.Item1.ToUpper())
+                switch (parseable.Item1.ToUpper().Substring(0,4))
                 {
                     case "MOVE":
                         //format is "X,Y,Z"
@@ -54,7 +54,7 @@ namespace ButlerQuest
                         int.TryParse(parseable.Item2, out time);
                         temp.defaultCommands.Enqueue(new CommandWait(time));
                         break;
-                    case "END":
+                    case "END ":
                         temp.defaultCommands.Enqueue(new GetNextCommandSet(temp, int.MaxValue));
                         temp.defaultCommands.Enqueue(new WaitForNextCommand(temp));
                         break;
