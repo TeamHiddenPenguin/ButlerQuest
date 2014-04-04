@@ -33,6 +33,13 @@ namespace ButlerQuest
             // updates the rectangle to match the new location
             rectangle.X = (int)location.X;
             rectangle.Y = (int)location.Y;
-        } 
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            rectangle.X = (int)location.X;
+            rectangle.Y = (int)location.Y;
+        }
     }
 }

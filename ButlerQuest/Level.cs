@@ -99,8 +99,6 @@ namespace ButlerQuest
                             case -1: break;
                             default: player.lives--;
                                 player.location = player.startLoc;
-                                player.rectangle.X = (int)player.location.X;
-                                player.rectangle.Y = (int)player.location.Y;
                                 ForceGlobalAIStateChange(AI_STATE.UNAWARE);
                                 break;
                         }
@@ -112,13 +110,13 @@ namespace ButlerQuest
                 int collision = player.CollisionSide(block);
                 switch (collision)
                 {
-                    case 0: player.location.Y -= player.velocity.Y;
+                    case 0: player.location.Y += player.velocity.Y;
                         break;
 
                     case 1: player.location.X -= player.velocity.X;
                         break;
 
-                    case 2: player.location.Y += player.velocity.Y;
+                    case 2: player.location.Y -= player.velocity.Y;
                         break;
 
                     case 3: player.location.X += player.velocity.X;
