@@ -38,7 +38,7 @@ namespace ButlerQuest
 
             foreach (var parseable in commands)
             {
-                switch (parseable.Item1.ToUpper().Substring(0,4))
+                switch (parseable.Item1.ToUpper().Trim('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'))
                 {
                     case "MOVE":
                         //format is "X,Y,Z"
