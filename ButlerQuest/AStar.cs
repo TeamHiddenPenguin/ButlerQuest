@@ -16,6 +16,7 @@ namespace ButlerQuest
     {
         /// <summary>
         /// Finds a path between two graph nodes using the A* algorithm
+        /// Based on http://blogs.msdn.com/b/ericlippert/archive/2007/10/10/path-finding-using-a-in-c-3-0-part-four.aspx
         /// </summary>
         /// <param name="start">The starting node to path from</param>
         /// <param name="end">The ending node to path from</param>
@@ -27,7 +28,7 @@ namespace ButlerQuest
             //A PriorityQueue of open paths to evaluate. the priority is the total cost of the current node plus the estimated distance to the end node
             PriorityQueue<double, List<IGraphNode>> openQueue = new PriorityQueue<double, List<IGraphNode>>();
             //A hashset set of nodes we have already looked at
-            //Is a hashset because it has O(1) time add and O(1) time Contains, and if we have like 30 enemies chasing us then lambda functions for List.Find(Predicate<T> predicate) are slow.
+            //Is a hashset because it has O(1) time Add and Contains
             HashSet<IGraphNode> closedSet = new HashSet<IGraphNode>();
             //The initial path, from which all other paths will be calculated
             List<IGraphNode> initialPath = new List<IGraphNode>();
