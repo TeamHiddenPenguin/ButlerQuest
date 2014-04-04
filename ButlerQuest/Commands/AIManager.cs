@@ -146,8 +146,9 @@ namespace ButlerQuest
             //create a list of commands to translate between a list of nodes and a queue of commands
             List<ICommand> translationList = new List<ICommand>();
             //Populate the translation list with commands from the graph nodes.
-            foreach (var item in path)
+            for (int i = 1; i < path.Count; i++)
             {
+                var item = path[i];
                 translationList.Add(new CommandMove(new Vector3(item.X * graph.nodeWidth, item.Y * graph.nodeHeight, item.Z), reference));
             }
             
