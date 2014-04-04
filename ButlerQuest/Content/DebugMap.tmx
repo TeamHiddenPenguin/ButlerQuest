@@ -12,34 +12,34 @@
     <object name="Player" type="Player" x="280" y="1360" width="40" height="40" />
     <object name="Enemy 1" type="Enemy" x="160" y="240" width="40" height="40">
       <properties>
-        <property name="WAIT" value="0" />
-        <property name="MOVE" value="120,240,0" />
-        <property name="WAIT" value="60" />
-        <property name="MOVE" value="440,240,0" />
-        <property name="WAIT" value="60" />
-        <property name="MOVE" value="160,240,0" />
+        <property name="WAIT1" value="0" />
+        <property name="MOVE2" value="120,240,0" />
+        <property name="WAIT3" value="60" />
+        <property name="MOVE4" value="440,240,0" />
+        <property name="WAIT5" value="60" />
+        <property name="MOVE6" value="160,240,0" />
       </properties>
     </object>
     <object name="Enemy 2" type="Enemy" x="840" y="1360" width="40" height="40">
       <properties>
-        <property name="WAIT" value="0" />
-        <property name="MOVE" value="840,1880,0" />
-        <property name="MOVE" value="1280,1880,0" />
-        <property name="MOVE" value="1280,1360,0" />
-        <property name="MOVE" value="840,1360,0" />
+        <property name="WAIT1" value="0" />
+        <property name="MOVE2" value="840,1880,0" />
+        <property name="MOVE3" value="1280,1880,0" />
+        <property name="MOVE4" value="1280,1360,0" />
+        <property name="MOVE5" value="840,1360,0" />
       </properties>
     </object>
     <object name="Enemy 3" type="Enemy" x="1360" y="600" width="40" height="40">
       <properties>
-        <property name="WAIT" value="0" />
-        <property name="MOVE" value="1000,600,0" />
-        <property name="MOVE" value="1000,1440,0" />
-        <property name="MOVE" value="1400,1440,0" />
-        <property name="MOVE" value="1400,1560,0" />
-        <property name="WAIT" value="60" />
-        <property name="MOVE" value="1880,1560,0" />
-        <property name="MOVE" value="1920,600,0" />
-        <property name="MOVE" value="1360,600,0" />
+        <property name="WAIT1" value="0" />
+        <property name="MOVE2" value="1000,600,0" />
+        <property name="MOVE3" value="1000,1440,0" />
+        <property name="MOVE4" value="1400,1440,0" />
+        <property name="MOVE5" value="1400,1560,0" />
+        <property name="WAIT6" value="60" />
+        <property name="MOVE7" value="1880,1560,0" />
+        <property name="MOVE8" value="1920,600,0" />
+        <property name="MOVE9" value="1360,600,0" />
       </properties>
     </object>
   </objectgroup>
