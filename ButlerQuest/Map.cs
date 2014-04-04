@@ -309,7 +309,8 @@ namespace ButlerQuest
                                 node.HasConnectionDownwards = true;
                             }
                         }
-                        nodes.Add(node);
+                        if (node.Cost != int.MaxValue)
+                            nodes.Add(node);
                     }
                 }
             }

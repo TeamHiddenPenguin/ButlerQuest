@@ -99,6 +99,9 @@ namespace ButlerQuest
                             case -1: break;
                             default: player.lives--;
                                 player.location = player.startLoc;
+                                player.rectangle.X = (int)player.location.X;
+                                player.rectangle.Y = (int)player.location.Y;
+                                ForceGlobalAIStateChange(AI_STATE.UNAWARE);
                                 break;
                         }
                 }
@@ -128,6 +131,16 @@ namespace ButlerQuest
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
 
             AIManager.SharedAIManager.lastKnownPlayerLoc = player.location;
+        }
+
+        public void ForceGlobalAIStateChange(AI_STATE newState)
+        {
+            foreach (var enemy in basicEnemies)
+            {
+                enemy.state = newState;
+                enemy.commandQueue.Clear();
+                enemy.currentCommand = null;
+            }
         }
     }
 }

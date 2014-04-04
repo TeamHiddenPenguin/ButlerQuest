@@ -15,7 +15,7 @@ namespace ButlerQuest
     /// <summary>
     /// Global enum representing the state of the AI
     /// </summary>
-    enum AI_STATE
+    public enum AI_STATE
     {
         UNAWARE = 0,
         AWARE,
@@ -25,6 +25,7 @@ namespace ButlerQuest
 
     class AIManager
     {
+        int CommandsToCopy = 3;
         //The shared manager to be returned by the SharedManager property
         static private AIManager sharedManager;
         //The stored map that this AIManager is working from
@@ -112,7 +113,7 @@ namespace ButlerQuest
                         //DO LATER THIS IS GONNA BE HARD
                     case AI_STATE.PURSUIT:
                         //build the path, factoring in the distance between the current location and the last known player location.
-                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, (int)Math.Ceiling(((Math.Abs(lastKnownPlayerLoc.X - currentEnemy.location.X) + Math.Abs(lastKnownPlayerLoc.Y - currentEnemy.location.Y)))));
+                        currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, CommandsToCopy);
                         break;
                 }
             }

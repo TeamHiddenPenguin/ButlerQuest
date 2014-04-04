@@ -158,6 +158,14 @@ namespace ButlerQuest
             {
                 level.player.Move(new Vector3(1, 0, 0));
             }
+            if (kState.IsKeyDown(Keys.Space))
+            {
+                level.ForceGlobalAIStateChange(AI_STATE.PURSUIT);
+            }
+            if (kState.IsKeyDown(Keys.Back))
+            {
+                level.ForceGlobalAIStateChange(AI_STATE.UNAWARE);
+            }
         }
     }
 
