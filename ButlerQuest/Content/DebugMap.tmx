@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="60" height="60" tilewidth="40" tileheight="40" backgroundcolor="#aa00ff">
  <tileset firstgid="1" name="tiles" tilewidth="40" tileheight="40">
   <image source="Wall&amp;Floor.png" width="80" height="40"/>
@@ -42,5 +42,18 @@
     <property name="9MOVE" value="1360,600,0"/>
    </properties>
   </object>
+  <object name="Wall 1" type="Wall" x="360" y="1600" width="160" height="40"/>
+  <object name="Wall 2" type="Wall" x="240" y="1280" width="120" height="40"/>
+  <object name="Wall 3" type="Wall" x="360" y="1280" width="40" height="320"/>
+  <object name="Wall 4" type="Wall" x="480" y="1560" width="80" height="40"/>
+  <object x="520" y="1560" width="40"/>
+  <object name="Wall 5" type="Wall" x="520" y="1480" width="40" height="80"/>
+  <object name="Wall 6" type="Wall" x="560" y="1400" width="40" height="120"/>
+  <object name="Wall 7" type="Wall" x="600" y="1320" width="40" height="120"/>
+  <object name="Wall 8" type="Wall" x="640" y="1280" width="40" height="80"/>
+  <object name="Wall 9" type="Wall" x="680" y="1240" width="40" height="80"/>
+  <object name="Wall 12" type="Wall" x="880" y="1200" width="80" height="40"/>
+  <object name="Wall 11" type="Wall" x="720" y="1160" width="200" height="40"/>
+  <object name="Wall 10" type="Wall" x="720" y="1200" width="40" height="40"/>
  </objectgroup>
 </map>

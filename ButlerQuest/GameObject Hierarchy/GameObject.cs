@@ -29,34 +29,34 @@ namespace ButlerQuest
             {
                 if (this.rectangle.Intersects(otherObject.rectangle)) // checks to see if the rectangles collide at all.
                 {
-                    if (this.rectangle.X > otherObject.rectangle.X) // does not collide at this.rectangle.Left
+                    if (this.rectangle.X > otherObject.rectangle.X) // does not collide at this.rectangle.Right
                     {
-                        if (this.rectangle.Y > otherObject.rectangle.Y) // does not collide at this.rectangle.Top
+                        if (this.rectangle.Y > otherObject.rectangle.Y) // does not collide at this.rectangle.Bottom
                         {
-                            if (Math.Abs(this.rectangle.X - otherObject.rectangle.X) > Math.Abs(this.rectangle.Y - otherObject.rectangle.Y)) return 3; // more of rectangle.Bottom is colliding than rectangle.Right
+                            if (Math.Abs(this.rectangle.X - otherObject.rectangle.Right) > Math.Abs(this.rectangle.Y - otherObject.rectangle.Bottom)) return 0; // more of rectangle.Top is colliding than rectangle.Left
 
-                            else return 0; // more of rectangle.Right is colliding than rectangle.Bottom.
+                            else return 3; // more of rectangle.Left is colliding than rectangle.Bottom.
                         }
-                        else // does not collide at this.rectangle.Right
+                        else // does not collide at this.rectangle.Top
                         {
-                            if (Math.Abs(this.rectangle.X - otherObject.rectangle.X) > Math.Abs(this.rectangle.Y - otherObject.rectangle.Y)) return 3; // more of rectangle.Bottom is colliding than rectangle.Left
+                            if (Math.Abs(this.rectangle.X - otherObject.rectangle.Right) > Math.Abs(this.rectangle.Bottom - otherObject.rectangle.Y)) return 2; // more of rectangle.Bottom is colliding than rectangle.Left
 
-                            return 2; // more of rectangle.Left is colliding than rectangle.Bottom.
+                            return 3; // more of rectangle.Left is colliding than rectangle.Bottom.
                         }
                     }
-                    else // does not collide at this.rectangle.Bottom
+                    else // does not collide at this.rectangle.Left
                     {
-                        if (this.rectangle.Y > otherObject.rectangle.Y) // does not collide at this.rectangle.Left
+                        if (this.rectangle.Y > otherObject.rectangle.Y) // does not collide at this.rectangle.Bottom
                         {
-                            if (Math.Abs(this.rectangle.X - otherObject.rectangle.X) > Math.Abs(this.rectangle.Y - otherObject.rectangle.Y)) return 1; // more of rectangle.Top is colliding than rectangle.Right
+                            if (Math.Abs(this.rectangle.Right - otherObject.rectangle.X) > Math.Abs(this.rectangle.Y - otherObject.rectangle.Bottom)) return 0; // more of rectangle.Top is colliding than rectangle.Right
 
-                            return 0; // more of rectangle.Right is colliding than rectangle.Top.
+                            return 1; // more of rectangle.Right is colliding than rectangle.Top.
                         }
-                        else // does not collide at this.rectangle.Right
+                        else // does not collide at this.rectangle.Top
                         {
-                            if (Math.Abs(this.rectangle.X - otherObject.rectangle.X) > Math.Abs(this.rectangle.Y - otherObject.rectangle.Y)) return 1; // more of rectangle.Top is colliding than rectangle.Left
+                            if (Math.Abs(this.rectangle.Right - otherObject.rectangle.X) > Math.Abs(this.rectangle.Bottom - otherObject.rectangle.Y)) return 2; // more of rectangle.Bottom is colliding than rectangle.Right
 
-                            return 2; // more of rectangle.Left is colliding than rectangle.Top.
+                            return 1; // more of rectangle.Right is colliding than rectangle.Bottom.
                         }
                     }
                 }
