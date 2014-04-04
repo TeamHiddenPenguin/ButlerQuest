@@ -25,45 +25,45 @@ namespace ButlerQuest
         public static List<IGraphNode> FindPath(IGraphNode start, IGraphNode end)
         {
             //The set of nodes we have already looked at
-            //Is a hashset because it has O(1) time add and O(1) time Contains
+            //Is a hashset because it has O(1) time add and O(1) time Contains, and if we have like 30 enemies chasing us then lambda functions for List.Find(Predicate<T> predicate) are slow.
             HashSet<IGraphNode> closedSet = new HashSet<IGraphNode>();
             //A PriorityQueue of paths to evaluate. the priority is the total cost of the current node plus the estimated distance to the end node
-            PriorityQueue<double, List<IGraphNode>> queue = new PriorityQueue<double, List<IGraphNode>>();
+            PriorityQueue<double, List<IGraphNode>> openQueue = new PriorityQueue<double, List<IGraphNode>>();
             //The initial path, from which all other paths will be calculated
             List<IGraphNode> initialPath = new List<IGraphNode>();
             
             //Add the start node to the initial path, and the initial path to the queue of things to be evaluated
             initialPath.Add(start);
-            queue.Enqueue(0, initialPath);
+            openQueue.Enqueue(0, initialPath);
 
             //While we stll have objects in the queue and have not exited the queue yet
-            while (!queue.IsEmpty)
+            while (!openQueue.IsEmpty)
             {
                 //Get the current node to be evaluated
-                List<IGraphNode> currentPath = queue.Dequeue();
+                List<IGraphNode> currentPath = openQueue.Dequeue();
                 IGraphNode currentNode = currentPath.Last();
 
                 //If the current node has already been evaluated, then this path is definitely not the shortest path and we can skip evaluating it.
-                if (closedSet.Contains(currentNode))
-                    continue;
-
-                //If the current node is the end node, then we're done and can return the current path.
-                if (currentNode.Equals(end))
-                    return currentPath;
-
-                //Add the current node to the closed set so that we know it's already been evaluated.
-                closedSet.Add(currentNode);
-
-                //For each of the object's neighbors, create a new path and add it to the queue
-                foreach (var node in currentNode.Neighbors)
+                if (!closedSet.Contains(currentNode))
                 {
-                    //find the distance between the two points.
-                    double dist = ManhattanDistance(currentNode, node);
-                    //Create a new path, contiaining the old path plus this path.
-                    List<IGraphNode> newPath = new List<IGraphNode>(currentPath);
-                    newPath.Add(node);
-                    //Add this path to the queue
-                    queue.Enqueue(CalculatePathCost(currentPath) + dist + ManhattanDistance(node, end), newPath);
+                    //If the current node is the end node, then we're done and can return the current path.
+                    if (currentNode.Equals(end))
+                        return currentPath;
+
+                    //Add the current node to the closed set so that we know it's already been evaluated.
+                    closedSet.Add(currentNode);
+
+                    //For each of the object's neighbors, create a new path and add it to the queue
+                    foreach (var node in currentNode.Neighbors)
+                    {
+                        //find the distance between the two points.
+                        double dist = ManhattanDistance(currentNode, node);
+                        //Create a new path, contiaining the old path plus this path.
+                        List<IGraphNode> newPath = new List<IGraphNode>(currentPath);
+                        newPath.Add(node);
+                        //Add this path to the queue
+                        openQueue.Enqueue(CalculatePathCost(currentPath) + dist + ManhattanDistance(node, end), newPath);
+                    }
                 }
             }
             //if no valid path exists, return null.
