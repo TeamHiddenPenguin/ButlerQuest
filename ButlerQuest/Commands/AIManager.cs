@@ -156,8 +156,8 @@ namespace ButlerQuest
             if (commandsToCopy > -1)
             {
                 //If the number of commands we are trying to input before requesting new commands is greater than the total number of commands, just stick it at the end of the list.
-                if (commandsToCopy >= path.Count)
-                    translationList.Insert(path.Count, new GetNextCommandSet(reference, path[path.Count - 1].Cost));
+                if (commandsToCopy + 1 >= path.Count)
+                    translationList.Insert(path.Count - 1, new GetNextCommandSet(reference, path[path.Count - 1].Cost));
                 //Otherwise, place it after the number of commands it's trying to copy
                 else
                     translationList.Insert(commandsToCopy + 1, new GetNextCommandSet(reference, path[commandsToCopy].Cost));

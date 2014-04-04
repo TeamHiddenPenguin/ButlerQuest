@@ -2,7 +2,7 @@
  * Written by Samuel Sternklar
  * 
  * This class contains static methods used in the A* pathfinding algorithm.
- */ 
+ */
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,17 +24,17 @@ namespace ButlerQuest
         /// <returns>A list of nodes representing the path between the two nodes</returns>
         public static List<IGraphNode> FindPath(IGraphNode start, IGraphNode end)
         {
-            //The set of nodes we have already looked at
+            //A PriorityQueue of open paths to evaluate. the priority is the total cost of the current node plus the estimated distance to the end node
+            PriorityQueue<double, List<IGraphNode>> openQueue = new PriorityQueue<double, List<IGraphNode>>();
+            //A hashset set of nodes we have already looked at
             //Is a hashset because it has O(1) time add and O(1) time Contains, and if we have like 30 enemies chasing us then lambda functions for List.Find(Predicate<T> predicate) are slow.
             HashSet<IGraphNode> closedSet = new HashSet<IGraphNode>();
-            //A PriorityQueue of paths to evaluate. the priority is the total cost of the current node plus the estimated distance to the end node
-            PriorityQueue<double, List<IGraphNode>> openQueue = new PriorityQueue<double, List<IGraphNode>>();
             //The initial path, from which all other paths will be calculated
             List<IGraphNode> initialPath = new List<IGraphNode>();
             
             //Add the start node to the initial path, and the initial path to the queue of things to be evaluated
             initialPath.Add(start);
-            openQueue.Enqueue(0, initialPath);
+            openQueue.Enqueue(ManhattanDistance(start, end), initialPath);
 
             //While we stll have objects in the queue and have not exited the queue yet
             while (!openQueue.IsEmpty)
@@ -56,13 +56,11 @@ namespace ButlerQuest
                     //For each of the object's neighbors, create a new path and add it to the queue
                     foreach (var node in currentNode.Neighbors)
                     {
-                        //find the distance between the two points.
-                        double dist = ManhattanDistance(currentNode, node);
                         //Create a new path, contiaining the old path plus this path.
                         List<IGraphNode> newPath = new List<IGraphNode>(currentPath);
                         newPath.Add(node);
                         //Add this path to the queue
-                        openQueue.Enqueue(CalculatePathCost(currentPath) + dist + ManhattanDistance(node, end), newPath);
+                        openQueue.Enqueue(CalculatePathCost(currentPath) + ManhattanDistance(currentNode, node) + ManhattanDistance(node, end), newPath);
                     }
                 }
             }
