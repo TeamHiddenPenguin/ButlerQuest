@@ -128,7 +128,7 @@ namespace ButlerQuest
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
 
-            AIManager.SharedAIManager.lastKnownPlayerLoc = player.location;
+            AIManager.SharedAIManager.PlayerLocation = player.location;
         }
 
         public void ForceGlobalAIStateChange(AI_STATE newState)

@@ -38,6 +38,15 @@ namespace ButlerQuest
         public PriorityQueue<int, Enemy> enemiesToPath;
         //The last known location of the player. This is known to all enemies
         public Vector3 lastKnownPlayerLoc;
+        //The current player location, used to check visibility against
+        private Vector3 playerLoc;
+
+        public Vector3 PlayerLocation
+        {
+            get { return playerLoc; }
+            //Set the value equal to the location of the player's CENTER
+            set { playerLoc = new Vector3(value.X + 20, value.Y + 20, value.Z); }
+        }
 
         //The shared AI manager to be used for all AI Management operations. If one doesn't exist, create it and return it.
         public static AIManager SharedAIManager
@@ -51,12 +60,6 @@ namespace ButlerQuest
             }
         }
 
-        public static void DebugInitialize(Level level)
-        {
-            SharedAIManager.level = level;
-            SharedAIManager.map = SharedAIManager.level.levelMap;
-            SharedAIManager.graph = SharedAIManager.map.Graph;
-        }
 
         /// <summary>
         /// Constructor for the AIManager class
@@ -168,6 +171,11 @@ namespace ButlerQuest
 
             //Return a new queue of commands, gotten from the translation list
             return new Queue<ICommand>(translationList);
+        }
+
+        public bool PlayerIsSuspicious()
+        {
+            return true;
         }
     }
 }

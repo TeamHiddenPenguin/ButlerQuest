@@ -14,6 +14,11 @@ namespace ButlerQuest
         public ICommand currentCommand;
         public Queue<ICommand> defaultCommands;
         public Queue<ICommand> commandQueue;
+        private double awareness = 0;
+        private const float MAX_VISION_RADIUS_SQUARED = 25000;
+        private const float VISION_CONE_ANGLE_DEGREES = 55;
+        private const float DEG_TO_RAD = 0.0174532925f;
+        public Vector3 center;
 
         // constructor
         public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
@@ -22,6 +27,8 @@ namespace ButlerQuest
             commandQueue = new Queue<ICommand>();
             defaultCommands = new Queue<ICommand>();
             startLocation = loc;
+            state = AI_STATE.UNAWARE;
+            center = new Vector3(rect.X + rect.Width, rect.Y + rect.Height, loc.Z);
         }
 
         public void ChangeCommand()
@@ -37,13 +44,80 @@ namespace ButlerQuest
 
         public override void Update(GameTime gameTime)
         {
-            //base.Update(gameTime);
+            base.Update(gameTime);
 
             if (currentCommand == null || currentCommand.IsFinished)
                 ChangeCommand();
 
+            center = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, location.Z);
+
+            PersonalAILogic();
             
             currentCommand.Update(gameTime);
+        }
+
+        private void PersonalAILogic()
+        {
+            if (state < AI_STATE.HUNTING)
+            {
+                if (this.center.Z == AIManager.SharedAIManager.PlayerLocation.Z)
+                {
+                    double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.PlayerLocation);
+                    if (dist < MAX_VISION_RADIUS_SQUARED)
+                    {
+                        if (CanSee(AIManager.SharedAIManager.PlayerLocation))
+                        {
+                            //Add check to see if there are any walls in the way. For now this works, but does not consider walls.
+                            AIManager.SharedAIManager.lastKnownPlayerLoc = new Vector3(AIManager.SharedAIManager.PlayerLocation.X - 20, AIManager.SharedAIManager.PlayerLocation.Y - 20, AIManager.SharedAIManager.PlayerLocation.Z);
+
+                            if (AIManager.SharedAIManager.PlayerIsSuspicious())
+                            {
+                                awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .005;
+                                if (awareness >= 1)
+                                {
+                                    //begin a pursuit, defer to AIManager
+                                    state = AI_STATE.PURSUIT;
+                                }
+                                System.Diagnostics.Debug.WriteLine("Awareness " + awareness + ", " + "Direction " + direction);
+                            }
+                        }
+                    }
+                }
+            }
+            if (state == AI_STATE.PURSUIT)
+            {
+                if (commandQueue.Count < 1)
+                {
+                    if (!CanSee(AIManager.SharedAIManager.lastKnownPlayerLoc))
+                    {
+                        //change state to hunting and defer to AIManager for that
+                    }
+                }
+            }
+            if (state == AI_STATE.HUNTING)
+            {
+                awareness -= .0005;
+                if (CanSee(AIManager.SharedAIManager.PlayerLocation))
+                {
+                    awareness += .01;
+                    if (awareness > 1)
+                        //reinitialize pursuit, call functions
+                        state = AI_STATE.PURSUIT;
+                }
+                if (awareness <= 0)
+                {
+                    awareness = 0;
+                    state = AI_STATE.AWARE;
+                }
+            }
+        }
+
+        public bool CanSee(Vector3 point)
+        {
+            double minAngle = (90 - (90 * direction)) - VISION_CONE_ANGLE_DEGREES;
+            double maxAngle = minAngle + (2 * VISION_CONE_ANGLE_DEGREES);
+            double angle = Math.Atan2(this.center.X - point.X, this.center.Y - point.Y);
+            return angle < maxAngle && angle > minAngle;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace ButlerQuest
     {
         // attributes
         public Vector3 velocity;// amount the object moves in a single move method
+        public int direction;
 
         // constructor
         public MovableGameObject(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
