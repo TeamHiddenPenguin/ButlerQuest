@@ -16,6 +16,7 @@ namespace ButlerQuest
         public Queue<ICommand> commandQueue;
         private double awareness = 0;
         private const float MAX_VISION_RADIUS_SQUARED = 25000;
+        private const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED + 5000;
         private const float VISION_CONE_ANGLE_DEGREES = 55;
         private const float DEG_TO_RAD = 0.0174532925f;
         public Vector3 center;
@@ -67,29 +68,36 @@ namespace ButlerQuest
                     {
                         if (CanSee(AIManager.SharedAIManager.PlayerLocation))
                         {
-                            //Add check to see if there are any walls in the way. For now this works, but does not consider walls.
-                            AIManager.SharedAIManager.lastKnownPlayerLoc = new Vector3(AIManager.SharedAIManager.PlayerLocation.X - 20, AIManager.SharedAIManager.PlayerLocation.Y - 20, AIManager.SharedAIManager.PlayerLocation.Z);
-
-                            if (AIManager.SharedAIManager.PlayerIsSuspicious())
+                            if (!WallInWay())
                             {
-                                awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .005;
-                                if (awareness >= 1)
+                                AIManager.SharedAIManager.lastKnownPlayerLoc = new Vector3(AIManager.SharedAIManager.PlayerLocation.X - 20, AIManager.SharedAIManager.PlayerLocation.Y - 20, AIManager.SharedAIManager.PlayerLocation.Z);
+
+                                if (AIManager.SharedAIManager.PlayerIsSuspicious())
                                 {
-                                    //begin a pursuit, defer to AIManager
-                                    commandQueue.Clear();
-                                    state = AI_STATE.PURSUIT;
+                                    awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .001;
+                                    if (awareness >= 1)
+                                    {
+                                        //begin a pursuit, defer to AIManager
+                                        commandQueue.Clear();
+                                        state = AI_STATE.PURSUIT;
+                                    }
                                 }
-                                System.Diagnostics.Debug.WriteLine("Awareness " + awareness + ", " + "Direction " + direction);
                             }
+                            System.Diagnostics.Debug.WriteLine("Awareness " + awareness + "Direction " + direction);
                         }
                     }
                 }
             }
             if (state == AI_STATE.PURSUIT)
             {
+                double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.PlayerLocation);
+                if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT)
+                {
+                    AIManager.SharedAIManager.lastKnownPlayerLoc = AIManager.SharedAIManager.PlayerLocation;
+                }
                 if (commandQueue.Count < 2)
                 {
-                    if (!CanSee(AIManager.SharedAIManager.lastKnownPlayerLoc))
+                    if (!CanSee(AIManager.SharedAIManager.lastKnownPlayerLoc) || WallInWay())
                     {
                         //change state to hunting and defer to AIManager for that
                     }
@@ -117,10 +125,15 @@ namespace ButlerQuest
 
         public bool CanSee(Vector3 point)
         {
-            double minAngle = (90 - (90 * direction)) - VISION_CONE_ANGLE_DEGREES;
-            double maxAngle = minAngle + (2 * VISION_CONE_ANGLE_DEGREES);
-            double angle = Math.Atan2(this.center.X - point.X, this.center.Y - point.Y);
+            double minAngle = ((90 - (90 * direction)) - VISION_CONE_ANGLE_DEGREES) * DEG_TO_RAD;
+            double maxAngle = ((90 - (90 * direction)) + VISION_CONE_ANGLE_DEGREES) * DEG_TO_RAD;
+            double angle = -Math.Atan2((point.Y - this.center.Y), (point.X - this.center.X));
             return angle < maxAngle && angle > minAngle;
+        }
+
+        public bool WallInWay()
+        {
+            return false;
         }
     }
 }

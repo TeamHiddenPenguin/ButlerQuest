@@ -25,11 +25,52 @@ namespace ButlerQuest
 
         // methods
         // moves the object based on it's velocity and the direction given.
-        public void Move(Vector3 direction)
+        public void Move(Vector3 dir)
         {
             Vector3 dirUnit; // Vector2 to hold the unit vector of the direction given.
-            dirUnit = Vector3.Normalize(direction); // normalizes the direction vector and stores it in dirUnit.
+            dirUnit = Vector3.Normalize(dir); // normalizes the direction vector and stores it in dirUnit.
             location = location + (velocity * dirUnit); // changes the location by velocity as a unit vector based on direction
+
+            // sets direction
+            if (dir.X == 0) // not moving in the x
+            {
+                if (dir.Y > 0) direction = 2; // moving down
+                else if (dir.Y < 0) direction = 0; // moving up
+            }
+            else if (dir.X > 0) // moving right
+            {
+                if (dir.Y == 0) // not moving in the y
+                {
+                    direction = 1; // only moving right
+                }
+                else if (dir.Y > 0) // moving down
+                {
+                    if (dir.X > dir.Y) direction = 1; // moving more right than down
+                    else direction = 2; // moving more down than right
+                }
+                else if (dir.Y < 0) // moving up
+                {
+                    if (dir.X > Math.Abs(dir.Y)) direction = 1; // moving more right than up
+                    else direction = 0; // moving more up than right
+                }
+            }
+            else if (dir.X < 0) // moving left
+            {
+                if (dir.Y == 0) // not moving in the y
+                {
+                    direction = 3; // only moving left
+                }
+                else if (dir.Y > 0) // moving down
+                {
+                    if (Math.Abs(dir.X) > dir.Y) direction = 3; // moving more left than down
+                    else direction = 2; // moving more down than left
+                }
+                else if (dir.Y < 0) // moving up
+                {
+                    if (dir.X < dir.Y) direction = 3; // moving more left than up
+                    else direction = 0; // moving more up than left
+                }
+            }
 
             // updates the rectangle to match the new location
             rectangle.X = (int)location.X;
