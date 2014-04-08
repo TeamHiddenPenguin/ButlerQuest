@@ -76,6 +76,7 @@ namespace ButlerQuest
                                 if (awareness >= 1)
                                 {
                                     //begin a pursuit, defer to AIManager
+                                    commandQueue.Clear();
                                     state = AI_STATE.PURSUIT;
                                 }
                                 System.Diagnostics.Debug.WriteLine("Awareness " + awareness + ", " + "Direction " + direction);
@@ -86,7 +87,7 @@ namespace ButlerQuest
             }
             if (state == AI_STATE.PURSUIT)
             {
-                if (commandQueue.Count < 1)
+                if (commandQueue.Count < 2)
                 {
                     if (!CanSee(AIManager.SharedAIManager.lastKnownPlayerLoc))
                     {
@@ -102,11 +103,13 @@ namespace ButlerQuest
                     awareness += .01;
                     if (awareness > 1)
                         //reinitialize pursuit, call functions
+                        commandQueue.Clear();
                         state = AI_STATE.PURSUIT;
                 }
                 if (awareness <= 0)
                 {
                     awareness = 0;
+                    commandQueue.Clear();
                     state = AI_STATE.AWARE;
                 }
             }

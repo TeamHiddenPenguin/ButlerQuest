@@ -40,6 +40,9 @@ namespace ButlerQuest
         public Vector3 lastKnownPlayerLoc;
         //The current player location, used to check visibility against
         private Vector3 playerLoc;
+        //The enemies involved in the current pursuit
+        private List<Enemy> currentPursuit;
+        private bool isPursuitActive;
 
         public Vector3 PlayerLocation
         {
@@ -83,6 +86,9 @@ namespace ButlerQuest
              
             //Create the PriorityQueue
             enemiesToPath = new PriorityQueue<int, Enemy>();
+
+            currentPursuit = new List<Enemy>();
+            isPursuitActive = false;
         }
 
         /// <summary>
@@ -113,7 +119,11 @@ namespace ButlerQuest
                         }
                         break;
                     case AI_STATE.HUNTING:
-                        //DO LATER THIS IS GONNA BE HARD
+                        //If we ever hit this case, we simply switch the AI state back to Aware. This is because if we ever finish searching spots when hunting, we haven't found the player,
+                        //so we want the enemy to go back to his path.
+                        currentEnemy.state = AI_STATE.AWARE;
+                        enemiesToPath.Enqueue(int.MaxValue, currentEnemy);
+                        break;
                     case AI_STATE.PURSUIT:
                         //build the path, factoring in the distance between the current location and the last known player location.
                         currentEnemy.commandQueue = BuildPath(currentEnemy.location, lastKnownPlayerLoc, currentEnemy, CommandsToCopy);
@@ -176,6 +186,34 @@ namespace ButlerQuest
         public bool PlayerIsSuspicious()
         {
             return true;
+        }
+
+        public void AddToPursuit(Enemy e)
+        {
+            if (!isPursuitActive)
+            {
+                currentPursuit = new List<Enemy>();
+                isPursuitActive = true;
+            }
+            currentPursuit.Add(e);
+        }
+
+        public void SwitchPursuitState(AI_STATE state)
+        {
+            foreach (Enemy enemy in currentPursuit)
+            {
+                enemy.commandQueue.Clear();
+                enemy.state = state;
+            }
+            if (state == AI_STATE.HUNTING)
+                BeginHunt();
+            if (state < AI_STATE.HUNTING)
+                isPursuitActive = false;
+        }
+
+        public void BeginHunt()
+        {
+            //Needs a room graph, hiding places graph.
         }
     }
 }
