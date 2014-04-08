@@ -106,6 +106,95 @@ namespace ButlerQuest
         public abstract void Update(GameTime time);
     }
 
+    // Main Menu to select what to do when starting game
+    public class MenuScreen : Screen
+    {
+        // Determines which menu option is selected, 0: Start New Game, 1: Options, 2: Exit, if we make it 3: Load
+        int selectedItem;
+
+        KeyboardState kState;
+        public MenuScreen()
+        {
+            selectedItem = 0;
+        }
+
+
+        // Updates the Menu
+        public override void Update(GameTime time)
+        {
+            HandleInput();
+        }
+
+        // Draws the Menu
+        public override void Draw(GameTime time)
+        {
+
+        }
+
+        // Handle the menu selection input from the player
+        public override void HandleInput()
+        {
+            kState = Keyboard.GetState();
+            base.HandleInput();
+            if (kState.IsKeyDown(Keys.W))
+            {
+                if (selectedItem == 0)
+                {
+                    selectedItem = 2;
+                }
+                else
+                {
+                    selectedItem--;
+                }
+            }
+            if (kState.IsKeyDown(Keys.S))
+            {
+                if (selectedItem == 2)
+                {
+                    selectedItem = 0;
+                }
+                else
+                {
+                    selectedItem++;
+                }
+            }
+            if (kState.IsKeyDown(Keys.Enter))
+            {
+                switch (selectedItem)
+                {
+                    case 0:
+                        // Level name subject to change
+                        ScreenManager.SharedManager.AddScreen(new GameScreen("Level 1"));
+                        break;
+                    case 1:
+                        ScreenManager.SharedManager.AddScreen(new OptionsScreen());
+                        break;
+                    case 2:
+                        // Exit the game
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // Add code to draw a visual representing which option is selected
+            switch (selectedItem)
+            {
+                case 0:
+                    // Put code to draw visual
+                    break;
+                case 1:
+                    // Put code to draw visual
+                    break;
+                case 2:
+                    // Put code to draw visual
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     // Main game Screen to be used, contains level information and the keyboard state
     public class GameScreen : Screen
     {
@@ -167,6 +256,14 @@ namespace ButlerQuest
                 level.ForceGlobalAIStateChange(AI_STATE.UNAWARE);
             }
         }
+    }
+
+    // Options screen for managing volume and other things
+
+    public class OptionsScreen : Screen
+    {
+        int optionSelected = 0;
+        // Finish later
     }
 
     // Debug Screen for testing purposes
