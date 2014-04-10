@@ -40,6 +40,7 @@
             this.StartXPosBox = new System.Windows.Forms.TextBox();
             this.StartYPosBox = new System.Windows.Forms.TextBox();
             this.StartPosBox = new System.Windows.Forms.GroupBox();
+            this.StartPosChange = new System.Windows.Forms.Button();
             this.MoveCommandBox = new System.Windows.Forms.GroupBox();
             this.MoveAddButton = new System.Windows.Forms.Button();
             this.MoveZPosBox = new System.Windows.Forms.TextBox();
@@ -53,8 +54,8 @@
             this.FloorSelectLabel = new System.Windows.Forms.Label();
             this.FloorSelectBox = new System.Windows.Forms.ListBox();
             this.RemoveCommand = new System.Windows.Forms.Button();
-            this.StartPosChange = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.FixCommands = new System.Windows.Forms.Button();
             this.StartPosBox.SuspendLayout();
             this.MoveCommandBox.SuspendLayout();
             this.WaitCommandBox.SuspendLayout();
@@ -169,6 +170,16 @@
             this.StartPosBox.TabIndex = 13;
             this.StartPosBox.TabStop = false;
             this.StartPosBox.Text = "Start Position (On this floor):";
+            // 
+            // StartPosChange
+            // 
+            this.StartPosChange.Location = new System.Drawing.Point(110, 29);
+            this.StartPosChange.Name = "StartPosChange";
+            this.StartPosChange.Size = new System.Drawing.Size(75, 23);
+            this.StartPosChange.TabIndex = 15;
+            this.StartPosChange.Text = "Change";
+            this.StartPosChange.UseVisualStyleBackColor = true;
+            this.StartPosChange.Click += new System.EventHandler(this.StartPosChange_Click);
             // 
             // MoveCommandBox
             // 
@@ -292,16 +303,6 @@
             this.RemoveCommand.UseVisualStyleBackColor = true;
             this.RemoveCommand.Click += new System.EventHandler(this.RemoveCommand_Click);
             // 
-            // StartPosChange
-            // 
-            this.StartPosChange.Location = new System.Drawing.Point(110, 29);
-            this.StartPosChange.Name = "StartPosChange";
-            this.StartPosChange.Size = new System.Drawing.Size(75, 23);
-            this.StartPosChange.TabIndex = 15;
-            this.StartPosChange.Text = "Change";
-            this.StartPosChange.UseVisualStyleBackColor = true;
-            this.StartPosChange.Click += new System.EventHandler(this.StartPosChange_Click);
-            // 
             // SaveButton
             // 
             this.SaveButton.Location = new System.Drawing.Point(335, 53);
@@ -312,11 +313,22 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // FixCommands
+            // 
+            this.FixCommands.Location = new System.Drawing.Point(12, 608);
+            this.FixCommands.Name = "FixCommands";
+            this.FixCommands.Size = new System.Drawing.Size(183, 23);
+            this.FixCommands.TabIndex = 20;
+            this.FixCommands.Text = "Reorder Commands from Tiled";
+            this.FixCommands.UseVisualStyleBackColor = true;
+            this.FixCommands.Click += new System.EventHandler(this.FixCommands_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(465, 658);
+            this.Controls.Add(this.FixCommands);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.RemoveCommand);
             this.Controls.Add(this.FloorSelectLabel);
@@ -374,6 +386,7 @@
         private System.Windows.Forms.Button RemoveCommand;
         private System.Windows.Forms.Button StartPosChange;
         private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.Button FixCommands;
     }
 }
 

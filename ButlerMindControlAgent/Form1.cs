@@ -16,7 +16,6 @@ namespace ButlerMindControlAgent
     {
         int lastCommandNumber;
         XDocument xDoc;
-        XElement rootObjectListElement;
         List<XElement> floors;
         List<XElement> currentFloorObjects;
         List<XElement> currentCommands;
@@ -197,6 +196,39 @@ namespace ButlerMindControlAgent
         private void SaveButton_Click(object sender, EventArgs e)
         {
             xDoc.Save(FileLocBox.Text);
+        }
+
+        private void FixCommands_Click(object sender, EventArgs e)
+        {
+            foreach (var floor in floors)
+            {
+                foreach (var obj in floor.Elements("object"))
+                {
+                    if (((string)obj.Attribute("type")) == "Enemy")
+                    {
+                        List<XElement> propertyList = (List<XElement>)obj.Element("properties").Elements("property");
+                        //quicksort based on command number
+                    }
+                }
+            }
+        }
+        private int GetCommandNumber(XElement element)
+        {
+            string name = (string)element.Attribute("name");
+            int ret;
+            for (int i = name.Length; i > 0; i--)
+            {
+                if (int.TryParse(name, out ret))
+                    return ret;
+            }
+            return int.MaxValue;
+        }
+
+        private List<XElement> QuicksortCommands(List<XElement> list)
+        {
+            if (list.Count < 1)
+                return list;
+            return list;
         }
     }
 }

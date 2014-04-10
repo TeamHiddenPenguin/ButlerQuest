@@ -264,6 +264,14 @@ namespace ButlerQuest
     {
         int optionSelected = 0;
         // Finish later
+
+        public override void Update(GameTime time)
+        {
+        }
+
+        public override void Draw(GameTime time)
+        {
+        }
     }
 
     // Debug Screen for testing purposes
