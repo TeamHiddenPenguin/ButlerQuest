@@ -200,14 +200,28 @@ namespace ButlerMindControlAgent
 
         private void FixCommands_Click(object sender, EventArgs e)
         {
+            EnemySelectBox.Enabled = false;
+            CommandList.Enabled = false;
+            StartPosBox.Enabled = false;
+            MoveCommandBox.Enabled = false;
+            WaitCommandBox.Enabled = false;
+
             foreach (var floor in floors)
             {
                 foreach (var obj in floor.Elements("object"))
                 {
                     if (((string)obj.Attribute("type")) == "Enemy")
                     {
-                        List<XElement> propertyList = (List<XElement>)obj.Element("properties").Elements("property");
-                        //quicksort based on command number
+                        List<XElement> propertyList = (obj.Element("properties").Elements("property")).ToList<XElement>();
+                        foreach (var element in propertyList)
+                        {
+                            element.Remove();
+                        }
+                        QuicksortCommands(propertyList);
+                        foreach (var element in propertyList)
+                        {
+                            obj.Element("properties").Add(element);
+                        }
                     }
                 }
             }
@@ -215,20 +229,64 @@ namespace ButlerMindControlAgent
         private int GetCommandNumber(XElement element)
         {
             string name = (string)element.Attribute("name");
-            int ret;
-            for (int i = name.Length; i > 0; i--)
+            int ret = int.MaxValue;
+            for (int i = 0; i < name.Length; i++)
             {
-                if (int.TryParse(name, out ret))
-                    return ret;
+                int tmp;
+                if (int.TryParse(name.Substring(0,i), out tmp))
+                    ret = tmp;
             }
-            return int.MaxValue;
+            return ret;
         }
 
-        private List<XElement> QuicksortCommands(List<XElement> list)
+        private void QuicksortCommands(List<XElement> list)
         {
             if (list.Count < 1)
-                return list;
-            return list;
+                return;
+            QuicksortCommands(list, 0, list.Count - 1);
+        }
+
+        public void QuicksortCommands(List<XElement> elements, int start, int end)
+        {
+            int left = start;
+            int right = end;
+            int mid = GetCommandNumber(elements[(start + end) / 2]);
+
+            //Partition the parts
+            while (left <= right)
+            {
+                while (GetCommandNumber(elements[left]) < mid)
+                {
+                    left++;
+                }
+
+                while (GetCommandNumber(elements[right]) > mid)
+                {
+                    right--;
+                }
+
+                if (left <= right)
+                {
+                    //Swap the parts
+                    XElement tmp = elements[left];
+                    elements[left] = elements[right];
+                    elements[right] = tmp;
+
+                    left++;
+                    right--;
+                }
+            }
+
+            //Recursion
+            if (start < right)
+            {
+                QuicksortCommands(elements, start, right);
+            }
+
+            if (left < end)
+            {
+                QuicksortCommands(elements, left, end);
+            }
         }
     }
 }
