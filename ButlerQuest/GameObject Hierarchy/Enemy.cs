@@ -61,16 +61,16 @@ namespace ButlerQuest
         {
             if (state < AI_STATE.HUNTING)
             {
-                if (this.center.Z == AIManager.SharedAIManager.PlayerLocation.Z)
+                if (this.center.Z == AIManager.SharedAIManager.playerLoc.Z)
                 {
-                    double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.PlayerLocation);
+                    double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.playerLoc);
                     if (dist < MAX_VISION_RADIUS_SQUARED)
                     {
-                        if (CanSee(AIManager.SharedAIManager.PlayerLocation))
+                        if (CanSee(AIManager.SharedAIManager.playerLoc))
                         {
-                            if (!WallInWay())
+                            if (!WallInWay((int)dist))
                             {
-                                AIManager.SharedAIManager.lastKnownPlayerLoc = new Vector3(AIManager.SharedAIManager.PlayerLocation.X - 20, AIManager.SharedAIManager.PlayerLocation.Y - 20, AIManager.SharedAIManager.PlayerLocation.Z);
+                                AIManager.SharedAIManager.lastKnownPlayerLoc = new Vector3(AIManager.SharedAIManager.playerLoc.X - 20, AIManager.SharedAIManager.playerLoc.Y - 20, AIManager.SharedAIManager.playerLoc.Z);
 
                                 if (AIManager.SharedAIManager.PlayerIsSuspicious())
                                 {
@@ -90,14 +90,14 @@ namespace ButlerQuest
             }
             if (state == AI_STATE.PURSUIT)
             {
-                double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.PlayerLocation);
+                double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.playerLoc);
                 if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT)
                 {
-                    AIManager.SharedAIManager.lastKnownPlayerLoc = AIManager.SharedAIManager.PlayerLocation;
+                    AIManager.SharedAIManager.lastKnownPlayerLoc = AIManager.SharedAIManager.playerLoc;
                 }
                 if (commandQueue.Count < 2)
                 {
-                    if (!CanSee(AIManager.SharedAIManager.lastKnownPlayerLoc) || WallInWay())
+                    if (!CanSee(AIManager.SharedAIManager.lastKnownPlayerLoc) || WallInWay((int)dist))
                     {
                         //change state to hunting and defer to AIManager for that
                     }
@@ -106,7 +106,7 @@ namespace ButlerQuest
             if (state == AI_STATE.HUNTING)
             {
                 awareness -= .0005;
-                if (CanSee(AIManager.SharedAIManager.PlayerLocation))
+                if (CanSee(AIManager.SharedAIManager.playerLoc))
                 {
                     awareness += .01;
                     if (awareness > 1)
@@ -131,9 +131,9 @@ namespace ButlerQuest
             return angle < maxAngle && angle > minAngle;
         }
 
-        public bool WallInWay()
+        public bool WallInWay(int distance)
         {
-            return false;
+            return AIManager.SharedAIManager.WallInWay(this, distance);
         }
     }
 }

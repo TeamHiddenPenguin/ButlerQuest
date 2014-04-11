@@ -14,8 +14,8 @@ namespace ButlerQuest
     {
         // properties
         public Player player; // the player. It's public so we can transfer info from one level to another (lives remaining, possibly score) without having to make the player in the gamestate management.
-        List<Enemy> basicEnemies; // a list to hold all of the normal butlers for the level
-        List<Wall> walls; // a list to hold all of the walls for the level
+        public List<Enemy> basicEnemies; // a list to hold all of the normal butlers for the level
+        public List<Wall> walls; // a list to hold all of the walls for the level
         public Map levelMap; // parses the map and tiles used for the specific level
         public Rectangle windowSpace; // window space used for drawing the map
         GraphicsDevice graphics;
@@ -128,7 +128,7 @@ namespace ButlerQuest
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
 
-            AIManager.SharedAIManager.PlayerLocation = player.location;
+            AIManager.SharedAIManager.playerLoc = player.center;
         }
 
         public void ForceGlobalAIStateChange(AI_STATE newState)

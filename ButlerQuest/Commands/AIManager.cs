@@ -39,17 +39,10 @@ namespace ButlerQuest
         //The last known location of the player. This is known to all enemies
         public Vector3 lastKnownPlayerLoc;
         //The current player location, used to check visibility against
-        private Vector3 playerLoc;
+        public Vector3 playerLoc;
         //The enemies involved in the current pursuit
         private List<Enemy> currentPursuit;
         private bool isPursuitActive;
-
-        public Vector3 PlayerLocation
-        {
-            get { return playerLoc; }
-            //Set the value equal to the location of the player's CENTER
-            set { playerLoc = new Vector3(value.X + 20, value.Y + 20, value.Z); }
-        }
 
         //The shared AI manager to be used for all AI Management operations. If one doesn't exist, create it and return it.
         public static AIManager SharedAIManager
@@ -214,6 +207,23 @@ namespace ButlerQuest
         public void BeginHunt()
         {
             //Needs a room graph, hiding places graph.
+        }
+
+        public bool WallInWay(Enemy enemy,int dist)
+        {
+            foreach (var wall in level.walls.Where(x => x.location.Z == playerLoc.Z && Vector3.DistanceSquared(enemy.center, x.center) < dist))
+            {
+                if (enemy.center.X > wall.rectangle.Right && playerLoc.X > wall.rectangle.Right)
+                    continue;
+                if (enemy.center.X < wall.rectangle.Left && playerLoc.X < wall.rectangle.Left)
+                    continue;
+                if (enemy.center.Y > wall.rectangle.Top && playerLoc.Y > wall.rectangle.Top)
+                    continue;
+                if (enemy.center.Y < wall.rectangle.Bottom && playerLoc.Y < wall.rectangle.Bottom)
+                    continue;
+                return true;
+            }
+            return false;
         }
     }
 }
