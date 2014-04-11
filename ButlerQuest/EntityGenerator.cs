@@ -34,7 +34,8 @@ namespace ButlerQuest
                 new Rectangle(
                     (int)position.X,
                     (int)position.Y,
-                    40, 40));
+                    40, 40),
+                    100);
 
             foreach (var parseable in commands)
             {
@@ -110,6 +111,51 @@ namespace ButlerQuest
             
 
             return player;
+        }
+
+
+        public static Weapon GenerateWeapon(Vector3 position, int durability, string weaponType)
+        {
+            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("SpriteSheet" + weaponType + ".png");
+
+            Weapon weapon = new Weapon(
+                new Animation[1] {
+                    new Animation(0, 0, 40, 40, 1, 1, 1, tex)
+                },
+                new String[1] { weaponType },
+                position,
+                new Rectangle(
+                    (int)position.X,
+                    (int)position.Y,
+                    40, 40),
+                durability,
+                new Vector3(),
+                new Rectangle());
+
+
+
+            return weapon;
+        }
+
+
+        public static Coin GenerateCoin(Vector3 position, int value)
+        {
+            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("SpriteSheetCoin.png");
+
+            Coin coin = new Coin(
+                new Animation[1] {
+                    new Animation(0, 0, 40, 40, 1, 1, 1, tex)
+                },
+                new String[1] { "coin" },
+                position,
+                new Rectangle(
+                    (int)position.X,
+                    (int)position.Y,
+                    40, 40),
+                value);
+
+
+            return coin;
         }
     }
 }

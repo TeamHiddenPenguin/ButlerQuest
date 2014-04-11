@@ -59,6 +59,8 @@ namespace ButlerQuest
 
         public virtual void Update(GameTime gameTime) // updates the current animation
         {
+            base.Update();
+
             if (currentAnimation != null && anims[currentAnimation] != null)
                 anims[currentAnimation].Update();
         }

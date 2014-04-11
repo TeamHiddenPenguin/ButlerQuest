@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ButlerQuest
 {
-    interface ICommand
+    public interface ICommand
     {
         //Tells whether or not the command is finished executing
         bool IsFinished

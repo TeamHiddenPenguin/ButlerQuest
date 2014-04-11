@@ -16,6 +16,8 @@ namespace ButlerQuest
         public Player player; // the player. It's public so we can transfer info from one level to another (lives remaining, possibly score) without having to make the player in the gamestate management.
         public List<Enemy> basicEnemies; // a list to hold all of the normal butlers for the level
         public List<Wall> walls; // a list to hold all of the walls for the level
+        List<Weapon> weapons; // a list to hold all of the weapons for the level
+        List<Coin> coins; // a list to hold all of the coins for the level
         public Map levelMap; // parses the map and tiles used for the specific level
         public Rectangle windowSpace; // window space used for drawing the map
         GraphicsDevice graphics;
@@ -26,6 +28,8 @@ namespace ButlerQuest
         {
             basicEnemies = new List<Enemy>();
             walls = new List<Wall>();
+            weapons = new List<Weapon>();
+            coins = new List<Coin>();
 
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
@@ -52,6 +56,14 @@ namespace ButlerQuest
                         {
                             walls.Add(EntityGenerator.GenerateWall(new Vector3(entity.X, entity.Y, currentFloor), entity.Width, entity.Height));
                         }
+                        else if (entity.Type == "Weapon")
+                        {
+                            weapons.Add(EntityGenerator.GenerateWeapon(new Vector3(entity.X, entity.Y, currentFloor), 2, entity.Name));
+                        }
+                        else if (entity.Type == "Coin")
+                        {
+                            coins.Add(EntityGenerator.GenerateCoin(new Vector3(entity.X, entity.Y, currentFloor), int.Parse(entity.Properties.Find(x => x.Item1 == "value").Item2)));
+                        }
                     }
                 }
                 //Otherwise it's a floor graph and sam will write this code later when it's relevant
@@ -72,7 +84,14 @@ namespace ButlerQuest
 
             levelMap.Draw(windowSpace, (int)player.location.Z);
 
-            foreach (Enemy enemy in basicEnemies) enemy.Draw(spriteBatch);
+            if (basicEnemies != null) foreach (Enemy enemy in basicEnemies) enemy.Draw(spriteBatch);
+
+
+            if (weapons != null) foreach (Weapon weapon in weapons) if (weapon.taken == false) weapon.Draw(spriteBatch);
+
+
+            if (coins != null) foreach (Coin coin in coins) if (coin.active) coin.Draw(spriteBatch);
+
 
             player.Draw(spriteBatch);
 
@@ -83,6 +102,9 @@ namespace ButlerQuest
         public void Update(GameTime gameTime)
         {
             player.Update(gameTime);
+
+            if (weapons != null) foreach (Weapon weapon in weapons) weapon.Update(gameTime);
+            if (weapons != null) foreach (Coin coin in coins) coin.Update(gameTime);
 
             AIManager.SharedAIManager.MakePaths();
 
@@ -125,6 +147,34 @@ namespace ButlerQuest
                     default: break;
                 }
             }
+
+            // coin collision
+            if (coins != null) foreach (Coin coin in coins)
+            {
+                int collision = player.CollisionSide(coin);
+                if (collision > -1)
+                {
+                    player.moneyCollected += coin.InteractWith();
+                }
+            }
+
+            // coin collision
+            if (player.currentWeapon == null)
+            {
+                if (weapons != null) foreach (Weapon weapon in weapons)
+                {
+                    if (weapon.taken == false)
+                    {
+                        int collision = player.CollisionSide(weapon);
+                        if (collision > -1)
+                        {
+                            player.currentWeapon = weapon;
+                            weapon.taken = true;
+                        }
+                    }
+                }
+            }
+
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
 

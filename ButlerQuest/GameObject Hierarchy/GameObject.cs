@@ -13,6 +13,7 @@ namespace ButlerQuest
         // attirbutes
         public Vector3 location; // position of the object in the game space
         public Rectangle rectangle; // rectangle used for the total area covered by the object
+        public Vector3 center;
 
         // constructor
         protected GameObject(Vector3 loc, Rectangle rect)
@@ -62,6 +63,11 @@ namespace ButlerQuest
                 }
             }
             return -1; // if the method makes it this far, then no collison has occured
+        }
+
+        public void Update()
+        {
+            center = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, location.Z);
         }
     }
 }

@@ -45,11 +45,13 @@
     <Compile Include="Data Structures.cs" />
     <Compile Include="EntityGenerator.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObject Hierarchy\Coin.cs" />
     <Compile Include="GameObject Hierarchy\DrawableGameObject.cs" />
     <Compile Include="GameObject Hierarchy\Enemy.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="GameObject Hierarchy\GameObject.cs" />
     <Compile Include="GameObject Hierarchy\Wall.cs" />
+    <Compile Include="GameObject Hierarchy\Weapon.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="GameObject Hierarchy\MovableGameObject.cs" />

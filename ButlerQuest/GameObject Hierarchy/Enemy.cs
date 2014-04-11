@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ButlerQuest
 {
-    class Enemy : MovableGameObject
+    public class Enemy : MovableGameObject
     {
         //AIState can be found in AIManager
         public AI_STATE state = AI_STATE.UNAWARE;
@@ -19,10 +19,11 @@ namespace ButlerQuest
         private const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED + 5000;
         private const float VISION_CONE_ANGLE_DEGREES = 55;
         private const float DEG_TO_RAD = 0.0174532925f;
-        public Vector3 center;
+        public int moneyValue; // amount of money the enemy is worth
+        public bool alive;
 
         // constructor
-        public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect)
+        public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect, int value)
             : base(vel, animations, names, loc, rect)
         {
             commandQueue = new Queue<ICommand>();
@@ -30,6 +31,8 @@ namespace ButlerQuest
             startLocation = loc;
             state = AI_STATE.UNAWARE;
             center = new Vector3(rect.X + rect.Width, rect.Y + rect.Height, loc.Z);
+            moneyValue = value;
+            alive = true;
         }
 
         public void ChangeCommand()
@@ -50,7 +53,7 @@ namespace ButlerQuest
             if (currentCommand == null || currentCommand.IsFinished)
                 ChangeCommand();
 
-            center = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, location.Z);
+            
 
             PersonalAILogic();
             

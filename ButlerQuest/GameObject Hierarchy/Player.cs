@@ -15,6 +15,8 @@ namespace ButlerQuest
         public int moneyCollected; // the amount of money the player has collected in the level.
         int moneyNeeded; // the total amount of money the player needs to collect to beat the level.
         public Vector3 startLoc; // the stat location of the player
+        public Weapon currentWeapon; // the player's current weapon
+        
 
         // constructor
         public Player(Vector3 velocity, Animation[] animations, string[] names, Vector3 location, Rectangle rectangle, int life, int moneyGoal)
@@ -26,8 +28,22 @@ namespace ButlerQuest
             lives = life;
             moneyNeeded = moneyGoal;
             moneyCollected = 0;
+
+            currentWeapon = null;
         }
 
-        // methods
+        bool Attack(Enemy enemy)
+        {
+            if (currentWeapon.CollisionSide(enemy) > -1)
+            {
+                currentWeapon.durability--;
+
+                if (currentWeapon.durability <= 0) currentWeapon = null;
+
+                return true;
+            }
+
+            return false;
+        }
     }
 }
