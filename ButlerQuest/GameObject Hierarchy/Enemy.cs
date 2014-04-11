@@ -14,11 +14,8 @@ namespace ButlerQuest
         public ICommand currentCommand;
         public Queue<ICommand> defaultCommands;
         public Queue<ICommand> commandQueue;
-        private double awareness = 0;
-        private const float MAX_VISION_RADIUS_SQUARED = 25000;
-        private const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED + 5000;
-        private const float VISION_CONE_ANGLE_DEGREES = 55;
-        private const float DEG_TO_RAD = 0.0174532925f;
+        public double awareness = 0;
+        
         public int moneyValue; // amount of money the enemy is worth
         public bool alive;
 
@@ -53,90 +50,9 @@ namespace ButlerQuest
             if (currentCommand == null || currentCommand.IsFinished)
                 ChangeCommand();
 
-            
-
-            PersonalAILogic();
+            AIManager.SharedAIManager.RunAI(this);
             
             currentCommand.Update(gameTime);
-        }
-
-        private void PersonalAILogic()
-        {
-            if (state < AI_STATE.HUNTING)
-            {
-                if (this.center.Z == AIManager.SharedAIManager.playerLoc.Z)
-                {
-                    double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.playerLoc);
-                    if (dist < MAX_VISION_RADIUS_SQUARED)
-                    {
-                        if (CanSee(AIManager.SharedAIManager.playerLoc))
-                        {
-                            if (!WallInWay((int)dist))
-                            {
-                                AIManager.SharedAIManager.lastKnownPlayerLoc = new Vector3(AIManager.SharedAIManager.playerLoc.X - 20, AIManager.SharedAIManager.playerLoc.Y - 20, AIManager.SharedAIManager.playerLoc.Z);
-
-                                if (AIManager.SharedAIManager.PlayerIsSuspicious())
-                                {
-                                    awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .001;
-                                    if (awareness >= 1)
-                                    {
-                                        //begin a pursuit, defer to AIManager
-                                        commandQueue.Clear();
-                                        state = AI_STATE.PURSUIT;
-                                    }
-                                }
-                            }
-                            System.Diagnostics.Debug.WriteLine("Awareness " + awareness + "Direction " + direction);
-                        }
-                    }
-                }
-            }
-            if (state == AI_STATE.PURSUIT)
-            {
-                double dist = Vector3.DistanceSquared(this.location, AIManager.SharedAIManager.playerLoc);
-                if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT)
-                {
-                    AIManager.SharedAIManager.lastKnownPlayerLoc = AIManager.SharedAIManager.playerLoc;
-                }
-                if (commandQueue.Count < 2)
-                {
-                    if (!CanSee(AIManager.SharedAIManager.lastKnownPlayerLoc) || WallInWay((int)dist))
-                    {
-                        //change state to hunting and defer to AIManager for that
-                    }
-                }
-            }
-            if (state == AI_STATE.HUNTING)
-            {
-                awareness -= .0005;
-                if (CanSee(AIManager.SharedAIManager.playerLoc))
-                {
-                    awareness += .01;
-                    if (awareness > 1)
-                        //reinitialize pursuit, call functions
-                        commandQueue.Clear();
-                        state = AI_STATE.PURSUIT;
-                }
-                if (awareness <= 0)
-                {
-                    awareness = 0;
-                    commandQueue.Clear();
-                    state = AI_STATE.AWARE;
-                }
-            }
-        }
-
-        public bool CanSee(Vector3 point)
-        {
-            double minAngle = ((90 - (90 * direction)) - VISION_CONE_ANGLE_DEGREES) * DEG_TO_RAD;
-            double maxAngle = ((90 - (90 * direction)) + VISION_CONE_ANGLE_DEGREES) * DEG_TO_RAD;
-            double angle = -Math.Atan2((point.Y - this.center.Y), (point.X - this.center.X));
-            return angle < maxAngle && angle > minAngle;
-        }
-
-        public bool WallInWay(int distance)
-        {
-            return AIManager.SharedAIManager.WallInWay(this, distance);
         }
     }
 }

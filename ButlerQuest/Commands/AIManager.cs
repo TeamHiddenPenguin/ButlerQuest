@@ -44,6 +44,11 @@ namespace ButlerQuest
         private List<Enemy> currentPursuit;
         private bool isPursuitActive;
 
+        public const float MAX_VISION_RADIUS_SQUARED = 25000;
+        public const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED + 5000;
+        public const float VISION_CONE_ANGLE_DEGREES = 55;
+        public const float DEG_TO_RAD = 0.0174532925f;
+
         //The shared AI manager to be used for all AI Management operations. If one doesn't exist, create it and return it.
         public static AIManager SharedAIManager
         {
@@ -176,6 +181,72 @@ namespace ButlerQuest
             return new Queue<ICommand>(translationList);
         }
 
+        public void RunAI(Enemy enemy)
+        {
+            if (enemy.state < AI_STATE.HUNTING)
+            {
+                if (enemy.center.Z == playerLoc.Z)
+                {
+                    double dist = Vector3.DistanceSquared(enemy.location, playerLoc);
+                    if (dist < MAX_VISION_RADIUS_SQUARED)
+                    {
+                        if (CanSee(enemy, playerLoc))
+                        {
+                            if (!WallInWay(enemy, (int)dist))
+                            {
+                                lastKnownPlayerLoc = playerLoc;
+
+                                if (AIManager.SharedAIManager.PlayerIsSuspicious())
+                                {
+                                    enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .001;
+                                    if (enemy.awareness >= 1)
+                                    {
+                                        //begin a pursuit, defer to AIManager
+                                        enemy.commandQueue.Clear();
+                                        enemy.state = AI_STATE.PURSUIT;
+                                    }
+                                }
+                            }
+                            //System.Diagnostics.Debug.WriteLine("Awareness " + awareness + "Direction " + direction);
+                        }
+                    }
+                }
+            }
+            if (enemy.state == AI_STATE.PURSUIT)
+            {
+                double dist = Vector3.DistanceSquared(enemy.location, playerLoc);
+                if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT)
+                {
+                    lastKnownPlayerLoc = playerLoc;
+                }
+                if (enemy.commandQueue.Count < 2)
+                {
+                    if (!CanSee(enemy, lastKnownPlayerLoc) || WallInWay(enemy, (int)dist))
+                    {
+                        //change state to hunting and defer to AIManager for that
+                    }
+                }
+            }
+            if (enemy.state == AI_STATE.HUNTING)
+            {
+                enemy.awareness -= .0005;
+                if (CanSee(enemy, playerLoc))
+                {
+                    enemy.awareness += .01;
+                    if (enemy.awareness > 1)
+                        //reinitialize pursuit, call functions
+                        enemy.commandQueue.Clear();
+                    enemy.state = AI_STATE.PURSUIT;
+                }
+                if (enemy.awareness <= 0)
+                {
+                    enemy.awareness = 0;
+                    enemy.commandQueue.Clear();
+                    enemy.state = AI_STATE.AWARE;
+                }
+            }
+        }
+
         public bool PlayerIsSuspicious()
         {
             return true;
@@ -207,6 +278,14 @@ namespace ButlerQuest
         public void BeginHunt()
         {
             //Needs a room graph, hiding places graph.
+        }
+
+        public bool CanSee(Enemy enemy, Vector3 point)
+        {
+            double minAngle = ((90 - (90 * enemy.direction)) - VISION_CONE_ANGLE_DEGREES) * DEG_TO_RAD;
+            double maxAngle = ((90 - (90 * enemy.direction)) + VISION_CONE_ANGLE_DEGREES) * DEG_TO_RAD;
+            double angle = -Math.Atan2((point.Y - enemy.center.Y), (point.X - enemy.center.X));
+            return angle < maxAngle && angle > minAngle;
         }
 
         public bool WallInWay(Enemy enemy,int dist)
