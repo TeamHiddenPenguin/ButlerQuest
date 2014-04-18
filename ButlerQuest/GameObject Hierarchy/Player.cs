@@ -32,18 +32,45 @@ namespace ButlerQuest
             currentWeapon = null;
         }
 
-        bool Attack(Enemy enemy)
+        void Attack() // sets the player's animation and weapon depending on what weapon is equipped
         {
-            if (currentWeapon.CollisionSide(enemy) > -1)
+            if (currentWeapon != null)
             {
-                currentWeapon.durability--;
-
-                if (currentWeapon.durability <= 0) currentWeapon = null;
-
-                return true;
+                if (!CurrentAnimation.Contains("Attack"))
+                {
+                    switch (direction)
+                    {
+                        case 0: currentWeapon.location.X = this.center.X + 10;
+                            currentWeapon.location.Y = this.center.Y - 10;
+                            CurrentAnimation = "UpAttack";
+                            break;
+                        case 1: currentWeapon.location.X = this.center.X + 20;
+                            currentWeapon.location.Y = this.center.Y;
+                            CurrentAnimation = "RightAttack";
+                            break;
+                        case 2: currentWeapon.location.X = this.center.X - 10;
+                            currentWeapon.location.Y = this.center.Y + 5;
+                            CurrentAnimation = "DownAttack";
+                            break;
+                        case 3: currentWeapon.location.X = this.center.X - 20;
+                            currentWeapon.location.Y = this.center.Y;
+                            CurrentAnimation = "LeftAttack";
+                            break;
+                        default: break;
+                    }
+                    currentWeapon.visible = true;
+                }
             }
+        }
 
-            return false;
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (currentWeapon != null && CurrentAnimation.Contains("Attack") == false)
+            {
+                currentWeapon.center = this.center;
+                currentWeapon.visible = false;
+            }
         }
     }
 }

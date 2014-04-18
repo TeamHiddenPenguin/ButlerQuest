@@ -87,13 +87,22 @@ namespace ButlerQuest
             if (basicEnemies != null) foreach (Enemy enemy in basicEnemies) enemy.Draw(spriteBatch);
 
 
-            if (weapons != null) foreach (Weapon weapon in weapons) if (weapon.taken == false) weapon.Draw(spriteBatch);
+            if (weapons != null) foreach (Weapon weapon in weapons) weapon.Draw(spriteBatch);
 
 
             if (coins != null) foreach (Coin coin in coins) if (coin.active) coin.Draw(spriteBatch);
 
 
-            player.Draw(spriteBatch);
+            if (player.direction == 1 || player.direction == 2)
+            {
+                player.Draw(spriteBatch);
+                player.currentWeapon.Draw(spriteBatch);
+            }
+            else
+            {
+                player.currentWeapon.Draw(spriteBatch);
+                player.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
         }
@@ -124,6 +133,16 @@ namespace ButlerQuest
                                 ForceGlobalAIStateChange(AI_STATE.UNAWARE);
                                 break;
                         }
+                }
+
+                // only worry about collision if the player is attacking
+                if (player.CurrentAnimation.Contains("Attack"))
+                {
+                    int collision = player.currentWeapon.CollisionSide(enemy);
+                    if (collision > -1)
+                    {
+                        enemy.alive = false;
+                    }
                 }
             }
             // wall collision
@@ -158,19 +177,16 @@ namespace ButlerQuest
                 }
             }
 
-            // coin collision
+            // weapon collision
             if (player.currentWeapon == null)
             {
                 if (weapons != null) foreach (Weapon weapon in weapons)
                 {
-                    if (weapon.taken == false)
+                    int collision = player.CollisionSide(weapon);
+                    if (collision > -1)
                     {
-                        int collision = player.CollisionSide(weapon);
-                        if (collision > -1)
-                        {
-                            player.currentWeapon = weapon;
-                            weapon.taken = true;
-                        }
+                        player.currentWeapon = weapon;
+                        weapons.Remove(weapon);
                     }
                 }
             }
