@@ -22,6 +22,7 @@ namespace ButlerQuest
         public Rectangle windowSpace; // window space used for drawing the map
         GraphicsDevice graphics;
         SpriteBatch spriteBatch;
+        public RoomGraph roomGraph;
 
         // constructor
         public Level(string mapFile)
@@ -64,6 +65,22 @@ namespace ButlerQuest
                         {
                             coins.Add(EntityGenerator.GenerateCoin(new Vector3(entity.X, entity.Y, currentFloor), int.Parse(entity.Properties.Find(x => x.Item1 == "value").Item2)));
                         }
+                    }
+                }
+                if (groupname.Contains("Room"))
+                {
+                    foreach (var entity in levelMap.ObjectGroups[groupname])
+                    {
+                        RoomGraphNode node = new RoomGraphNode(new Rectangle(entity.X, entity.Y, entity.Width, entity.Height), currentFloor, entity.Name);
+                        List<string> connections = new List<string>();
+                        foreach (var t in entity.Properties)
+                        {
+                            if (t.Item1 != null)
+                                connections.Add(t.Item1);
+                            if (t.Item2 != null)
+                                connections.Add(t.Item2);
+                        }
+                        roomGraph.AddNode(node, connections);
                     }
                 }
                 //Otherwise it's a floor graph and sam will write this code later when it's relevant
