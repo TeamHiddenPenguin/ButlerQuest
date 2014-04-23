@@ -96,6 +96,7 @@ namespace ButlerQuest
             // TODO: Add your drawing code here
             ScreenManager.SharedManager.DrawCurrentScreen(gameTime);
             
+            
             base.Draw(gameTime);
         }
     }

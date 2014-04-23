@@ -201,7 +201,6 @@ namespace ButlerQuest
                                     enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .001;
                                     if (enemy.awareness >= 1)
                                     {
-                                        
                                         AddToPursuit(enemy);
                                         SwitchPursuitState(AI_STATE.PURSUIT);
                                     }
@@ -219,22 +218,9 @@ namespace ButlerQuest
                 {
                     lastKnownPlayerLoc = playerLoc;
                 }
-                if (enemy.commandQueue.Count < 1)
+                if (graph.GetNode((int)enemy.center.X, (int)enemy.center.Y, (int)enemy.center.Z).Equals(graph.GetNode((int)lastKnownPlayerLoc.X, (int)lastKnownPlayerLoc.Y, (int)lastKnownPlayerLoc.Z)))
                 {
-                    if (!CanSee(enemy, lastKnownPlayerLoc) || WallInWay(enemy, (int)dist))
-                    {
-                        if (Vector3.Distance(enemy.location, playerLoc) < 200)
-                        {
-                            enemy.commandQueue.Clear();
-                            enemy.commandQueue.Enqueue(new WaitForNextCommand(enemy));
-                            SwitchPursuitState(AI_STATE.HUNTING);
-                        }
-                        else
-                        {
-                            currentPursuit.Remove(enemy);
-                            enemy.state = AI_STATE.AWARE;
-                        }
-                    }
+                    SwitchPursuitState(AI_STATE.HUNTING);
                 }
             }
             if (enemy.state == AI_STATE.HUNTING)
@@ -252,8 +238,7 @@ namespace ButlerQuest
                 if (enemy.awareness <= 0)
                 {
                     enemy.awareness = 0;
-                    enemy.commandQueue.Clear();
-                    enemy.state = AI_STATE.AWARE;
+                    SwitchPursuitState(AI_STATE.AWARE);
                 }
             }
         }
@@ -281,7 +266,10 @@ namespace ButlerQuest
                 enemy.state = state;
             }
             if (state == AI_STATE.HUNTING)
+            {
+                System.Diagnostics.Debug.WriteLine("Began Hunt");
                 BeginHunt();
+            }
             if (state < AI_STATE.HUNTING)
                 isPursuitActive = false;
         }
