@@ -42,7 +42,6 @@ namespace ButlerQuest
         public Vector3 playerLoc;
         //The enemies involved in the current pursuit
         private List<Enemy> currentPursuit;
-        private HashSet<Enemy> LostSightPursuit;
         private bool isPursuitActive;
 
         public const float MAX_VISION_RADIUS_SQUARED = 50000;
@@ -202,10 +201,9 @@ namespace ButlerQuest
                                     enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .001;
                                     if (enemy.awareness >= 1)
                                     {
-                                        //begin a pursuit, defer to AIManager
-                                        enemy.commandQueue.Clear();
-                                        enemy.state = AI_STATE.PURSUIT;
+                                        
                                         AddToPursuit(enemy);
+                                        SwitchPursuitState(AI_STATE.PURSUIT);
                                     }
                                 }
                             }
@@ -221,22 +219,15 @@ namespace ButlerQuest
                 {
                     lastKnownPlayerLoc = playerLoc;
                 }
-                if (enemy.commandQueue.Count < 2)
+                if (enemy.commandQueue.Count < 1)
                 {
                     if (!CanSee(enemy, lastKnownPlayerLoc) || WallInWay(enemy, (int)dist))
                     {
-                        if(!LostSightPursuit.Contains(enemy))
+                        if (Vector3.Distance(enemy.location, playerLoc) < 200)
                         {
-                            if (Vector3.Distance(enemy.location, playerLoc) < 200)
-                            {
-                                LostSightPursuit.Add(enemy);
-                                enemy.commandQueue.Clear();
-                                enemy.commandQueue.Enqueue(new WaitForNextCommand(enemy));
-                                if (LostSightPursuit.Count < Math.Min(currentPursuit.Count, 3))
-                                {
-                                    SwitchPursuitState(AI_STATE.HUNTING);
-                                }
-                            }
+                            enemy.commandQueue.Clear();
+                            enemy.commandQueue.Enqueue(new WaitForNextCommand(enemy));
+                            SwitchPursuitState(AI_STATE.HUNTING);
                         }
                         else
                         {
@@ -277,7 +268,6 @@ namespace ButlerQuest
             if (!isPursuitActive)
             {
                 currentPursuit = new List<Enemy>();
-                LostSightPursuit = new HashSet<Enemy>();
                 isPursuitActive = true;
             }
             currentPursuit.Add(e);
