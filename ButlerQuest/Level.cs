@@ -90,17 +90,20 @@ namespace ButlerQuest
             if (weapons != null) foreach (Weapon weapon in weapons) weapon.Draw(spriteBatch);
 
 
-            if (coins != null) foreach (Coin coin in coins) if (coin.active) coin.Draw(spriteBatch);
+            if (coins != null)
+                foreach (Coin coin in coins)
+                    if (coin.active)
+                        coin.Draw(spriteBatch);
 
 
             if (player.direction == 1 || player.direction == 2)
             {
                 player.Draw(spriteBatch);
-                player.currentWeapon.Draw(spriteBatch);
+                if (player.currentWeapon != null) player.currentWeapon.Draw(spriteBatch);
             }
             else
             {
-                player.currentWeapon.Draw(spriteBatch);
+                if (player.currentWeapon != null) player.currentWeapon.Draw(spriteBatch);
                 player.Draw(spriteBatch);
             }
 
@@ -112,8 +115,8 @@ namespace ButlerQuest
         {
             player.Update(gameTime);
 
-            if (weapons != null) foreach (Weapon weapon in weapons) weapon.Update(gameTime);
-            if (weapons != null) foreach (Coin coin in coins) coin.Update(gameTime);
+            if (weapons.Count != 0) foreach (Weapon weapon in weapons) weapon.Update(gameTime);
+            if (coins.Count != 0) foreach (Coin coin in coins) coin.Update(gameTime);
 
             AIManager.SharedAIManager.MakePaths();
 
@@ -168,25 +171,25 @@ namespace ButlerQuest
             }
 
             // coin collision
-            if (coins != null) foreach (Coin coin in coins)
+            for (int i = 0; i < coins.Count; i++)
             {
-                int collision = player.CollisionSide(coin);
+                int collision = player.CollisionSide(coins[i]);
                 if (collision > -1)
                 {
-                    player.moneyCollected += coin.InteractWith();
+                    player.moneyCollected += coins[i].InteractWith();
                 }
             }
 
             // weapon collision
             if (player.currentWeapon == null)
             {
-                if (weapons != null) foreach (Weapon weapon in weapons)
+                for (int i = 0; i < weapons.Count; i++)
                 {
-                    int collision = player.CollisionSide(weapon);
+                    int collision = player.CollisionSide(weapons[i]);
                     if (collision > -1)
                     {
-                        player.currentWeapon = weapon;
-                        weapons.Remove(weapon);
+                        player.currentWeapon = weapons[i];
+                        weapons.Remove(weapons[i]);
                     }
                 }
             }

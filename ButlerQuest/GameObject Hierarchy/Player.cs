@@ -36,7 +36,7 @@ namespace ButlerQuest
         {
             if (currentWeapon != null)
             {
-                if (!CurrentAnimation.Contains("Attack"))
+                if (CurrentAnimation.Contains("Attack"))
                 {
                     switch (direction)
                     {
