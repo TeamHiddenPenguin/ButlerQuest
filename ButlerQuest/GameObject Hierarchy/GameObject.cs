@@ -67,7 +67,7 @@ namespace ButlerQuest
 
         public void Update()
         {
-            center = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, location.Z);
+            center = new Vector3(rectangle.X + (rectangle.Width / 2), rectangle.Y + (rectangle.Height / 2), location.Z);
         }
     }
 }
