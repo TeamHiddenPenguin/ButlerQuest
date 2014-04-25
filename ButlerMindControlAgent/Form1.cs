@@ -82,6 +82,7 @@ namespace ButlerMindControlAgent
             EnemySelectBox.Items.Clear();
             EnemySelectBox.ClearSelected();
             currentFloorObjects = new List<XElement>();
+            FloorSelectBox.SelectedIndex = 0;
             foreach (var obj in floors[FloorSelectBox.SelectedIndex].Elements("object"))
             {
                 if (((string)obj.Attribute("type")) == "Enemy")

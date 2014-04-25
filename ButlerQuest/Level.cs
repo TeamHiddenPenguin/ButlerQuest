@@ -37,7 +37,9 @@ namespace ButlerQuest
 
             levelMap = new Map(mapFile, new int[2] { 1, int.MaxValue });
 
-            
+
+            roomGraph = new RoomGraph();
+
             foreach (var groupname in levelMap.ObjectGroups.Keys) // Sam did this loop and everything inside it.
             {
                 int currentFloor = int.Parse(groupname[5].ToString()) - 1;

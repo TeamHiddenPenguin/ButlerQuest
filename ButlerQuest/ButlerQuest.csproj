@@ -117,7 +117,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\DebugMap2.tmx" />
+    <None Include="Content\DebugMap2.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

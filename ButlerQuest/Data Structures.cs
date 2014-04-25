@@ -455,6 +455,7 @@ namespace ButlerQuest
             {
                 node.AddNode(GetNode(s));
             }
+            nodes.Add(node);
         }
     }
 
