@@ -44,10 +44,13 @@ namespace ButlerQuest
         private List<Enemy> currentPursuit;
         private bool isPursuitActive;
 
+        private Random rand;
+
         public const float MAX_VISION_RADIUS_SQUARED = 50000;
         public const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED + 5000;
         public const float VISION_CONE_ANGLE_DEGREES = 55;
         public const float DEG_TO_RAD = 0.0174532925f;
+        public const double PERCENTAGE_ROOMS_TO_SEARCH = 2.0 / 3.0;
 
         //The shared AI manager to be used for all AI Management operations. If one doesn't exist, create it and return it.
         public static AIManager SharedAIManager
@@ -87,6 +90,8 @@ namespace ButlerQuest
 
             currentPursuit = new List<Enemy>();
             isPursuitActive = false;
+
+            rand = new Random();
         }
 
         /// <summary>
@@ -180,7 +185,11 @@ namespace ButlerQuest
             //Return a new queue of commands, gotten from the translation list
             return new Queue<ICommand>(translationList);
         }
-
+        
+        /// <summary>
+        /// Runs the AI for the enemy passed in
+        /// </summary>
+        /// <param name="enemy">Enemy to run the AI on</param>
         public void RunAI(Enemy enemy)
         {
             if (enemy.state < AI_STATE.HUNTING)
@@ -276,7 +285,29 @@ namespace ButlerQuest
 
         public void BeginHunt()
         {
-            //Needs a room graph, hiding places graph.
+            RoomGraphNode currentRoom = level.roomGraph.GetNode(new Rectangle((int)(lastKnownPlayerLoc.X), (int)(lastKnownPlayerLoc.Y), 1, 1));
+            int roomsToSearch = (int)Math.Ceiling(currentRoom.Neighbors.Count * PERCENTAGE_ROOMS_TO_SEARCH);
+            List<RoomGraphNode> rooms = new List<RoomGraphNode>();
+            rooms.Capacity = roomsToSearch;
+            //rooms.
+            for (int i = 0; i < rooms.Capacity; i++)
+            {
+                rooms[i] = (RoomGraphNode)currentRoom.Neighbors[rand.Next(currentRoom.Neighbors.Count)];
+            }
+            double enemiesSearching = Math.Min(currentPursuit.Count, 4);
+            enemiesSearching = Math.Min(enemiesSearching, rooms.Capacity);
+
+            double roomsPerEnemy = roomsToSearch / enemiesSearching;
+
+            for (int i = 0; i < enemiesSearching; i++)
+            {
+                for(int j = 0; j < roomsPerEnemy; j++)
+                {
+                    currentPursuit[i].commandQueue.Enqueue(new CommandMove(new Vector3(rooms[0].X, rooms[0].Y, rooms[0].Z), currentPursuit[i]));
+                    currentPursuit[i].commandQueue.Enqueue(new CommandWait(30));
+                    rooms.RemoveAt(0);
+                }
+            }
         }
 
         public bool CanSee(Enemy enemy, Vector3 point)
