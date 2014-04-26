@@ -116,7 +116,7 @@ namespace ButlerQuest
 
         public static Weapon GenerateWeapon(Vector3 position, int durability, string weaponType)
         {
-            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("player.png");
+            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>(weaponType + ".png");
 
             Weapon weapon = new Weapon(
                 new Animation[1] {
@@ -142,7 +142,7 @@ namespace ButlerQuest
 
         public static Coin GenerateCoin(Vector3 position, int value)
         {
-            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("Target.png");
+            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("Coin.png");
 
             Coin coin = new Coin(
                 new Animation[1] {

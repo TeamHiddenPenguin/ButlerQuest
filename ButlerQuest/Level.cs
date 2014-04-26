@@ -37,7 +37,7 @@ namespace ButlerQuest
             levelMap = new Map(mapFile, new int[2] { 1, int.MaxValue });
 
             
-            foreach (var groupname in levelMap.ObjectGroups.Keys) // Sam did this loop and everything inside it.
+            foreach (var groupname in levelMap.ObjectGroups.Keys) // takes each entity in the map file and creates objects based on their type.
             {
                 int currentFloor = int.Parse(groupname[5].ToString()) - 1;
                 if (groupname.Substring(6, 8) == "Entities")
@@ -58,7 +58,7 @@ namespace ButlerQuest
                         }
                         else if (entity.Type == "Weapon")
                         {
-                            weapons.Add(EntityGenerator.GenerateWeapon(new Vector3(entity.X, entity.Y, currentFloor), 2, entity.Name));
+                            weapons.Add(EntityGenerator.GenerateWeapon(new Vector3(entity.X, entity.Y, currentFloor), 2, entity.Properties.Find(x => x.Item1 == "type").Item2));
                         }
                         else if (entity.Type == "Coin")
                         {
