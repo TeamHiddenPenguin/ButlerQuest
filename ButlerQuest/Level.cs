@@ -140,7 +140,7 @@ namespace ButlerQuest
                             case -1: break;
                             default: player.lives--;
                                 player.location = player.startLoc;
-                                ForceGlobalAIStateChange(AI_STATE.UNAWARE);
+                                //ForceGlobalAIStateChange(AI_STATE.UNAWARE);
                                 break;
                         }
                 }

@@ -41,13 +41,13 @@ namespace ButlerQuest
         //The current player location, used to check visibility against
         public Vector3 playerLoc;
         //The enemies involved in the current pursuit
-        private List<Enemy> currentPursuit;
+        private HashSet<Enemy> currentPursuit;
         private bool isPursuitActive;
 
         private Random rand;
 
         public const float MAX_VISION_RADIUS_SQUARED = 50000;
-        public const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED + 5000;
+        public const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED;// + 5000;
         public const float VISION_CONE_ANGLE_DEGREES = 55;
         public const float DEG_TO_RAD = 0.0174532925f;
         public const double PERCENTAGE_ROOMS_TO_SEARCH = 2.0 / 3.0;
@@ -88,7 +88,7 @@ namespace ButlerQuest
             //Create the PriorityQueue
             enemiesToPath = new PriorityQueue<int, Enemy>();
 
-            currentPursuit = new List<Enemy>();
+            currentPursuit = new HashSet<Enemy>();
             isPursuitActive = false;
 
             rand = new Random();
@@ -227,7 +227,7 @@ namespace ButlerQuest
                 {
                     lastKnownPlayerLoc = playerLoc;
                 }
-                if (graph.GetNode((int)enemy.center.X, (int)enemy.center.Y, (int)enemy.center.Z).Equals(graph.GetNode((int)lastKnownPlayerLoc.X, (int)lastKnownPlayerLoc.Y, (int)lastKnownPlayerLoc.Z)))
+                else if (graph.GetNode((int)enemy.center.X, (int)enemy.center.Y, (int) enemy.center.Z) == graph.GetNode((int)lastKnownPlayerLoc.X, (int)lastKnownPlayerLoc.Y, (int)lastKnownPlayerLoc.Z))
                 {
                     SwitchPursuitState(AI_STATE.HUNTING);
                 }
@@ -235,7 +235,7 @@ namespace ButlerQuest
             if (enemy.state == AI_STATE.HUNTING)
             {
                 enemy.awareness -= .0005;
-                if (CanSee(enemy, playerLoc))
+                if (CanSee(enemy, playerLoc) && !WallInWay(enemy, (int)Vector3.DistanceSquared(enemy.location, playerLoc)))
                 {
                     enemy.awareness += .1;
                     if (enemy.awareness > 1)
@@ -261,10 +261,11 @@ namespace ButlerQuest
         {
             if (!isPursuitActive)
             {
-                currentPursuit = new List<Enemy>();
+                currentPursuit = new HashSet<Enemy>();
                 isPursuitActive = true;
             }
-            currentPursuit.Add(e);
+            if(!currentPursuit.Contains(e))
+                currentPursuit.Add(e);
         }
 
         public void SwitchPursuitState(AI_STATE state)
@@ -286,26 +287,36 @@ namespace ButlerQuest
         public void BeginHunt()
         {
             RoomGraphNode currentRoom = level.roomGraph.GetNode(new Rectangle((int)(lastKnownPlayerLoc.X), (int)(lastKnownPlayerLoc.Y), 1, 1));
+
             int roomsToSearch = (int)Math.Ceiling(currentRoom.Neighbors.Count * PERCENTAGE_ROOMS_TO_SEARCH);
-            List<RoomGraphNode> rooms = new List<RoomGraphNode>();
-            rooms.Capacity = roomsToSearch;
-            //rooms.
-            for (int i = 0; i < rooms.Capacity; i++)
+            Queue<RoomGraphNode> rooms = new Queue<RoomGraphNode>();
+
+            for (int i = 0; i < roomsToSearch; i++)
             {
-                rooms[i] = (RoomGraphNode)currentRoom.Neighbors[rand.Next(currentRoom.Neighbors.Count)];
+                rooms.Enqueue((RoomGraphNode)currentRoom.Neighbors[rand.Next(currentRoom.Neighbors.Count)]);
             }
             double enemiesSearching = Math.Min(currentPursuit.Count, 4);
-            enemiesSearching = Math.Min(enemiesSearching, rooms.Capacity);
+            enemiesSearching = Math.Min(enemiesSearching, roomsToSearch);
 
             double roomsPerEnemy = roomsToSearch / enemiesSearching;
 
-            for (int i = 0; i < enemiesSearching; i++)
+            //MAKE MORE EFFICIENT
+
+            foreach(Enemy enemy in currentPursuit)
             {
+                Vector3 loc = enemy.location;
                 for(int j = 0; j < roomsPerEnemy; j++)
                 {
-                    currentPursuit[i].commandQueue.Enqueue(new CommandMove(new Vector3(rooms[0].X, rooms[0].Y, rooms[0].Z), currentPursuit[i]));
-                    currentPursuit[i].commandQueue.Enqueue(new CommandWait(30));
-                    rooms.RemoveAt(0);
+                    RoomGraphNode next = rooms.Dequeue();
+                    Vector3 nextLoc = new Vector3(next.X, next.Y, next.Z);
+                    Queue<ICommand> toNextRoom = BuildPath(loc, nextLoc, enemy, -1);
+                    loc = nextLoc;
+
+                    foreach (var element in toNextRoom)
+                    {
+                        enemy.commandQueue.Enqueue(element);
+                    }
+                    enemy.commandQueue.Enqueue(new CommandWait(30));
                 }
             }
         }

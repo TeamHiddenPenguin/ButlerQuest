@@ -21,7 +21,7 @@ namespace ButlerQuest
             Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("SpriteSheetEnemies.png");
 
             Enemy temp = new Enemy(
-                new Vector3(2.3f, 2.3f, 1),
+                new Vector3(2f, 2f, 1),
                 new Animation[5]{
                     new Animation(0,0,40,40,4,4,1, tex), //default
                     new Animation(4,5,40,40,4,4,15, tex), //WalkUp
