@@ -145,6 +145,7 @@ namespace ButlerQuest
                     if (collision > -1)
                     {
                         enemy.alive = false;
+                        coins.Add(EntityGenerator.GenerateCoin(enemy.location, enemy.moneyValue));
                     }
                 }
             }
