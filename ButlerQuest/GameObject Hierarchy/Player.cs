@@ -47,7 +47,7 @@ namespace ButlerQuest
                         CurrentAnimation = "RightAttack";
                         break;
                    case 2: currentWeapon.location.X = this.location.X;
-                        currentWeapon.location.Y = this.location.Y - 5;
+                        currentWeapon.location.Y = this.location.Y;
                         CurrentAnimation = "DownAttack";
                         break;
                     case 3: currentWeapon.location.X = this.location.X - 5;

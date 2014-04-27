@@ -58,7 +58,7 @@ namespace ButlerQuest
                         }
                         else if (entity.Type == "Weapon")
                         {
-                            weapons.Add(EntityGenerator.GenerateWeapon(new Vector3(entity.X, entity.Y, currentFloor), 2, entity.Properties.Find(x => x.Item1 == "type").Item2));
+                            weapons.Add(EntityGenerator.GenerateWeapon(new Vector3(entity.X, entity.Y, currentFloor), int.Parse(entity.Properties.Find(x => x.Item1 == "durability").Item2), entity.Properties.Find(x => x.Item1 == "type").Item2));
                         }
                         else if (entity.Type == "Coin")
                         {
@@ -149,13 +149,16 @@ namespace ButlerQuest
                     }
 
                     // only worry about collision if the player is attacking
-                    if (player.CurrentAnimation.Contains("Attack"))
+                    if (player.CurrentAnimation.Contains("Attack") && player.currentWeapon != null)
                     {
                         int collision = player.currentWeapon.CollisionSide(enemy);
                         if (collision > -1)
                         {
                             enemy.alive = false;
                             coins.Add(EntityGenerator.GenerateCoin(enemy.location, enemy.moneyValue));
+                            player.currentWeapon.durability--;
+                            if (player.currentWeapon.durability == 0)
+                                player.currentWeapon = null;
                         }
                     }
                 }
