@@ -18,24 +18,16 @@ namespace ButlerQuest
         /// <returns>An enemy</returns>
         public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands)
         {
-            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("SpriteSheetEnemies.png");
-
             Enemy temp = new Enemy(
-                new Vector3(2.3f, 2.3f, 1),
-                new Animation[5]{
-                    new Animation(0,0,40,40,4,4,1, tex), //default
-                    new Animation(4,5,40,40,4,4,15, tex), //WalkUp
-                    new Animation(11,15,40,40,4,4,5,tex), //WalkRight
-                    new Animation(1,2,40,40,4,4,15, tex), //WalkDown
-                    new Animation(6,10,40,40,4,4,5,tex) //WalkLeft
-                },
-                new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" },
+                GameVariables.enemyMoveSpeed,
+                GameVariables.enemyAnimations,
+                GameVariables.enemyAnimationNames,
                 position,
                 new Rectangle(
                     (int)position.X,
                     (int)position.Y,
-                    40, 40),
-                    100);
+                    GameVariables.tileWidth, GameVariables.tileHeight),
+                    GameVariables.normalEnemyCash);
 
             foreach (var parseable in commands)
             {
@@ -88,23 +80,15 @@ namespace ButlerQuest
         /// <returns>A player object</returns>
         public static Player GeneratePlayer(Vector3 position, int lives, int goal)
         {
-            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("SpriteSheetAlfredJeevesIII.png");
-
             Player player = new Player(
-                new Vector3(2, 2, 1),
-                new Animation[5] {
-                    new Animation(0,0,40,40,4,4,1, tex), //default
-                    new Animation(4,5,40,40,4,4,15, tex), //WalkUp
-                    new Animation(11,15,40,40,4,4,5,tex), //WalkRight
-                    new Animation(1,2,40,40,4,4,15, tex), //WalkDown
-                    new Animation(6,10,40,40,4,4,5,tex) //WalkLeft
-                },
-                new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" },
+                GameVariables.playerSpeed,
+                GameVariables.playerAnimations,
+                GameVariables.playerAnimationNames,
                 position,
                 new Rectangle(
                     (int)position.X,
                     (int)position.Y,
-                    40, 40),
+                    GameVariables.tileWidth, GameVariables.tileHeight),
                 lives,
                 goal);
 
@@ -116,18 +100,16 @@ namespace ButlerQuest
 
         public static Weapon GenerateWeapon(Vector3 position, int durability, string weaponType)
         {
-            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("player.png");
+            
 
             Weapon weapon = new Weapon(
-                new Animation[1] {
-                    new Animation(0, 0, 40, 40, 1, 1, 1, tex)
-                },
+                GameVariables.GetWeaponAnimations(weaponType),
                 new String[1] { weaponType },
                 position,
                 new Rectangle(
                     (int)position.X,
                     (int)position.Y,
-                    40, 40),
+                    GameVariables.tileWidth, GameVariables.tileHeight),
                 durability,
                 new Vector3(),
                 new Rectangle());
@@ -142,22 +124,18 @@ namespace ButlerQuest
 
         public static Coin GenerateCoin(Vector3 position, int value)
         {
-            Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("Target.png");
 
             Coin coin = new Coin(
-                new Animation[1] {
-                    new Animation(0, 0, 40, 40, 1, 1, 1, tex)
-                },
+                GameVariables.coinAnimation,
                 new String[1] { "coin" },
                 position,
                 new Rectangle(
                     (int)position.X,
                     (int)position.Y,
-                    40, 40),
+                    GameVariables.tileWidth, GameVariables.tileHeight),
                 value);
 
             coin.CurrentAnimation = "coin";
-
 
             return coin;
         }

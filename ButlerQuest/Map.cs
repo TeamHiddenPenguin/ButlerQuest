@@ -73,6 +73,9 @@ namespace ButlerQuest
 
             //constrcut a "graph". I put graph in quotes because it's a pretty bad implementation
             Graph = CreateSquareGraph(gidCostMap);
+
+            GameVariables.tileWidth = TileWidth;
+            GameVariables.tileHeight = TileHeight;
         }
 
         /// <summary>

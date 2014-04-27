@@ -52,6 +52,7 @@
     <Compile Include="GameObject Hierarchy\GameObject.cs" />
     <Compile Include="GameObject Hierarchy\Wall.cs" />
     <Compile Include="GameObject Hierarchy\Weapon.cs" />
+    <Compile Include="GameVariables.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="GameObject Hierarchy\MovableGameObject.cs" />
