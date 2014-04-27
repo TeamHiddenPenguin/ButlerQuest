@@ -43,16 +43,22 @@ namespace ButlerQuest
         public static Texture2D playerTex = ScreenManager.SharedManager.Content.Load<Texture2D>(playerFile);
 
         // populate animation array for player
-        public static Animation[] playerAnimations = new Animation[5] {
+        public static Animation[] playerAnimations = new Animation[9] {
                     new Animation(0,0,40,40,4,4,1, playerTex), //default
                     new Animation(4,5,40,40,4,4,15, playerTex), //WalkUp
                     new Animation(11,15,40,40,4,4,5,playerTex), //WalkRight
                     new Animation(1,2,40,40,4,4,15, playerTex), //WalkDown
-                    new Animation(6,10,40,40,4,4,5,playerTex) //WalkLeft
+                    new Animation(6,10,40,40,4,4,5,playerTex), //WalkLeft
+
+                    // placeholders until attack animation is a thing.
+                    new Animation(0,0,40,40,4,4,1, playerTex),
+                    new Animation(0,0,40,40,4,4,1, playerTex),
+                    new Animation(0,0,40,40,4,4,1, playerTex),
+                    new Animation(0,0,40,40,4,4,1, playerTex),
                 };
 
         // add in the names of the player's animation frames
-        public static string[] playerAnimationNames = new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" };
+        public static string[] playerAnimationNames = new string[9] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft", "UpAttack", "RightAttack", "DownAttack", "LeftAttack" };
 
         // sets how fast the player moves
         public static Vector3 playerSpeed = new Vector3(2, 2, 1);

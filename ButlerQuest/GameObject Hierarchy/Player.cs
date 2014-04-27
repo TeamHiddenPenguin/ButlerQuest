@@ -32,44 +32,41 @@ namespace ButlerQuest
             currentWeapon = null;
         }
 
-        void Attack() // sets the player's animation and weapon depending on what weapon is equipped
+        public void Attack() // sets the player's animation and weapon depending on what weapon is equipped
         {
             if (currentWeapon != null)
             {
-                if (CurrentAnimation.Contains("Attack"))
+                switch (direction)
                 {
-                    switch (direction)
-                    {
-                        case 0: currentWeapon.location.X = this.center.X + 10;
-                            currentWeapon.location.Y = this.center.Y - 10;
-                            CurrentAnimation = "UpAttack";
-                            break;
-                        case 1: currentWeapon.location.X = this.center.X + 20;
-                            currentWeapon.location.Y = this.center.Y;
-                            CurrentAnimation = "RightAttack";
-                            break;
-                        case 2: currentWeapon.location.X = this.center.X - 10;
-                            currentWeapon.location.Y = this.center.Y + 5;
-                            CurrentAnimation = "DownAttack";
-                            break;
-                        case 3: currentWeapon.location.X = this.center.X - 20;
-                            currentWeapon.location.Y = this.center.Y;
-                            CurrentAnimation = "LeftAttack";
-                            break;
-                        default: break;
-                    }
-                    currentWeapon.visible = true;
+                    case 0: currentWeapon.location.X = this.location.X + 10;
+                        currentWeapon.location.Y = this.location.Y - 10;
+                        CurrentAnimation = "UpAttack";
+                        break;
+                    case 1: currentWeapon.location.X = this.location.X + 20;
+                        currentWeapon.location.Y = this.location.Y - 5;
+                        CurrentAnimation = "RightAttack";
+                        break;
+                   case 2: currentWeapon.location.X = this.location.X;
+                        currentWeapon.location.Y = this.location.Y - 5;
+                        CurrentAnimation = "DownAttack";
+                        break;
+                    case 3: currentWeapon.location.X = this.location.X - 5;
+                        currentWeapon.location.Y = this.location.Y - 5;
+                        CurrentAnimation = "LeftAttack";
+                        break;
+                    default: break;
                 }
+                currentWeapon.visible = true;
             }
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (currentWeapon != null && CurrentAnimation.Contains("Attack") == false)
+            if (currentWeapon != null)
             {
-                currentWeapon.center = this.center;
                 currentWeapon.visible = false;
+                currentWeapon.Update(gameTime);
             }
         }
     }

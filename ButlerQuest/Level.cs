@@ -84,10 +84,15 @@ namespace ButlerQuest
 
             levelMap.Draw(windowSpace, (int)player.location.Z);
 
-            if (basicEnemies != null) foreach (Enemy enemy in basicEnemies) enemy.Draw(spriteBatch);
+            if (basicEnemies != null)
+                foreach (Enemy enemy in basicEnemies)
+                    if (enemy.alive)
+                        enemy.Draw(spriteBatch);
 
 
-            if (weapons != null) foreach (Weapon weapon in weapons) weapon.Draw(spriteBatch);
+            if (weapons != null)
+                foreach (Weapon weapon in weapons) 
+                    weapon.Draw(spriteBatch);
 
 
             if (coins != null)
@@ -99,11 +104,14 @@ namespace ButlerQuest
             if (player.direction == 1 || player.direction == 2)
             {
                 player.Draw(spriteBatch);
-                if (player.currentWeapon != null) player.currentWeapon.Draw(spriteBatch);
+                if (player.currentWeapon != null)
+                    player.currentWeapon.Draw(spriteBatch);
             }
             else
             {
-                if (player.currentWeapon != null) player.currentWeapon.Draw(spriteBatch);
+                if (player.currentWeapon != null)
+                    player.currentWeapon.Draw(spriteBatch);
+
                 player.Draw(spriteBatch);
             }
 
@@ -123,10 +131,12 @@ namespace ButlerQuest
             //Enemy updates and collision
             foreach (Enemy enemy in basicEnemies) // updates enemies and checks for collision with player if on the same floor.
             {
-                enemy.Update(gameTime);
-                //Only worry about collision if they are hunting the player, otherwise don't worry about it
-                if (enemy.state >= AI_STATE.HUNTING)
+                if (enemy.alive)
                 {
+                    enemy.Update(gameTime);
+                    //Only worry about collision if they are hunting the player, otherwise don't worry about it
+                    if (enemy.state >= AI_STATE.HUNTING)
+                    {
                         int collision = player.CollisionSide(enemy);
                         switch (collision)
                         {
@@ -136,16 +146,17 @@ namespace ButlerQuest
                                 ForceGlobalAIStateChange(AI_STATE.UNAWARE);
                                 break;
                         }
-                }
+                    }
 
-                // only worry about collision if the player is attacking
-                if (player.CurrentAnimation.Contains("Attack"))
-                {
-                    int collision = player.currentWeapon.CollisionSide(enemy);
-                    if (collision > -1)
+                    // only worry about collision if the player is attacking
+                    if (player.CurrentAnimation.Contains("Attack"))
                     {
-                        enemy.alive = false;
-                        coins.Add(EntityGenerator.GenerateCoin(enemy.location, enemy.moneyValue));
+                        int collision = player.currentWeapon.CollisionSide(enemy);
+                        if (collision > -1)
+                        {
+                            enemy.alive = false;
+                            coins.Add(EntityGenerator.GenerateCoin(enemy.location, enemy.moneyValue));
+                        }
                     }
                 }
             }
@@ -191,6 +202,9 @@ namespace ButlerQuest
                     {
                         player.currentWeapon = weapons[i];
                         weapons.Remove(weapons[i]);
+
+                        player.currentWeapon.rectangle.Width = (int)(player.currentWeapon.rectangle.Width / 1.2);
+                        player.currentWeapon.rectangle.Height = (int)(player.currentWeapon.rectangle.Height / 1.2);
                     }
                 }
             }

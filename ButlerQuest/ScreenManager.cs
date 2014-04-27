@@ -262,11 +262,7 @@ namespace ButlerQuest
             }
             if (kState.IsKeyDown(Keys.Space))
             {
-                level.ForceGlobalAIStateChange(AI_STATE.PURSUIT);
-            }
-            if (kState.IsKeyDown(Keys.Back))
-            {
-                level.ForceGlobalAIStateChange(AI_STATE.UNAWARE);
+                level.player.Attack();
             }
         }
     }

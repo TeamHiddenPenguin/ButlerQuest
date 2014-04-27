@@ -110,9 +110,7 @@ namespace ButlerQuest
                     (int)position.X,
                     (int)position.Y,
                     GameVariables.tileWidth, GameVariables.tileHeight),
-                durability,
-                new Vector3(),
-                new Rectangle());
+                durability);
 
             weapon.CurrentAnimation = weaponType;
 
