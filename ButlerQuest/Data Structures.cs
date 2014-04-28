@@ -390,6 +390,75 @@ namespace ButlerQuest
         }
     }
 
+    public class RoomGraphNode : IGraphNode
+    {
+        //The X coordinate of the node(center)
+        public int X { get; set; }
+        //The Y coordinate(center)
+        public int Y { get; set; }
+        //The Z coordinate(center)
+        public int Z { get; set; }
+        //This node's neighbors
+        public List<IGraphNode> Neighbors { get; set; }
+        public Rectangle rect;
+        public int Cost { get { return 0; } set { } }
+        public string name;
+
+        public RoomGraphNode(Rectangle rect, int z, string name)
+        {
+            this.rect = rect;
+            X = rect.Center.X;
+            Y = rect.Center.Y;
+            Z = z;
+            this.name = name;
+            Neighbors = new List<IGraphNode>();
+        }
+
+        public void AddNode(IGraphNode node)
+        {
+            if (node != null)
+            {
+                if (!node.Neighbors.Contains(this))
+                    node.Neighbors.Add(this);
+                if (!this.Neighbors.Contains(node))
+                    this.Neighbors.Add(node);
+            }
+        }
+    }
+
+    public class RoomGraph
+    {
+        List<IGraphNode> nodes;
+        public RoomGraph(params RoomGraphNode[] nodes)
+        {
+            this.nodes = nodes.ToList<IGraphNode>();
+        }
+
+        public RoomGraphNode GetNode(Rectangle rect)
+        {
+            return (RoomGraphNode)(nodes.Find(x => ((RoomGraphNode)x).rect.Intersects(rect)));
+        }
+
+        public RoomGraphNode GetNode(string name)
+        {
+            return (RoomGraphNode)(nodes.Find(x => ((RoomGraphNode)x).name == name));
+        }
+
+        public void AddNode(RoomGraphNode node)
+        {
+            nodes.Add(node);
+        }
+
+        public void AddNode(RoomGraphNode node, List<string> connections)
+        {
+            foreach (var s in connections)
+            {
+                node.AddNode(GetNode(s));
+            }
+            nodes.Add(node);
+        }
+    }
+
     /// <summary>
     /// Well That Failed Exception, used anywhere in this project where a better exception
     /// to throw could not be found, and when the writer is too lazy to make another exception

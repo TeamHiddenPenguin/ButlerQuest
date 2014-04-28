@@ -30,7 +30,7 @@ namespace ButlerQuest
 
         public void Update(GameTime gameTime)
         {
-            if (reference.commandQueue.Peek() != null)
+            if (reference.commandQueue.Count > 1)
                 IsFinished = true;
         }
     }

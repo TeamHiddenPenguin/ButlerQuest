@@ -24,6 +24,7 @@ namespace ButlerQuest
         public Rectangle windowSpace; // window space used for drawing the map
         GraphicsDevice graphics;
         SpriteBatch spriteBatch;
+        public RoomGraph roomGraph;
 
         // constructor
         public Level(string mapFile)
@@ -40,8 +41,10 @@ namespace ButlerQuest
 
             levelMap = new Map(mapFile, new int[2] { 1, int.MaxValue });
 
-            
-            foreach (var groupname in levelMap.ObjectGroups.Keys) // takes each entity in the map file and creates objects based on their type.
+
+            roomGraph = new RoomGraph();
+
+            foreach (var groupname in levelMap.ObjectGroups.Keys) // Sam did this loop and everything inside it.
             {
                 int currentFloor = int.Parse(groupname[5].ToString()) - 1;
                 if (groupname.Substring(6, 8) == "Entities")
@@ -76,6 +79,22 @@ namespace ButlerQuest
                         {
                             coins.Add(EntityGenerator.GenerateCoin(new Vector3(entity.X, entity.Y, currentFloor), int.Parse(entity.Properties.Find(x => x.Item1 == "value").Item2)));
                         }
+                    }
+                }
+                if (groupname.Contains("Room"))
+                {
+                    foreach (var entity in levelMap.ObjectGroups[groupname])
+                    {
+                        RoomGraphNode node = new RoomGraphNode(new Rectangle(entity.X, entity.Y, entity.Width, entity.Height), currentFloor, entity.Name);
+                        List<string> connections = new List<string>();
+                        foreach (var t in entity.Properties)
+                        {
+                            if (t.Item1 != null)
+                                connections.Add(t.Item1);
+                            if (t.Item2 != null)
+                                connections.Add(t.Item2);
+                        }
+                        roomGraph.AddNode(node, connections);
                     }
                 }
                 //Otherwise it's a floor graph and sam will write this code later when it's relevant
@@ -168,7 +187,7 @@ namespace ButlerQuest
                             case -1: break;
                             default: player.lives--;
                                 player.location = player.startLoc;
-                                ForceGlobalAIStateChange(AI_STATE.UNAWARE);
+                                //ForceGlobalAIStateChange(AI_STATE.UNAWARE);
                                 break;
                         }
                     }

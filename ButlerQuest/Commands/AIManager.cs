@@ -41,13 +41,16 @@ namespace ButlerQuest
         //The current player location, used to check visibility against
         public Vector3 playerLoc;
         //The enemies involved in the current pursuit
-        private List<Enemy> currentPursuit;
+        private HashSet<Enemy> currentPursuit;
         private bool isPursuitActive;
 
-        public const float MAX_VISION_RADIUS_SQUARED = 25000;
-        public const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED + 5000;
+        private Random rand;
+
+        public const float MAX_VISION_RADIUS_SQUARED = 50000;
+        public const float MAX_VISION_RADIUS_SQUARED_PURSUIT = MAX_VISION_RADIUS_SQUARED;// + 5000;
         public const float VISION_CONE_ANGLE_DEGREES = 55;
         public const float DEG_TO_RAD = 0.0174532925f;
+        public const double PERCENTAGE_ROOMS_TO_SEARCH = 2.0 / 3.0;
 
         //The shared AI manager to be used for all AI Management operations. If one doesn't exist, create it and return it.
         public static AIManager SharedAIManager
@@ -85,8 +88,10 @@ namespace ButlerQuest
             //Create the PriorityQueue
             enemiesToPath = new PriorityQueue<int, Enemy>();
 
-            currentPursuit = new List<Enemy>();
+            currentPursuit = new HashSet<Enemy>();
             isPursuitActive = false;
+
+            rand = new Random();
         }
 
         /// <summary>
@@ -180,7 +185,11 @@ namespace ButlerQuest
             //Return a new queue of commands, gotten from the translation list
             return new Queue<ICommand>(translationList);
         }
-
+        
+        /// <summary>
+        /// Runs the AI for the enemy passed in
+        /// </summary>
+        /// <param name="enemy">Enemy to run the AI on</param>
         public void RunAI(Enemy enemy)
         {
             if (enemy.state < AI_STATE.HUNTING)
@@ -201,13 +210,12 @@ namespace ButlerQuest
                                     enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .001;
                                     if (enemy.awareness >= 1)
                                     {
-                                        //begin a pursuit, defer to AIManager
-                                        enemy.commandQueue.Clear();
-                                        enemy.state = AI_STATE.PURSUIT;
+                                        AddToPursuit(enemy);
+                                        SwitchPursuitState(AI_STATE.PURSUIT);
                                     }
                                 }
                             }
-                            //System.Diagnostics.Debug.WriteLine("Awareness " + awareness + "Direction " + direction);
+                            System.Diagnostics.Debug.WriteLine("Awareness " + enemy.awareness + "Direction " + enemy.direction);
                         }
                     }
                 }
@@ -215,34 +223,35 @@ namespace ButlerQuest
             if (enemy.state == AI_STATE.PURSUIT)
             {
                 double dist = Vector3.DistanceSquared(enemy.location, playerLoc);
+                foreach (var other in level.basicEnemies.Where(x => x.location.Z == enemy.location.Z && Vector3.DistanceSquared(enemy.location, x.location) < MAX_VISION_RADIUS_SQUARED_PURSUIT))
+                {
+                    AddToPursuit(other);
+                }
                 if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT)
                 {
                     lastKnownPlayerLoc = playerLoc;
                 }
-                if (enemy.commandQueue.Count < 2)
+                else if (graph.GetNode((int)enemy.center.X, (int)enemy.center.Y, (int) enemy.center.Z) == graph.GetNode((int)lastKnownPlayerLoc.X, (int)lastKnownPlayerLoc.Y, (int)lastKnownPlayerLoc.Z))
                 {
-                    if (!CanSee(enemy, lastKnownPlayerLoc) || WallInWay(enemy, (int)dist))
-                    {
-                        //change state to hunting and defer to AIManager for that
-                    }
+                    SwitchPursuitState(AI_STATE.HUNTING);
                 }
             }
             if (enemy.state == AI_STATE.HUNTING)
             {
                 enemy.awareness -= .0005;
-                if (CanSee(enemy, playerLoc))
+                if (Vector3.DistanceSquared(enemy.location, playerLoc) < MAX_VISION_RADIUS_SQUARED_PURSUIT && CanSee(enemy, playerLoc) && !WallInWay(enemy, (int)Vector3.DistanceSquared(enemy.location, playerLoc)))
                 {
-                    enemy.awareness += .01;
+                    enemy.awareness += .1;
                     if (enemy.awareness > 1)
-                        //reinitialize pursuit, call functions
-                        enemy.commandQueue.Clear();
-                    enemy.state = AI_STATE.PURSUIT;
+                    {
+                        lastKnownPlayerLoc = playerLoc;
+                        SwitchPursuitState(AI_STATE.PURSUIT);
+                    }
                 }
                 if (enemy.awareness <= 0)
                 {
                     enemy.awareness = 0;
-                    enemy.commandQueue.Clear();
-                    enemy.state = AI_STATE.AWARE;
+                    SwitchPursuitState(AI_STATE.AWARE);
                 }
             }
         }
@@ -256,10 +265,11 @@ namespace ButlerQuest
         {
             if (!isPursuitActive)
             {
-                currentPursuit = new List<Enemy>();
+                currentPursuit = new HashSet<Enemy>();
                 isPursuitActive = true;
             }
-            currentPursuit.Add(e);
+            if(!currentPursuit.Contains(e))
+                currentPursuit.Add(e);
         }
 
         public void SwitchPursuitState(AI_STATE state)
@@ -267,17 +277,58 @@ namespace ButlerQuest
             foreach (Enemy enemy in currentPursuit)
             {
                 enemy.commandQueue.Clear();
+                enemy.currentCommand = null;
                 enemy.state = state;
             }
             if (state == AI_STATE.HUNTING)
+            {
+                System.Diagnostics.Debug.WriteLine("Began Hunt");
                 BeginHunt();
+            }
             if (state < AI_STATE.HUNTING)
                 isPursuitActive = false;
         }
 
         public void BeginHunt()
         {
-            //Needs a room graph, hiding places graph.
+            RoomGraphNode currentRoom = level.roomGraph.GetNode(new Rectangle((int)(lastKnownPlayerLoc.X), (int)(lastKnownPlayerLoc.Y), 1, 1));
+
+            int roomsToSearch = (int)Math.Ceiling(currentRoom.Neighbors.Count * PERCENTAGE_ROOMS_TO_SEARCH);
+            Queue<RoomGraphNode> rooms = new Queue<RoomGraphNode>();
+
+            for (int i = 0; i < roomsToSearch; i++)
+            {
+                rooms.Enqueue((RoomGraphNode)currentRoom.Neighbors[rand.Next(currentRoom.Neighbors.Count)]);
+            }
+            int enemiesSearching = Math.Min(currentPursuit.Count, 4);
+            enemiesSearching = Math.Min(enemiesSearching, roomsToSearch);
+
+            double roomsPerEnemy = roomsToSearch / enemiesSearching;
+
+            //MAKE MORE EFFICIENT
+
+            int count = 0;
+            foreach(Enemy enemy in currentPursuit)
+            {
+                if (count >= enemiesSearching)
+                    break;
+
+                Vector3 loc = enemy.location;
+                for(int j = 0; j < roomsPerEnemy; j++)
+                {
+                    RoomGraphNode next = rooms.Dequeue();
+                    Vector3 nextLoc = new Vector3(next.X, next.Y, next.Z);
+                    Queue<ICommand> toNextRoom = BuildPath(loc, nextLoc, enemy, -1);
+                    loc = nextLoc;
+
+                    foreach (var element in toNextRoom)
+                    {
+                        enemy.commandQueue.Enqueue(element);
+                    }
+                    enemy.commandQueue.Enqueue(new CommandWait(120));
+                }
+                count++;
+            }
         }
 
         public bool CanSee(Enemy enemy, Vector3 point)

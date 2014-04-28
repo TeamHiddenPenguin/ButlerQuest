@@ -47,6 +47,14 @@ namespace ButlerQuest
         {
             base.Update(gameTime);
 
+
+            AIManager.SharedAIManager.RunAI(this);
+
+            if (currentCommand == null || currentCommand.IsFinished)
+                ChangeCommand();
+
+            
+            currentCommand.Update(gameTime);
             if (alive)
             {
                 if (currentCommand == null || currentCommand.IsFinished)
