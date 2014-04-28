@@ -58,7 +58,7 @@ namespace ButlerQuest
             ScreenManager.SharedManager.Content = Content;
             ScreenManager.SharedManager.gDevice = GraphicsDevice;
             ScreenManager.SharedManager.sBatch = spriteBatch;
-            ScreenManager.SharedManager.PushScreen(new LoadingGameScreen("DebugMap2.tmx"));
+            ScreenManager.SharedManager.PushScreen(new LoadingGameScreen("TutorialLevel.tmx"));
         }
 
         /// <summary>

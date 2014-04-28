@@ -63,7 +63,7 @@ namespace ButlerQuest
                         {
                             walls.Add(EntityGenerator.GenerateWall(new Vector3(entity.X, entity.Y, currentFloor), entity.Width, entity.Height));
                         }
-                        else if (entity.Type == "Door")
+                        else if (entity.Type == "LockedDoor")
                         {
                             doors.Add(EntityGenerator.GenerateDoor(new Vector3(entity.X, entity.Y, currentFloor), doors.Count));
                         }
@@ -141,7 +141,8 @@ namespace ButlerQuest
 
             if (doors != null)
                 foreach (Door door in doors)
-                    door.Draw(spriteBatch);
+                    if (door.locked)
+                        door.Draw(spriteBatch);
 
             if (player.direction == 1 || player.direction == 2)
             {
@@ -286,8 +287,8 @@ namespace ButlerQuest
                         player.currentWeapon = weapons[i];
                         weapons.Remove(weapons[i]);
 
-                        player.currentWeapon.rectangle.Width = (int)(player.currentWeapon.rectangle.Width / 1.2);
-                        player.currentWeapon.rectangle.Height = (int)(player.currentWeapon.rectangle.Height / 1.2);
+                        player.currentWeapon.rectangle.Width = (int)(player.currentWeapon.rectangle.Width / 1.3);
+                        player.currentWeapon.rectangle.Height = (int)(player.currentWeapon.rectangle.Height / 1.3);
                     }
                 }
             }

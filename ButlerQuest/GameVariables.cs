@@ -35,7 +35,7 @@ namespace ButlerQuest
         public static string[] enemyAnimationNames = new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" };
         
         // sets how fast the enemies move
-        public static Vector3 enemyMoveSpeed = new Vector3(2.3f, 2.3f, 1);
+        public static Vector3 enemyMoveSpeed = new Vector3(2, 2, 1);
 
         //  PLAYER VARIABLES
         // sets files for player's spritesheet
@@ -116,7 +116,7 @@ namespace ButlerQuest
 
         // KEY VARIABLES
         // sets the file for the key's image
-        static string keyFile = "target.png";
+        static string keyFile = "Key.png";
         public static Texture2D keyTex = ScreenManager.SharedManager.Content.Load<Texture2D>(keyFile);
 
         // populates animation array for key
@@ -127,12 +127,12 @@ namespace ButlerQuest
 
         // DOOR VARIABLES
         // sets the file for the door's image
-        static string doorFile = "Wall&Floor.png";
+        static string doorFile = "target.png";
         public static Texture2D doorTex = ScreenManager.SharedManager.Content.Load<Texture2D>(doorFile);
 
         // populates animation array for door
         public static Animation[] doorAnimation = new Animation[1] {
-                    new Animation(1, 1, 40, 40, 1, 2, 1, doorTex)
+                    new Animation(0, 0, 40, 40, 1, 1, 1, doorTex)
                 };
     }
 }

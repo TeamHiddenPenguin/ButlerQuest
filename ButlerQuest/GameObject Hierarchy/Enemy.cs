@@ -46,21 +46,14 @@ namespace ButlerQuest
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-
-            AIManager.SharedAIManager.RunAI(this);
-
-            if (currentCommand == null || currentCommand.IsFinished)
-                ChangeCommand();
-
-            
-            currentCommand.Update(gameTime);
             if (alive)
             {
+
+                AIManager.SharedAIManager.RunAI(this);
+
                 if (currentCommand == null || currentCommand.IsFinished)
                     ChangeCommand();
 
-                AIManager.SharedAIManager.RunAI(this);
 
                 currentCommand.Update(gameTime);
             }

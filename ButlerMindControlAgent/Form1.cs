@@ -153,6 +153,8 @@ namespace ButlerMindControlAgent
 
         private void RemoveCommand_Click(object sender, EventArgs e)
         {
+            if (CommandList.SelectedIndex < 0)
+                return;
             currentCommands[CommandList.SelectedIndex].Remove();
             currentCommands.RemoveAt(CommandList.SelectedIndex);
             CommandList.Items.RemoveAt(CommandList.SelectedIndex);

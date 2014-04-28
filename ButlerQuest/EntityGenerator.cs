@@ -19,22 +19,11 @@ namespace ButlerQuest
         public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands)
         {
             Enemy temp = new Enemy(
-                new Vector3(2f, 2f, 1),
-                new Animation[5]{
-                    new Animation(0,0,40,40,4,4,1, tex), //default
-                    new Animation(4,5,40,40,4,4,15, tex), //WalkUp
-                    new Animation(11,15,40,40,4,4,5,tex), //WalkRight
-                    new Animation(1,2,40,40,4,4,15, tex), //WalkDown
-                    new Animation(6,10,40,40,4,4,5,tex) //WalkLeft
-                },
-                new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" },
                 GameVariables.enemyMoveSpeed,
                 GameVariables.enemyAnimations,
                 GameVariables.enemyAnimationNames,
                 position,
-                new Rectangle(
-                    (int)position.X,
-                    (int)position.Y,
+                new Rectangle((int)position.X, (int)position.Y,
                     GameVariables.tileWidth, GameVariables.tileHeight),
                     GameVariables.normalEnemyCash);
 
@@ -92,6 +81,8 @@ namespace ButlerQuest
                     GameVariables.tileWidth, GameVariables.tileHeight),
                     doorNum);
 
+            door.CurrentAnimation = "door";
+
             return door;
         }
 
@@ -106,6 +97,8 @@ namespace ButlerQuest
                     (int)position.Y,
                     GameVariables.tileWidth, GameVariables.tileHeight),
                     keyNum);
+
+            key.CurrentAnimation = "key";
 
             return key;
         }

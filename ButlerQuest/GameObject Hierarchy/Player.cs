@@ -38,21 +38,13 @@ namespace ButlerQuest
             {
                 switch (direction)
                 {
-                    case 0: currentWeapon.location.X = this.location.X + 10;
-                        currentWeapon.location.Y = this.location.Y - 10;
-                        CurrentAnimation = "UpAttack";
+                    case 0: CurrentAnimation = "UpAttack";
                         break;
-                    case 1: currentWeapon.location.X = this.location.X + 20;
-                        currentWeapon.location.Y = this.location.Y - 5;
-                        CurrentAnimation = "RightAttack";
+                    case 1: CurrentAnimation = "RightAttack";
                         break;
-                   case 2: currentWeapon.location.X = this.location.X;
-                        currentWeapon.location.Y = this.location.Y;
-                        CurrentAnimation = "DownAttack";
+                   case 2: CurrentAnimation = "DownAttack";
                         break;
-                    case 3: currentWeapon.location.X = this.location.X - 5;
-                        currentWeapon.location.Y = this.location.Y - 5;
-                        CurrentAnimation = "LeftAttack";
+                    case 3: CurrentAnimation = "LeftAttack";
                         break;
                     default: break;
                 }
@@ -65,6 +57,23 @@ namespace ButlerQuest
             base.Update(gameTime);
             if (currentWeapon != null)
             {
+                switch (direction)
+                {
+                    case 0: currentWeapon.location.X = this.location.X + 10;
+                        currentWeapon.location.Y = this.location.Y - 10;
+                        break;
+                    case 1: currentWeapon.location.X = this.location.X + 20;
+                        currentWeapon.location.Y = this.location.Y - 5;
+                        break;
+                    case 2: currentWeapon.location.X = this.location.X;
+                        currentWeapon.location.Y = this.location.Y + 10;
+                        break;
+                    case 3: currentWeapon.location.X = this.location.X - 5;
+                        currentWeapon.location.Y = this.location.Y - 5;
+                        break;
+                    default: break;
+                }
+
                 currentWeapon.visible = false;
                 currentWeapon.Update(gameTime);
             }
