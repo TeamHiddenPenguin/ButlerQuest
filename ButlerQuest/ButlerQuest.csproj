@@ -85,6 +85,11 @@
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\ButlerMenu0.png" />
+    <Content Include="Content\ButlerMenu1.png" />
+    <Content Include="Content\ButlerMenu2.png" />
+    <Content Include="Content\ButlerOptions0.png" />
+    <Content Include="Content\ButlerOptions1.png" />
     <Content Include="Content\CandleStick.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -94,6 +99,7 @@
     <Content Include="Content\Key.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\LoadScreen.png" />
     <Content Include="Content\Map in Editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
