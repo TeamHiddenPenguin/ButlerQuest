@@ -223,6 +223,10 @@ namespace ButlerQuest
             if (enemy.state == AI_STATE.PURSUIT)
             {
                 double dist = Vector3.DistanceSquared(enemy.location, playerLoc);
+                foreach (var other in level.basicEnemies.Where(x => x.location.Z == enemy.location.Z && Vector3.DistanceSquared(enemy.location, x.location) < MAX_VISION_RADIUS_SQUARED_PURSUIT))
+                {
+                    AddToPursuit(other);
+                }
                 if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT)
                 {
                     lastKnownPlayerLoc = playerLoc;
@@ -235,7 +239,7 @@ namespace ButlerQuest
             if (enemy.state == AI_STATE.HUNTING)
             {
                 enemy.awareness -= .0005;
-                if (CanSee(enemy, playerLoc) && !WallInWay(enemy, (int)Vector3.DistanceSquared(enemy.location, playerLoc)))
+                if (Vector3.DistanceSquared(enemy.location, playerLoc) < MAX_VISION_RADIUS_SQUARED_PURSUIT && CanSee(enemy, playerLoc) && !WallInWay(enemy, (int)Vector3.DistanceSquared(enemy.location, playerLoc)))
                 {
                     enemy.awareness += .1;
                     if (enemy.awareness > 1)
@@ -273,6 +277,7 @@ namespace ButlerQuest
             foreach (Enemy enemy in currentPursuit)
             {
                 enemy.commandQueue.Clear();
+                enemy.currentCommand = null;
                 enemy.state = state;
             }
             if (state == AI_STATE.HUNTING)
@@ -295,15 +300,19 @@ namespace ButlerQuest
             {
                 rooms.Enqueue((RoomGraphNode)currentRoom.Neighbors[rand.Next(currentRoom.Neighbors.Count)]);
             }
-            double enemiesSearching = Math.Min(currentPursuit.Count, 4);
+            int enemiesSearching = Math.Min(currentPursuit.Count, 4);
             enemiesSearching = Math.Min(enemiesSearching, roomsToSearch);
 
             double roomsPerEnemy = roomsToSearch / enemiesSearching;
 
             //MAKE MORE EFFICIENT
 
+            int count = 0;
             foreach(Enemy enemy in currentPursuit)
             {
+                if (count >= enemiesSearching)
+                    break;
+
                 Vector3 loc = enemy.location;
                 for(int j = 0; j < roomsPerEnemy; j++)
                 {
@@ -316,8 +325,9 @@ namespace ButlerQuest
                     {
                         enemy.commandQueue.Enqueue(element);
                     }
-                    enemy.commandQueue.Enqueue(new CommandWait(30));
+                    enemy.commandQueue.Enqueue(new CommandWait(120));
                 }
+                count++;
             }
         }
 
