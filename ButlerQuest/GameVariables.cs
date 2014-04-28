@@ -112,5 +112,27 @@ namespace ButlerQuest
         public static Animation[] coinAnimation = new Animation[1] {
                     new Animation(0, 0, 40, 40, 1, 1, 1, coinTex)
                 };
+
+
+        // KEY VARIABLES
+        // sets the file for the key's image
+        static string keyFile = "target.png";
+        public static Texture2D keyTex = ScreenManager.SharedManager.Content.Load<Texture2D>(keyFile);
+
+        // populates animation array for key
+        public static Animation[] keyAnimation = new Animation[1] {
+                    new Animation(0, 0, 40, 40, 1, 1, 1, keyTex)
+                };
+
+
+        // DOOR VARIABLES
+        // sets the file for the door's image
+        static string doorFile = "Wall&Floor.png";
+        public static Texture2D doorTex = ScreenManager.SharedManager.Content.Load<Texture2D>(doorFile);
+
+        // populates animation array for door
+        public static Animation[] doorAnimation = new Animation[1] {
+                    new Animation(1, 1, 40, 40, 1, 2, 1, doorTex)
+                };
     }
 }

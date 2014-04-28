@@ -71,6 +71,36 @@ namespace ButlerQuest
             return new Wall(position, width, height);
         }
 
+        public static Door GenerateDoor(Vector3 position, int doorNum)
+        {
+            Door door = new Door(
+                GameVariables.doorAnimation,
+                new String[1] { "door" },
+                position,
+                new Rectangle(
+                    (int)position.X,
+                    (int)position.Y,
+                    GameVariables.tileWidth, GameVariables.tileHeight),
+                    doorNum);
+
+            return door;
+        }
+
+        public static Key GenerateKey(Vector3 position, int keyNum)
+        {
+            Key key = new Key(
+                GameVariables.keyAnimation,
+                new String[1] { "key" },
+                position,
+                new Rectangle(
+                    (int)position.X,
+                    (int)position.Y,
+                    GameVariables.tileWidth, GameVariables.tileHeight),
+                    keyNum);
+
+            return key;
+        }
+
         /// <summary>
         /// Generates a Player object
         /// </summary>

@@ -43,6 +43,7 @@
     <Compile Include="Commands\GetNextSetCommand.cs" />
     <Compile Include="Commands\WaitForNextCommand.cs" />
     <Compile Include="Data Structures.cs" />
+    <Compile Include="GameObject Hierarchy\Door.cs" />
     <Compile Include="EntityGenerator.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject Hierarchy\Coin.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="GameObject Hierarchy\Wall.cs" />
     <Compile Include="GameObject Hierarchy\Weapon.cs" />
     <Compile Include="GameVariables.cs" />
+    <Compile Include="GameObject Hierarchy\Key.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="GameObject Hierarchy\MovableGameObject.cs" />

@@ -18,6 +18,8 @@ namespace ButlerQuest
         public List<Wall> walls; // a list to hold all of the walls for the level
         List<Weapon> weapons; // a list to hold all of the weapons for the level
         List<Coin> coins; // a list to hold all of the coins for the level
+        List<Door> doors; // a list to hold all of the locked doors for a level.
+        List<Key> keys; // a list to hold all of the keys for a level.
         public Map levelMap; // parses the map and tiles used for the specific level
         public Rectangle windowSpace; // window space used for drawing the map
         GraphicsDevice graphics;
@@ -30,6 +32,8 @@ namespace ButlerQuest
             walls = new List<Wall>();
             weapons = new List<Weapon>();
             coins = new List<Coin>();
+            doors = new List<Door>();
+            keys = new List<Key>();
 
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
@@ -56,6 +60,14 @@ namespace ButlerQuest
                         {
                             walls.Add(EntityGenerator.GenerateWall(new Vector3(entity.X, entity.Y, currentFloor), entity.Width, entity.Height));
                         }
+                        else if (entity.Type == "Door")
+                        {
+                            doors.Add(EntityGenerator.GenerateDoor(new Vector3(entity.X, entity.Y, currentFloor), doors.Count));
+                        }
+                        else if (entity.Type == "Key")
+                        {
+                            keys.Add(EntityGenerator.GenerateKey(new Vector3(entity.X, entity.Y, currentFloor), keys.Count));
+                        }
                         else if (entity.Type == "Weapon")
                         {
                             weapons.Add(EntityGenerator.GenerateWeapon(new Vector3(entity.X, entity.Y, currentFloor), int.Parse(entity.Properties.Find(x => x.Item1 == "durability").Item2), entity.Properties.Find(x => x.Item1 == "type").Item2));
@@ -67,6 +79,12 @@ namespace ButlerQuest
                     }
                 }
                 //Otherwise it's a floor graph and sam will write this code later when it's relevant
+            }
+
+            foreach (Door lockedDoor in doors)
+            {
+                if (keys[lockedDoor.keyAssociation] == null)
+                    lockedDoor.locked = false;
             }
 
             windowSpace = new Rectangle((int)(player.location.X + (player.rectangle.Width / 2)) - (graphics.Viewport.Width / 2), (int)(player.location.Y + (player.rectangle.Height / 2)) - (graphics.Viewport.Height / 2), graphics.Viewport.Width, graphics.Viewport.Height);
@@ -89,17 +107,22 @@ namespace ButlerQuest
                     if (enemy.alive)
                         enemy.Draw(spriteBatch);
 
-
             if (weapons != null)
                 foreach (Weapon weapon in weapons) 
                     weapon.Draw(spriteBatch);
-
 
             if (coins != null)
                 foreach (Coin coin in coins)
                     if (coin.active)
                         coin.Draw(spriteBatch);
 
+            if (keys != null)
+                foreach (Key key in keys)
+                    key.Draw(spriteBatch);
+
+            if (doors != null)
+                foreach (Door door in doors)
+                    door.Draw(spriteBatch);
 
             if (player.direction == 1 || player.direction == 2)
             {
@@ -125,6 +148,8 @@ namespace ButlerQuest
 
             if (weapons.Count != 0) foreach (Weapon weapon in weapons) weapon.Update(gameTime);
             if (coins.Count != 0) foreach (Coin coin in coins) coin.Update(gameTime);
+            if (keys.Count != 0) foreach (Key key in keys) key.Update(gameTime);
+            if (doors.Count != 0) foreach (Door door in doors) door.Update();
 
             AIManager.SharedAIManager.MakePaths();
 
@@ -182,6 +207,42 @@ namespace ButlerQuest
                         break;
 
                     default: break;
+                }
+            }
+
+            // door collision
+            foreach (Door block in doors)
+            {
+                if (block.locked)
+                {
+                    int collision = player.CollisionSide(block);
+                    switch (collision)
+                    {
+                        case 0: player.location.Y += player.velocity.Y;
+                            break;
+
+                        case 1: player.location.X -= player.velocity.X;
+                            break;
+
+                        case 2: player.location.Y -= player.velocity.Y;
+                            break;
+
+                        case 3: player.location.X += player.velocity.X;
+                            break;
+
+                        default: break;
+                    }
+                }
+            }
+
+            // key collision
+            for (int i = 0; i < keys.Count; i++)
+            {
+                int collision = player.CollisionSide(keys[i]);
+                if (collision > -1)
+                {
+                    doors[keys[i].doorAssociation].locked = false;
+                    keys.Remove(keys[i]);
                 }
             }
 
