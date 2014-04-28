@@ -264,6 +264,10 @@ namespace ButlerQuest
             {
                 level.player.Attack();
             }
+            if (kState.IsKeyDown(Keys.Escape))
+            {
+                ScreenManager.SharedManager.NextScreen();
+            }
         }
     }
 
@@ -403,6 +407,53 @@ namespace ButlerQuest
         public override void Update(GameTime time)
         {
             if (!loadThread.IsAlive)
+            {
+                AIManager.SharedAIManager.Reinitialize();
+                ScreenManager.SharedManager.NextScreen();
+            }
+        }
+    }
+
+    public class GameOverScreen : Screen
+    {
+        string level;
+        Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("GameOverScreen.png");
+        public GameOverScreen(string level)
+        {
+            this.level = level;
+        }
+
+        public override void Draw(GameTime time)
+        {
+            ScreenManager.SharedManager.sBatch.Begin();
+            ScreenManager.SharedManager.sBatch.Draw(tex, new Rectangle(0, 0, ScreenManager.SharedManager.gDevice.Viewport.Width, ScreenManager.SharedManager.gDevice.Viewport.Height), Color.White);
+            ScreenManager.SharedManager.sBatch.End();
+        }
+
+        public override void Update(GameTime time)
+        {
+            if(Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                ScreenManager.SharedManager.NextScreen();
+                ScreenManager.SharedManager.PushScreen(new LoadingGameScreen(level));
+            }
+        }
+    }
+
+    public class VictoryScreen : Screen
+    {
+        Texture2D tex = ScreenManager.SharedManager.Content.Load<Texture2D>("VictoryScreen.png");
+
+        public override void Draw(GameTime time)
+        {
+            ScreenManager.SharedManager.sBatch.Begin();
+            ScreenManager.SharedManager.sBatch.Draw(tex, new Rectangle(0, 0, ScreenManager.SharedManager.gDevice.Viewport.Width, ScreenManager.SharedManager.gDevice.Viewport.Height), Color.White);
+            ScreenManager.SharedManager.sBatch.End();
+        }
+
+        public override void Update(GameTime time)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
                 ScreenManager.SharedManager.NextScreen();
             }

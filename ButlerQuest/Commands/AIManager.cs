@@ -32,8 +32,6 @@ namespace ButlerQuest
         public Map map;
         //The level which this AIManager is working on
         public Level level;
-        //The graph which this AIManager is working on
-        public SquareGraph graph;
         //The priority queue of enemies to path. It would be a list, but if we run out of time per frame then we have to keep the ones that still need pathing on the next frame.
         public PriorityQueue<int, Enemy> enemiesToPath;
         //The last known location of the player. This is known to all enemies
@@ -82,8 +80,6 @@ namespace ButlerQuest
                 throw new WTFException("We are currently not inside a GameScreen and cannot create an AIManager, or the level has not been initiated yet. Stop trying to get the AIManager before creating the level!");
             if((map = level.levelMap) == null)
                 throw new WTFException("The current map has not been initialized yet. Stop trying to get the AIManager before finishing building the level.");
-            if((graph = map.Graph) == null)
-                throw new WTFException("The graph for the current map has not been built yet. Stop trying to get the AIManager before finishing building the level.");
              
             //Create the PriorityQueue
             enemiesToPath = new PriorityQueue<int, Enemy>();
@@ -92,6 +88,20 @@ namespace ButlerQuest
             isPursuitActive = false;
 
             rand = new Random();
+        }
+
+        public void Reinitialize()
+        {
+            if ((level = ScreenManager.SharedManager.GetCurrentGameScreen().level) == null)
+                throw new WTFException("We are currently not inside a GameScreen and cannot create an AIManager, or the level has not been initiated yet. Stop trying to get the AIManager before creating the level!");
+            if ((map = level.levelMap) == null)
+                throw new WTFException("The current map has not been initialized yet. Stop trying to get the AIManager before finishing building the level.");
+
+            //Create the PriorityQueue
+            enemiesToPath = new PriorityQueue<int, Enemy>();
+
+            currentPursuit = new HashSet<Enemy>();
+            isPursuitActive = false;
         }
 
         /// <summary>
@@ -158,14 +168,14 @@ namespace ButlerQuest
         private Queue<ICommand> BuildPath(Vector3 start, Vector3 end, Enemy reference, int commandsToCopy)
         {
             //Build the path.
-            List<IGraphNode> path = AStar.FindPath(graph.GetNode((int)start.X, (int)start.Y, (int)start.Z), graph.GetNode((int)end.X, (int)end.Y, (int)end.Z));
+            List<IGraphNode> path = AStar.FindPath(map.Graph.GetNode((int)start.X, (int)start.Y, (int)start.Z), map.Graph.GetNode((int)end.X, (int)end.Y, (int)end.Z));
             //create a list of commands to translate between a list of nodes and a queue of commands
             List<ICommand> translationList = new List<ICommand>();
             //Populate the translation list with commands from the graph nodes.
             for (int i = 1; i < path.Count; i++)
             {
                 var item = path[i];
-                translationList.Add(new CommandMove(new Vector3(item.X * graph.nodeWidth, item.Y * graph.nodeHeight, item.Z), reference));
+                translationList.Add(new CommandMove(new Vector3(item.X * map.Graph.nodeWidth, item.Y * map.Graph.nodeHeight, item.Z), reference));
             }
             
             //if commandsToCopy is less than or equal to 0, then we don't want to add any extra commands in because it will be gotten elsewhere.
@@ -231,7 +241,7 @@ namespace ButlerQuest
                 {
                     lastKnownPlayerLoc = playerLoc;
                 }
-                else if (graph.GetNode((int)enemy.center.X, (int)enemy.center.Y, (int) enemy.center.Z) == graph.GetNode((int)lastKnownPlayerLoc.X, (int)lastKnownPlayerLoc.Y, (int)lastKnownPlayerLoc.Z))
+                else if (map.Graph.GetNode((int)enemy.center.X, (int)enemy.center.Y, (int) enemy.center.Z) == map.Graph.GetNode((int)lastKnownPlayerLoc.X, (int)lastKnownPlayerLoc.Y, (int)lastKnownPlayerLoc.Z))
                 {
                     SwitchPursuitState(AI_STATE.HUNTING);
                 }
