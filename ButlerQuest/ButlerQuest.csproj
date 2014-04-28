@@ -43,6 +43,7 @@
     <Compile Include="Commands\GetNextSetCommand.cs" />
     <Compile Include="Commands\WaitForNextCommand.cs" />
     <Compile Include="Data Structures.cs" />
+    <Compile Include="GameObject Hierarchy\Door.cs" />
     <Compile Include="EntityGenerator.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject Hierarchy\Coin.cs" />
@@ -52,6 +53,8 @@
     <Compile Include="GameObject Hierarchy\GameObject.cs" />
     <Compile Include="GameObject Hierarchy\Wall.cs" />
     <Compile Include="GameObject Hierarchy\Weapon.cs" />
+    <Compile Include="GameVariables.cs" />
+    <Compile Include="GameObject Hierarchy\Key.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="GameObject Hierarchy\MovableGameObject.cs" />
@@ -82,6 +85,12 @@
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\CandleStick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Coin.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Map in Editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -99,6 +108,12 @@
     </Content>
     <Content Include="Content\tiles.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Tray.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Vase.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Wall&amp;Floor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

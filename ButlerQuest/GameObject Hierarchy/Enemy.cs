@@ -55,6 +55,19 @@ namespace ButlerQuest
 
             
             currentCommand.Update(gameTime);
+            if (alive)
+            {
+                if (currentCommand == null || currentCommand.IsFinished)
+                    ChangeCommand();
+
+                AIManager.SharedAIManager.RunAI(this);
+
+                currentCommand.Update(gameTime);
+            }
+            else
+            {
+                CurrentAnimation = "Dead";
+            }
         }
     }
 }

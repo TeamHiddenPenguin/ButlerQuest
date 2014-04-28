@@ -106,11 +106,14 @@ namespace ButlerQuest
         public abstract void Update(GameTime time);
     }
 
-    // Main Menu to select what to do when starting game
+    // Main Menu to select what to do when starting game UNFINISHED make the temporary one cornflower blue, and use plain text for the selections, an arrow next to the selected one
     public class MenuScreen : Screen
     {
-        // Determines which menu option is selected, 0: Start New Game, 1: Options, 2: Exit, if we make it 3: Load
+        // Determines which menu option is selected, 0: Start New Game, 1: Options, 2: Exit, if we make it 3: Load if it is implemented
         int selectedItem;
+        private Texture2D menu;
+        private Texture2D selectionArrow;
+        // use menu = Content.Load<Texture2D>("name here"); to load in the images
 
         KeyboardState kState;
         public MenuScreen()
@@ -125,10 +128,20 @@ namespace ButlerQuest
             HandleInput();
         }
 
-        // Draws the Menu
+        // Draws the Menu (Add in the images for it to draw the menu) UNFINISHED
         public override void Draw(GameTime time)
         {
-
+            switch (selectedItem)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
         }
 
         // Handle the menu selection input from the player
@@ -164,7 +177,7 @@ namespace ButlerQuest
                 {
                     case 0:
                         // Level name subject to change
-                        ScreenManager.SharedManager.AddScreen(new GameScreen("Level 1"));
+                        ScreenManager.SharedManager.AddScreen(new LoadingGameScreen("DebugMap.tmx"));
                         break;
                     case 1:
                         ScreenManager.SharedManager.AddScreen(new OptionsScreen());
@@ -249,28 +262,92 @@ namespace ButlerQuest
             }
             if (kState.IsKeyDown(Keys.Space))
             {
-                level.ForceGlobalAIStateChange(AI_STATE.PURSUIT);
-            }
-            if (kState.IsKeyDown(Keys.Back))
-            {
-                level.ForceGlobalAIStateChange(AI_STATE.UNAWARE);
+                level.player.Attack();
             }
         }
     }
 
     // Options screen for managing volume and other things
-
+    //UNFINISHED
     public class OptionsScreen : Screen
     {
+        // optionSelected 0 = Return to last screen, 1 = Change Volume/Mute, 2 = 
         int optionSelected = 0;
-        // Finish later
+
+        KeyboardState kState;
 
         public override void Update(GameTime time)
         {
+            HandleInput();
         }
 
         public override void Draw(GameTime time)
         {
+        }
+
+        public override void HandleInput()
+        {
+            kState = Keyboard.GetState();
+            base.HandleInput();
+            if (kState.IsKeyDown(Keys.W))
+            {
+                if (optionSelected == 0)
+                {
+                    optionSelected = 2;
+                }
+                else
+                {
+                    optionSelected--;
+                }
+            }
+
+            if (kState.IsKeyDown(Keys.S))
+            {
+                if (optionSelected == 2)
+                {
+                    optionSelected = 0;
+                }
+                else
+                {
+                    optionSelected++;
+                }
+            }
+
+            // Run the selected Option
+            if (kState.IsKeyDown(Keys.Enter))
+            {
+                switch (optionSelected)
+                {
+                    case 0:
+                        // Return to the previous screen
+                        ScreenManager.SharedManager.AddScreen(new GameScreen("DebugMap.tmx"));
+                        break;
+                    case 1:
+                        ScreenManager.SharedManager.AddScreen(new OptionsScreen());
+                        break;
+                    case 2:
+                        // Exit the game
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // Add code to draw a visual representing which option is selected
+            switch (optionSelected)
+            {
+                case 0:
+                    // Put code to draw visual
+                    break;
+                case 1:
+                    // Put code to draw visual
+                    break;
+                case 2:
+                    // Put code to draw visual
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -302,7 +379,7 @@ namespace ButlerQuest
         }
     }
 
-    // Loading Screen to display while setting up the Game Screen
+    // Loading Screen to display while setting up the Game Screen UNFINISHED
     public class LoadingGameScreen : Screen
     {
         Thread loadThread;
@@ -319,6 +396,7 @@ namespace ButlerQuest
         public override void Draw(GameTime time)
         {
             //do stuff
+            
         }
 
         // Goes to the next screen once the thread for loading is finished

@@ -53,7 +53,7 @@ namespace ButlerQuest
         // draws the current animation from the anim dictionary
         public void Draw(SpriteBatch spriteBatch) // draws the current animation
         {
-            if(currentAnimation != null && anims[currentAnimation] != null)
+            if(currentAnimation != null && anims.ContainsKey(currentAnimation))
                 anims[currentAnimation].Draw(spriteBatch, rectangle);
         }
 
@@ -61,7 +61,7 @@ namespace ButlerQuest
         {
             base.Update();
 
-            if (currentAnimation != null && anims[currentAnimation] != null)
+            if (currentAnimation != null && anims.ContainsKey(currentAnimation))
                 anims[currentAnimation].Update();
         }
     }
