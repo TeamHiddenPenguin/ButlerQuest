@@ -260,6 +260,10 @@ namespace ButlerQuest
             {
                 level.player.Attack();
             }
+            if (kState.IsKeyDown(Keys.Escape))
+            {
+                ScreenManager.SharedManager.NextScreen();
+            }
         }
     }
 
