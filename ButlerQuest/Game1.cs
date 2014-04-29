@@ -58,7 +58,7 @@ namespace ButlerQuest
             ScreenManager.SharedManager.Content = Content;
             ScreenManager.SharedManager.gDevice = GraphicsDevice;
             ScreenManager.SharedManager.sBatch = spriteBatch;
-            ScreenManager.SharedManager.PushScreen(new LoadingGameScreen("TutorialLevel.tmx"));
+            ScreenManager.SharedManager.PushScreen(new MenuScreen());
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace ButlerQuest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
             ScreenManager.SharedManager.UpdateCurrentScreen(gameTime);

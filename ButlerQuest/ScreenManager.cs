@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna;
 using System.Threading;
+using System.IO;
 
 // code by James Borger
 namespace ButlerQuest
@@ -111,13 +112,17 @@ namespace ButlerQuest
     {
         // Determines which menu option is selected, 0: Start New Game, 1: Options, 2: Exit, if we make it 3: Load if it is implemented
         int selectedItem;
-        private Texture2D menu;
+        Texture2D menu0 = Texture2D.FromStream(ScreenManager.SharedManager.gDevice, File.OpenRead("Content\\" + "ButlerMenu0.png"));
+        Texture2D menu1 = Texture2D.FromStream(ScreenManager.SharedManager.gDevice, File.OpenRead("Content\\" + "ButlerMenu1.png"));
+        Texture2D menu2 = Texture2D.FromStream(ScreenManager.SharedManager.gDevice, File.OpenRead("Content\\" + "ButlerMenu2.png"));
         private Texture2D selectionArrow;
-        // use menu = Content.Load<Texture2D>("name here"); to load in the images
+
 
         KeyboardState kState;
+        KeyboardState oldkState;
         public MenuScreen()
         {
+            oldkState = new KeyboardState();
             selectedItem = 0;
         }
 
@@ -131,25 +136,32 @@ namespace ButlerQuest
         // Draws the Menu (Add in the images for it to draw the menu) UNFINISHED
         public override void Draw(GameTime time)
         {
+            ScreenManager.SharedManager.sBatch.Begin();
             switch (selectedItem)
             {
                 case 0:
+                    
+                    ScreenManager.SharedManager.sBatch.Draw(menu0, new Rectangle(0, 0, 1280, 720), Color.White);
                     break;
                 case 1:
+                    ScreenManager.SharedManager.sBatch.Draw(menu1, new Rectangle(0, 0, 1280, 720), Color.White);
                     break;
                 case 2:
+                    ScreenManager.SharedManager.sBatch.Draw(menu2, new Rectangle(0, 0, 1280, 720), Color.White);
                     break;
                 default:
                     break;
             }
+            ScreenManager.SharedManager.sBatch.End();
         }
 
         // Handle the menu selection input from the player
         public override void HandleInput()
         {
+            oldkState = kState;
             kState = Keyboard.GetState();
             base.HandleInput();
-            if (kState.IsKeyDown(Keys.W))
+            if (kState.IsKeyUp(Keys.W) && oldkState.IsKeyDown(Keys.W))
             {
                 if (selectedItem == 0)
                 {
@@ -160,7 +172,7 @@ namespace ButlerQuest
                     selectedItem--;
                 }
             }
-            if (kState.IsKeyDown(Keys.S))
+            if (kState.IsKeyUp(Keys.S) && oldkState.IsKeyDown(Keys.S))
             {
                 if (selectedItem == 2)
                 {
@@ -171,13 +183,13 @@ namespace ButlerQuest
                     selectedItem++;
                 }
             }
-            if (kState.IsKeyDown(Keys.Enter))
+            if (kState.IsKeyUp(Keys.Enter) && oldkState.IsKeyDown(Keys.Enter))
             {
                 switch (selectedItem)
                 {
                     case 0:
                         // Level name subject to change
-                        ScreenManager.SharedManager.AddScreen(new LoadingGameScreen("DebugMap.tmx"));
+                        ScreenManager.SharedManager.AddScreen(new LoadingGameScreen("TutorialLevel.tmx"));
                         break;
                     case 1:
                         ScreenManager.SharedManager.AddScreen(new OptionsScreen());
@@ -188,22 +200,6 @@ namespace ButlerQuest
                     default:
                         break;
                 }
-            }
-
-            // Add code to draw a visual representing which option is selected
-            switch (selectedItem)
-            {
-                case 0:
-                    // Put code to draw visual
-                    break;
-                case 1:
-                    // Put code to draw visual
-                    break;
-                case 2:
-                    // Put code to draw visual
-                    break;
-                default:
-                    break;
             }
         }
     }
@@ -271,10 +267,14 @@ namespace ButlerQuest
     //UNFINISHED
     public class OptionsScreen : Screen
     {
-        // optionSelected 0 = Return to last screen, 1 = Change Volume/Mute, 2 = 
+        // optionSelected 0 = Return to last screen, 1 = Quit to Menu
         int optionSelected = 0;
 
-        KeyboardState kState;
+        Texture2D options0 = Texture2D.FromStream(ScreenManager.SharedManager.gDevice, File.OpenRead("Content\\" + "ButlerOptions0.png"));
+        Texture2D options1 = Texture2D.FromStream(ScreenManager.SharedManager.gDevice, File.OpenRead("Content\\" + "ButlerOptions1.png"));
+
+        KeyboardState kState = new KeyboardState();
+        KeyboardState oldkState = new KeyboardState();
 
         public override void Update(GameTime time)
         {
@@ -283,17 +283,34 @@ namespace ButlerQuest
 
         public override void Draw(GameTime time)
         {
+            // Add code to draw a visual representing which option is selected
+            ScreenManager.SharedManager.sBatch.Begin();
+            switch (optionSelected)
+            {
+                case 0:
+                    // Put code to draw visual
+                    ScreenManager.SharedManager.sBatch.Draw(options0, new Rectangle(0, 0, 1280, 720), Color.CornflowerBlue);
+                    break;
+                case 1:
+                    // Put code to draw visual
+                    ScreenManager.SharedManager.sBatch.Draw(options1, new Rectangle(0, 0, 1280, 720), Color.CornflowerBlue);
+                    break;
+                default:
+                    break;
+            }
+            ScreenManager.SharedManager.sBatch.End();
         }
 
         public override void HandleInput()
         {
+            oldkState = kState;
             kState = Keyboard.GetState();
             base.HandleInput();
-            if (kState.IsKeyDown(Keys.W))
+            if (kState.IsKeyUp(Keys.W) && oldkState.IsKeyDown(Keys.W))
             {
                 if (optionSelected == 0)
                 {
-                    optionSelected = 2;
+                    optionSelected = 1;
                 }
                 else
                 {
@@ -301,9 +318,9 @@ namespace ButlerQuest
                 }
             }
 
-            if (kState.IsKeyDown(Keys.S))
+            if (kState.IsKeyUp(Keys.S) && oldkState.IsKeyDown(Keys.S))
             {
-                if (optionSelected == 2)
+                if (optionSelected == 1)
                 {
                     optionSelected = 0;
                 }
@@ -314,39 +331,22 @@ namespace ButlerQuest
             }
 
             // Run the selected Option
-            if (kState.IsKeyDown(Keys.Enter))
+            if (kState.IsKeyUp(Keys.Enter) && oldkState.IsKeyDown(Keys.Enter))
             {
                 switch (optionSelected)
                 {
                     case 0:
                         // Return to the previous screen
-                        ScreenManager.SharedManager.AddScreen(new GameScreen("DebugMap.tmx"));
+                        ScreenManager.SharedManager.PopScreen();
                         break;
                     case 1:
-                        ScreenManager.SharedManager.AddScreen(new OptionsScreen());
-                        break;
-                    case 2:
-                        // Exit the game
+                        // Exit the Game to Main Menu
+                        while (!(ScreenManager.SharedManager.CurrentScreen is MenuScreen))
+                            ScreenManager.SharedManager.PopScreen();
                         break;
                     default:
                         break;
                 }
-            }
-
-            // Add code to draw a visual representing which option is selected
-            switch (optionSelected)
-            {
-                case 0:
-                    // Put code to draw visual
-                    break;
-                case 1:
-                    // Put code to draw visual
-                    break;
-                case 2:
-                    // Put code to draw visual
-                    break;
-                default:
-                    break;
             }
         }
     }
@@ -357,7 +357,7 @@ namespace ButlerQuest
         Texture2D thing1;
         public DebugScreen()
         {
-            
+
         }
 
         public void Initialize()
@@ -368,13 +368,13 @@ namespace ButlerQuest
 
         public override void Update(GameTime time)
         {
-            
+
         }
 
         public override void Draw(GameTime time)
         {
             ScreenManager.SharedManager.sBatch.Begin();
-            ScreenManager.SharedManager.sBatch.Draw(thing1, new Vector2(0,0), Color.White);
+            ScreenManager.SharedManager.sBatch.Draw(thing1, new Vector2(0, 0), Color.White);
             ScreenManager.SharedManager.sBatch.End();
         }
     }
@@ -382,6 +382,7 @@ namespace ButlerQuest
     // Loading Screen to display while setting up the Game Screen UNFINISHED
     public class LoadingGameScreen : Screen
     {
+        Texture2D loading = Texture2D.FromStream(ScreenManager.SharedManager.gDevice, File.OpenRead("Content\\LoadScreen.png"));
         Thread loadThread;
         GameScreen gameScreen;
         public LoadingGameScreen(string level)
@@ -395,8 +396,10 @@ namespace ButlerQuest
 
         public override void Draw(GameTime time)
         {
-            //do stuff
-            
+            ScreenManager.SharedManager.sBatch.Begin();
+            ScreenManager.SharedManager.sBatch.Draw(loading, new Rectangle(0, 0, 1200, 720), Color.White);
+            ScreenManager.SharedManager.sBatch.End();
+
         }
 
         // Goes to the next screen once the thread for loading is finished
