@@ -27,6 +27,7 @@ namespace ButlerQuest
         public GraphicsDevice gDevice;
         public ContentManager Content;
         static ScreenManager sharedManager;
+        public Game1 Game;
         public Screen CurrentScreen { get { return screenState.Peek(); } }
 
         // Create the SharedManager as a singleton using a get set
@@ -196,6 +197,7 @@ namespace ButlerQuest
                         break;
                     case 2:
                         // Exit the game
+                        ScreenManager.SharedManager.Game.Exit();
                         break;
                     default:
                         break;

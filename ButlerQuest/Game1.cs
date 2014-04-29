@@ -55,6 +55,7 @@ namespace ButlerQuest
 
             //I'm not fixing this. Feel free to try yourselves.
             //-Sam
+            ScreenManager.SharedManager.Game = this;
             ScreenManager.SharedManager.Content = Content;
             ScreenManager.SharedManager.gDevice = GraphicsDevice;
             ScreenManager.SharedManager.sBatch = spriteBatch;
