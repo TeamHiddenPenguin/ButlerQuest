@@ -25,10 +25,12 @@ namespace ButlerQuest
         GraphicsDevice graphics;
         SpriteBatch spriteBatch;
         public RoomGraph roomGraph;
+        public string mapFile;
 
         // constructor
         public Level(string mapFile)
         {
+            this.mapFile = mapFile;
             basicEnemies = new List<Enemy>();
             walls = new List<Wall>();
             weapons = new List<Weapon>();
@@ -57,7 +59,7 @@ namespace ButlerQuest
                         }
                         else if (entity.Type == "Player")
                         {
-                            player = EntityGenerator.GeneratePlayer(new Vector3(entity.X, entity.Y, currentFloor), 5, 500);
+                            player = EntityGenerator.GeneratePlayer(new Vector3(entity.X, entity.Y, currentFloor), 5, 400);
                         }
                         else if (entity.Type == "Wall")
                         {
@@ -186,9 +188,9 @@ namespace ButlerQuest
                         switch (collision)
                         {
                             case -1: break;
-                            default: player.lives--;
-                                player.location = player.startLoc;
-                                //ForceGlobalAIStateChange(AI_STATE.UNAWARE);
+                            default:
+                                ScreenManager.SharedManager.PopScreen();
+                                ScreenManager.SharedManager.AddScreen(new GameOverScreen(mapFile));
                                 break;
                         }
                     }
@@ -269,10 +271,15 @@ namespace ButlerQuest
             // coin collision
             for (int i = 0; i < coins.Count; i++)
             {
-                int collision = player.CollisionSide(coins[i]);
-                if (collision > -1)
+                if (coins[i].active == true)
                 {
-                    player.moneyCollected += coins[i].InteractWith();
+                    int collision = player.CollisionSide(coins[i]);
+                    if (collision > -1)
+                    {
+                        int collected = coins[i].InteractWith();
+                        player.moneyCollected += collected;
+                        coins[i].active = false;
+                    }
                 }
             }
 
@@ -297,6 +304,12 @@ namespace ButlerQuest
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
 
             AIManager.SharedAIManager.playerLoc = player.center;
+
+            if (player.moneyCollected >= player.moneyNeeded)
+            {
+                ScreenManager.SharedManager.NextScreen();
+                ScreenManager.SharedManager.AddScreen(new VictoryScreen());
+            }
         }
 
         public void ForceGlobalAIStateChange(AI_STATE newState)

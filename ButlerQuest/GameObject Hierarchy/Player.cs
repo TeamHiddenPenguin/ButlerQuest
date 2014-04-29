@@ -13,9 +13,11 @@ namespace ButlerQuest
         // properties
         public int lives; // the number of lives the player has remaining. if it drops to 0, game ends.
         public int moneyCollected; // the amount of money the player has collected in the level.
-        int moneyNeeded; // the total amount of money the player needs to collect to beat the level.
+        public int moneyNeeded; // the total amount of money the player needs to collect to beat the level.
         public Vector3 startLoc; // the stat location of the player
         public Weapon currentWeapon; // the player's current weapon
+        public int attackLength; // how long the player's attack has lasted (in ms)
+        const int MAX_ATTACK_LENGTH = 10;
         
 
         // constructor
@@ -28,6 +30,8 @@ namespace ButlerQuest
             lives = life;
             moneyNeeded = moneyGoal;
             moneyCollected = 0;
+
+            attackLength = 0;
 
             currentWeapon = null;
         }
@@ -76,6 +80,17 @@ namespace ButlerQuest
 
                 currentWeapon.visible = false;
                 currentWeapon.Update(gameTime);
+            }
+
+            if (CurrentAnimation.Contains("Attack"))
+            {
+                attackLength++;
+
+                if (attackLength >= MAX_ATTACK_LENGTH)
+                {
+                    CurrentAnimation = "default";
+                    attackLength = 0;
+                }
             }
         }
     }
