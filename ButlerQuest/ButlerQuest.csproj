@@ -43,6 +43,7 @@
     <Compile Include="Commands\GetNextSetCommand.cs" />
     <Compile Include="Commands\WaitForNextCommand.cs" />
     <Compile Include="Data Structures.cs" />
+    <Compile Include="GameObject Hierarchy\Disguise.cs" />
     <Compile Include="GameObject Hierarchy\Door.cs" />
     <Compile Include="EntityGenerator.cs" />
     <Compile Include="Game1.cs" />

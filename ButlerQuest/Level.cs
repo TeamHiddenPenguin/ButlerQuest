@@ -20,8 +20,9 @@ namespace ButlerQuest
         List<Coin> coins; // a list to hold all of the coins for the level
         List<Door> doors; // a list to hold all of the locked doors for a level.
         List<Key> keys; // a list to hold all of the keys for a level.
-        public Map levelMap; // parses the map and tiles used for the specific level
-        public Rectangle windowSpace; // window space used for drawing the map
+        List<Disguise> disguises; // a list to hold all of the disguises for a level.
+        public Map levelMap; // parses the map and tiles used for the specific level.
+        public Rectangle windowSpace; // window space used for drawing the map.
         GraphicsDevice graphics;
         SpriteBatch spriteBatch;
         public RoomGraph roomGraph;
@@ -37,6 +38,7 @@ namespace ButlerQuest
             coins = new List<Coin>();
             doors = new List<Door>();
             keys = new List<Key>();
+            disguises = new List<Disguise>();
 
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
@@ -80,6 +82,10 @@ namespace ButlerQuest
                         else if (entity.Type == "Coin")
                         {
                             coins.Add(EntityGenerator.GenerateCoin(new Vector3(entity.X, entity.Y, currentFloor), int.Parse(entity.Properties.Find(x => x.Item1 == "value").Item2)));
+                        }
+                        else if (entity.Type == "Disguise")
+                        {
+                            disguises.Add(EntityGenerator.GenerateDisguise(new Vector3(entity.X, entity.Y, currentFloor), entity.Properties.Find(x => x.Item1 == "disguiseType").Item2));
                         }
                     }
                 }
@@ -146,6 +152,10 @@ namespace ButlerQuest
                     if (door.locked)
                         door.Draw(spriteBatch);
 
+            if (disguises != null)
+                foreach (Disguise disguise in disguises)
+                    disguise.Draw(spriteBatch);
+
             if (player.direction == 1 || player.direction == 2)
             {
                 player.Draw(spriteBatch);
@@ -160,6 +170,9 @@ namespace ButlerQuest
                 player.Draw(spriteBatch);
             }
 
+            if (player.currentDisguise != null)
+                player.currentDisguise.Draw(spriteBatch);
+
             spriteBatch.End();
         }
 
@@ -171,7 +184,8 @@ namespace ButlerQuest
             if (weapons.Count != 0) foreach (Weapon weapon in weapons) weapon.Update(gameTime);
             if (coins.Count != 0) foreach (Coin coin in coins) coin.Update(gameTime);
             if (keys.Count != 0) foreach (Key key in keys) key.Update(gameTime);
-            if (doors.Count != 0) foreach (Door door in doors) door.Update();
+            if (doors.Count != 0) foreach (Door door in doors) door.Update(gameTime);
+            if (disguises.Count != 0) foreach (Disguise disguise in disguises) disguise.Update(gameTime);
 
             AIManager.SharedAIManager.MakePaths();
 
@@ -299,6 +313,69 @@ namespace ButlerQuest
                     }
                 }
             }
+
+            if (disguises != null)
+                for (int i = 0; i < disguises.Count; i++)
+                {
+                    int collision = player.CollisionSide(disguises[i]);
+                    if (collision > -1 && player.currentDisguise == null)
+                    {
+                        player.currentDisguise = disguises[i];
+                        disguises.Remove(disguises[i]);
+                    }
+                    else
+                    {
+                        switch (collision)
+                        {
+                            case 0:
+                                disguises.Add(
+                                    EntityGenerator.GenerateDisguise(
+                                    new Vector3(player.location.X, player.location.Y + 40, player.location.Z),
+                                    player.currentDisguise.disguiseType)
+                                    );
+
+                                player.currentDisguise = disguises[i];
+                                disguises.Remove(disguises[i]);
+                                break;
+
+                            case 1:
+                                disguises.Add(
+                                    EntityGenerator.GenerateDisguise(
+                                    new Vector3(player.location.X - 40, player.location.Y, player.location.Z),
+                                    player.currentDisguise.disguiseType)
+                                    );
+
+                                player.currentDisguise = disguises[i];
+                                disguises.Remove(disguises[i]);
+                                break;
+
+                            case 2:
+                                disguises.Add(
+                                    EntityGenerator.GenerateDisguise(
+                                    new Vector3(player.location.X, player.location.Y - 40, player.location.Z),
+                                    player.currentDisguise.disguiseType)
+                                    );
+
+                                player.currentDisguise = disguises[i];
+                                disguises.Remove(disguises[i]);
+                                break;
+
+                            case 3:
+                                disguises.Add(
+                                    EntityGenerator.GenerateDisguise(
+                                    new Vector3(player.location.X + 40, player.location.Y, player.location.Z),
+                                    player.currentDisguise.disguiseType)
+                                    );
+
+                                player.currentDisguise = disguises[i];
+                                disguises.Remove(disguises[i]);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
 
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);

@@ -127,12 +127,23 @@ namespace ButlerQuest
 
         // DOOR VARIABLES
         // sets the file for the door's image
-        static string doorFile = "target.png";
+        static string doorFile = "target.png"; // will change once locked door sprite is added.
         public static Texture2D doorTex = ScreenManager.SharedManager.Content.Load<Texture2D>(doorFile);
 
         // populates animation array for door
         public static Animation[] doorAnimation = new Animation[1] {
                     new Animation(0, 0, 40, 40, 1, 1, 1, doorTex)
+                };
+
+
+        // DISGUISE VARIABLES
+        // sets the file for a disguise's image
+        static string disguiseFile = "player.png"; // will change once disguise spirtesheet is added. Can also just copy and alter this file to make more than one disguise type.
+        public static Texture2D disguiseTex = ScreenManager.SharedManager.Content.Load<Texture2D>(disguiseFile);
+
+        // populates animation array for door
+        public static Animation[] disguiseAnimation = new Animation[1] {
+                    new Animation(0, 0, 40, 40, 1, 1, 1, disguiseTex)
                 };
     }
 }

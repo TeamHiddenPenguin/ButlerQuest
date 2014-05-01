@@ -16,6 +16,7 @@ namespace ButlerQuest
         public int moneyNeeded; // the total amount of money the player needs to collect to beat the level.
         public Vector3 startLoc; // the stat location of the player
         public Weapon currentWeapon; // the player's current weapon
+        public Disguise currentDisguise; // the player's current disguise
         public int attackLength; // how long the player's attack has lasted (in ms)
         const int MAX_ATTACK_LENGTH = 10;
         
@@ -34,6 +35,7 @@ namespace ButlerQuest
             attackLength = 0;
 
             currentWeapon = null;
+            currentDisguise = null;
         }
 
         public void Attack() // sets the player's animation and weapon depending on what weapon is equipped
@@ -91,6 +93,13 @@ namespace ButlerQuest
                     CurrentAnimation = "default";
                     attackLength = 0;
                 }
+            }
+
+            if (currentDisguise != null)
+            {
+                currentDisguise.location = this.location;
+
+                currentDisguise.Update(gameTime);
             }
         }
     }
