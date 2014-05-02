@@ -169,5 +169,23 @@ namespace ButlerQuest
 
             return coin;
         }
+
+        public static Disguise GenerateDisguise(Vector3 position, string type)
+        {
+            Disguise disguise = new Disguise(
+                GameVariables.disguiseAnimation,
+                new String[1] { "disguise" },
+                position,
+                new Rectangle(
+                    (int)position.X,
+                    (int)position.Y,
+                    GameVariables.tileWidth, GameVariables.tileHeight),
+                    type);
+
+            disguise.CurrentAnimation = "disguise";
+
+
+            return disguise;
+        }
     }
 }
