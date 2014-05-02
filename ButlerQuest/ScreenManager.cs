@@ -212,6 +212,7 @@ namespace ButlerQuest
         public Level level;
         string levelName;
         KeyboardState kState;
+        KeyboardState previousState;
         public GameScreen(string toLoad)
         {
             levelName = toLoad;
@@ -222,6 +223,7 @@ namespace ButlerQuest
         {
             level = new Level(levelName);
             kState = Keyboard.GetState();
+            previousState = Keyboard.GetState();
         }
 
         // Updates the level
@@ -245,27 +247,54 @@ namespace ButlerQuest
             if (kState.IsKeyDown(Keys.W))
             {
                 level.player.Move(new Vector3(0, -1, 0));
+                if (!level.player.CurrentAnimation.Contains("Attack"))
+                    level.player.CurrentAnimation = "WalkUp";
             }
             if (kState.IsKeyDown(Keys.A))
             {
                 level.player.Move(new Vector3(-1, 0, 0));
+                if (!level.player.CurrentAnimation.Contains("Attack"))
+                    level.player.CurrentAnimation = "WalkLeft";
             }
             if (kState.IsKeyDown(Keys.S))
             {
                 level.player.Move(new Vector3(0, 1, 0));
+                if (!level.player.CurrentAnimation.Contains("Attack"))
+                    level.player.CurrentAnimation = "WalkDown";
             }
             if (kState.IsKeyDown(Keys.D))
             {
                 level.player.Move(new Vector3(1, 0, 0));
+                if (!level.player.CurrentAnimation.Contains("Attack"))
+                    level.player.CurrentAnimation = "WalkRight";
             }
             if (kState.IsKeyDown(Keys.Space))
             {
-                level.player.Attack();
+                if (previousState.IsKeyUp(Keys.Space))
+                    level.player.Attack();
             }
             if (kState.IsKeyDown(Keys.Escape))
             {
                 ScreenManager.SharedManager.NextScreen();
             }
+            if (!kState.IsKeyDown(Keys.W) && !kState.IsKeyDown(Keys.D) && !kState.IsKeyDown(Keys.S) && !kState.IsKeyDown(Keys.A) && !level.player.CurrentAnimation.Contains("Attack"))
+            {
+                switch (level.player.direction)
+                {
+                    case 0: level.player.CurrentAnimation = "StandUp";
+                        break;
+                    case 1: level.player.CurrentAnimation = "StandRight";
+                        break;
+                    case 2: level.player.CurrentAnimation = "StandDown";
+                        break;
+                    case 3: level.player.CurrentAnimation = "StandLeft";
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            previousState = kState;
         }
     }
 

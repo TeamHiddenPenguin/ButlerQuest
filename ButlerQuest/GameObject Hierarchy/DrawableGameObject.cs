@@ -29,7 +29,6 @@ namespace ButlerQuest
                 if (anims.ContainsKey(value))
                 {
                     currentAnimation = value;
-                    anims[currentAnimation].Reset();
                 }
                 else currentAnimation = "default";
             }

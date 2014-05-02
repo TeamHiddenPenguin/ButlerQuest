@@ -80,20 +80,36 @@ namespace ButlerQuest
                     default: break;
                 }
 
-                currentWeapon.visible = false;
+                if (CurrentAnimation.Contains("Attack"))
+                {
+                    attackLength++;
+
+                    if (attackLength >= MAX_ATTACK_LENGTH)
+                    {
+                        switch (direction)
+                        {
+                            case 0: CurrentAnimation = "StandUp";
+                                break;
+                            case 1: CurrentAnimation = "StandRight";
+                                break;
+                            case 2: CurrentAnimation = "StandDown";
+                                break;
+                            case 3: CurrentAnimation = "StandLeft";
+                                break;
+                            default:
+                                break;
+                        }
+                        attackLength = 0;
+                        currentWeapon.visible = false;
+                    }
+                }
+
+                else currentWeapon.visible = false;
+
                 currentWeapon.Update(gameTime);
             }
 
-            if (CurrentAnimation.Contains("Attack"))
-            {
-                attackLength++;
-
-                if (attackLength >= MAX_ATTACK_LENGTH)
-                {
-                    CurrentAnimation = "default";
-                    attackLength = 0;
-                }
-            }
+            
 
             if (currentDisguise != null)
             {

@@ -43,22 +43,25 @@ namespace ButlerQuest
         public static Texture2D playerTex = ScreenManager.SharedManager.Content.Load<Texture2D>(playerFile);
 
         // populate animation array for player
-        public static Animation[] playerAnimations = new Animation[9] {
-                    new Animation(0,0,40,40,4,4,1, playerTex), //default
-                    new Animation(4,5,40,40,4,4,15, playerTex), //WalkUp
-                    new Animation(11,15,40,40,4,4,5,playerTex), //WalkRight
-                    new Animation(1,2,40,40,4,4,15, playerTex), //WalkDown
-                    new Animation(6,10,40,40,4,4,5,playerTex), //WalkLeft
+        public static Animation[] playerAnimations = new Animation[12] {
+                    new Animation(3, 3, 40, 40, 4, 4, 1, playerTex), // StandUp
+                    new Animation(11, 11, 40, 40, 4, 4, 1, playerTex), // StandRight
+                    new Animation(0, 0, 40 ,40, 4, 4, 1, playerTex), //StandDown
+                    new Animation(6, 6, 40, 40, 4, 4, 15, playerTex), // StandLeft
+                    new Animation(4, 5, 40, 40, 4, 4, 15, playerTex), //WalkUp
+                    new Animation(11, 15, 40, 40, 4, 4, 5, playerTex), //WalkRight
+                    new Animation(1, 2, 40, 40, 4, 4, 15, playerTex), //WalkDown
+                    new Animation(6, 10, 40, 40, 4, 4, 5, playerTex), //WalkLeft
 
                     // placeholders until attack animation is a thing.
-                    new Animation(0,0,40,40,4,4,1, playerTex),
-                    new Animation(0,0,40,40,4,4,1, playerTex),
-                    new Animation(0,0,40,40,4,4,1, playerTex),
-                    new Animation(0,0,40,40,4,4,1, playerTex),
+                    new Animation(3, 3, 40, 40, 4, 4, 1, playerTex), // AttackUp
+                    new Animation(11, 11, 40, 40, 4, 4, 1, playerTex), // AttackRight
+                    new Animation(0, 0, 40, 40, 4, 4, 1, playerTex), // AttackDown
+                    new Animation(6, 6, 40, 40, 4, 4, 1, playerTex), // AttackLeft
                 };
 
         // add in the names of the player's animation frames
-        public static string[] playerAnimationNames = new string[9] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft", "UpAttack", "RightAttack", "DownAttack", "LeftAttack" };
+        public static string[] playerAnimationNames = new string[12] { "StandUp", "StandRight", "StandDown", "StandLeft", "WalkUp", "WalkRight", "WalkDown", "WalkLeft", "UpAttack", "RightAttack", "DownAttack", "LeftAttack" };
 
         // sets how fast the player moves
         public static Vector3 playerSpeed = new Vector3(2, 2, 1);

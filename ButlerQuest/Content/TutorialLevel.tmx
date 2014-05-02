@@ -135,6 +135,11 @@
   <object name="Table 1 Leg 2" type="Wall" x="480" y="1760" width="40" height="40"/>
   <object name="Table 2 Leg 1" type="Wall" x="1680" y="1800" width="40" height="40"/>
   <object name="Table 2 Leg 2" type="Wall" x="2200" y="1800" width="40" height="40"/>
+  <object name="disguise1" type="Disguise" x="480" y="1200" width="40" height="40">
+   <properties>
+    <property name="disguiseType" value="default"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Floor1RoomGraph" width="60" height="60" visible="0">
   <object name="StartingRoom" x="1200" y="1720" width="200" height="600">

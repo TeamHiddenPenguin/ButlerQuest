@@ -124,6 +124,8 @@ namespace ButlerQuest
                 lives,
                 goal);
 
+            player.CurrentAnimation = "StandUp";
+
             
 
             return player;

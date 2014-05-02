@@ -307,6 +307,7 @@ namespace ButlerQuest
                     {
                         player.currentWeapon = weapons[i];
                         weapons.Remove(weapons[i]);
+                        player.currentWeapon.visible = false;
 
                         player.currentWeapon.rectangle.Width = (int)(player.currentWeapon.rectangle.Width / 1.3);
                         player.currentWeapon.rectangle.Height = (int)(player.currentWeapon.rectangle.Height / 1.3);
