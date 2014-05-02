@@ -63,5 +63,31 @@ namespace ButlerQuest
             if (currentAnimation != null && anims.ContainsKey(currentAnimation))
                 anims[currentAnimation].Update();
         }
+
+        public bool PixelCollide(DrawableGameObject other)
+        {
+            Texture2D otherTex = other.anims[other.CurrentAnimation].GetTexture(ScreenManager.SharedManager.gDevice, ScreenManager.SharedManager.sBatch);
+            Texture2D thisTex = this.anims[this.CurrentAnimation].GetTexture(ScreenManager.SharedManager.gDevice, ScreenManager.SharedManager.sBatch);
+            Color[] otherPixels = new Color[otherTex.Width * otherTex.Height];
+            Color[] thisPixels = new Color[thisTex.Width * thisTex.Height];
+
+            int minX = Math.Max(this.rectangle.X, other.rectangle.X);
+            int maxX = Math.Min(this.rectangle.X + this.rectangle.Width, other.rectangle.X + other.rectangle.Width);
+            int minY = Math.Max(this.rectangle.Y, other.rectangle.Y);
+            int maxY = Math.Min(this.rectangle.Y + this.rectangle.Height, other.rectangle.Y + other.rectangle.Height);
+
+            for (int x = minX; x < maxX; x++)
+            {
+                for (int y = minY; y < maxY; y++)
+                {
+                    Color otherPixel = otherPixels[(x - other.rectangle.X) + (y - other.rectangle.Y) * other.rectangle.Width];
+                    Color thisPixel = thisPixels[(x - this.rectangle.X) + (y - this.rectangle.Y) * this.rectangle.Width];
+
+                    if (otherPixel.A != 0 && thisPixel.A != 0)
+                        return true;
+                }
+            }
+            return false;
+        }
     }
 }

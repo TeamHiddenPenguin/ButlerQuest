@@ -400,6 +400,7 @@ namespace ButlerQuest
         public int Z { get; set; }
         //This node's neighbors
         public List<IGraphNode> Neighbors { get; set; }
+        public HashSet<string> validDisguises;
         public Rectangle rect;
         public int Cost { get { return 0; } set { } }
         public string name;
@@ -412,6 +413,7 @@ namespace ButlerQuest
             Z = z;
             this.name = name;
             Neighbors = new List<IGraphNode>();
+            validDisguises = new HashSet<string>();
         }
 
         public void AddNode(IGraphNode node)
@@ -423,6 +425,11 @@ namespace ButlerQuest
                 if (!this.Neighbors.Contains(node))
                     this.Neighbors.Add(node);
             }
+        }
+        public void AddDisguise(string disguiseName)
+        {
+            if (!validDisguises.Contains(disguiseName))
+                validDisguises.Add(disguiseName);
         }
     }
 

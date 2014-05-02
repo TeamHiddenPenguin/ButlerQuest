@@ -207,25 +207,27 @@ namespace ButlerQuest
                 if (enemy.center.Z == playerLoc.Z)
                 {
                     double dist = Vector3.DistanceSquared(enemy.location, playerLoc);
-                    if (dist < MAX_VISION_RADIUS_SQUARED)
+                    if (dist < MAX_VISION_RADIUS_SQUARED && CanSee(enemy, playerLoc) && !WallInWay(enemy, (int)dist))
                     {
-                        if (CanSee(enemy, playerLoc))
-                        {
-                            if (!WallInWay(enemy, (int)dist))
-                            {
-                                lastKnownPlayerLoc = playerLoc;
+                        lastKnownPlayerLoc = playerLoc;
 
-                                if (AIManager.SharedAIManager.PlayerIsSuspicious())
-                                {
-                                    enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .001;
-                                    if (enemy.awareness >= 1)
-                                    {
-                                        AddToPursuit(enemy);
-                                        SwitchPursuitState(AI_STATE.PURSUIT);
-                                    }
-                                }
+                        if (AIManager.SharedAIManager.PlayerIsSuspicious())
+                        {
+                            enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .01;
+                            if (enemy.awareness >= 1)
+                            {
+                                AddToPursuit(enemy);
+                                SwitchPursuitState(AI_STATE.PURSUIT);
                             }
-                            System.Diagnostics.Debug.WriteLine("Awareness " + enemy.awareness + "Direction " + enemy.direction);
+                        }
+                        else
+                        {
+                            enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .0005;
+                            if (enemy.awareness >= 1)
+                            {
+                                AddToPursuit(enemy);
+                                SwitchPursuitState(AI_STATE.PURSUIT);
+                            }
                         }
                     }
                 }
@@ -268,6 +270,8 @@ namespace ButlerQuest
 
         public bool PlayerIsSuspicious()
         {
+            if (level.roomGraph.GetNode(level.player.rectangle).validDisguises.Contains(level.player.currentDisguise.disguiseType) || (level.player.currentWeapon != null && level.player.currentWeapon.visible))
+                return false;
             return true;
         }
 

@@ -35,7 +35,7 @@ namespace ButlerQuest
             attackLength = 0;
 
             currentWeapon = null;
-            currentDisguise = null;
+            currentDisguise = new Disguise(animations, names, this.location, this.rectangle, "Default");
         }
 
         public void Attack() // sets the player's animation and weapon depending on what weapon is equipped
