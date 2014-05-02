@@ -100,7 +100,7 @@ namespace ButlerQuest
                             if (t.Item1 != null)
                                 connections.Add(t.Item1);
                             if (t.Item2 != null)
-                                connections.Add(t.Item2);
+                                node.validDisguises.Add(t.Item2);
                         }
                         roomGraph.AddNode(node, connections);
                     }
@@ -203,8 +203,11 @@ namespace ButlerQuest
                         {
                             case -1: break;
                             default:
-                                ScreenManager.SharedManager.PopScreen();
-                                ScreenManager.SharedManager.AddScreen(new GameOverScreen(mapFile));
+                                if(enemy.PixelCollide(player))
+                                {
+                                    ScreenManager.SharedManager.PopScreen();
+                                    ScreenManager.SharedManager.AddScreen(new GameOverScreen(mapFile));
+                                }
                                 break;
                         }
                     }
@@ -220,6 +223,10 @@ namespace ButlerQuest
                             player.currentWeapon.durability--;
                             if (player.currentWeapon.durability == 0)
                                 player.currentWeapon = null;
+                            if (enemy.state > AI_STATE.AWARE)
+                            {
+                                AIManager.SharedAIManager.RemoveFromPursuit(enemy);
+                            }
                         }
                     }
                 }
@@ -387,16 +394,6 @@ namespace ButlerQuest
             {
                 ScreenManager.SharedManager.NextScreen();
                 ScreenManager.SharedManager.AddScreen(new VictoryScreen());
-            }
-        }
-
-        public void ForceGlobalAIStateChange(AI_STATE newState)
-        {
-            foreach (var enemy in basicEnemies)
-            {
-                enemy.state = newState;
-                enemy.commandQueue.Clear();
-                enemy.currentCommand = null;
             }
         }
     }

@@ -213,7 +213,7 @@ namespace ButlerQuest
 
                         if (AIManager.SharedAIManager.PlayerIsSuspicious())
                         {
-                            enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .01;
+                            enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .02;
                             if (enemy.awareness >= 1)
                             {
                                 AddToPursuit(enemy);
@@ -222,7 +222,7 @@ namespace ButlerQuest
                         }
                         else
                         {
-                            enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .0005;
+                            enemy.awareness += (MAX_VISION_RADIUS_SQUARED / dist) * .0009;
                             if (enemy.awareness >= 1)
                             {
                                 AddToPursuit(enemy);
@@ -284,6 +284,16 @@ namespace ButlerQuest
             }
             if(!currentPursuit.Contains(e))
                 currentPursuit.Add(e);
+        }
+
+        public void RemoveFromPursuit(Enemy e)
+        {
+            if(currentPursuit.Contains(e))
+            {
+                currentPursuit.Remove(e);
+                if (currentPursuit.Count == 0)
+                    isPursuitActive = false;
+            }
         }
 
         public void SwitchPursuitState(AI_STATE state)

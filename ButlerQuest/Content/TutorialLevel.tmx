@@ -141,7 +141,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Floor1RoomGraph" width="60" height="60" visible="0">
+ <objectgroup name="Floor1RoomGraph" width="60" height="60">
   <object name="StartingRoom" x="1200" y="1720" width="200" height="600">
    <properties>
     <property name="FirstRoom" value=""/>
@@ -149,7 +149,7 @@
   </object>
   <object name="FirstRoom" x="880" y="1360" width="1480" height="640">
    <properties>
-    <property name="Hallway1" value=""/>
+    <property name="Hallway1" value="Default"/>
     <property name="StartingRoom" value=""/>
    </properties>
   </object>
