@@ -91,7 +91,7 @@ namespace ButlerQuest
                         }
                         else if (entity.Type == "FloorSwitcher")
                         {
-                            floorSwitchers.Add(new FloorSwitcher(new Rectangle(entity.X, entity.Y, entity.Width, entity.Height), currentFloor, currentFloor + 1));
+                            floorSwitchers.Add(new FloorSwitcher(new Rectangle(entity.X, entity.Y, entity.Width, entity.Height), currentFloor, currentFloor + 1, bool.Parse(entity.Properties.Find(x => x.Item1 == "Horizontal").Item2)));
                         }
                     }
                 }
@@ -135,30 +135,33 @@ namespace ButlerQuest
 
             if (basicEnemies != null)
                 foreach (Enemy enemy in basicEnemies)
-                    if (enemy.alive)
+                    if (enemy.alive && enemy.location.Z == player.location.Z)
                         enemy.Draw(spriteBatch);
 
             if (weapons != null)
                 foreach (Weapon weapon in weapons) 
-                    weapon.Draw(spriteBatch);
+                    if (weapon.location.Z == player.location.Z)
+                        weapon.Draw(spriteBatch);
 
             if (coins != null)
                 foreach (Coin coin in coins)
-                    if (coin.active)
+                    if (coin.active && coin.location.Z == player.location.Z)
                         coin.Draw(spriteBatch);
 
             if (keys != null)
                 foreach (Key key in keys)
-                    key.Draw(spriteBatch);
+                    if (key.location.Z == player.location.Z)
+                        key.Draw(spriteBatch);
 
             if (doors != null)
                 foreach (Door door in doors)
-                    if (door.locked)
+                    if (door.locked && door.location.Z == player.location.Z)
                         door.Draw(spriteBatch);
 
             if (disguises != null)
                 foreach (Disguise disguise in disguises)
-                    disguise.Draw(spriteBatch);
+                    if (disguise.location.Z == player.location.Z)
+                        disguise.Draw(spriteBatch);
 
             if (player.direction == 1 || player.direction == 2)
             {
