@@ -51,6 +51,7 @@
     <Compile Include="GameObject Hierarchy\DrawableGameObject.cs" />
     <Compile Include="GameObject Hierarchy\Enemy.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="GameObject Hierarchy\FloorSwitcher.cs" />
     <Compile Include="GameObject Hierarchy\GameObject.cs" />
     <Compile Include="GameObject Hierarchy\Wall.cs" />
     <Compile Include="GameObject Hierarchy\Weapon.cs" />

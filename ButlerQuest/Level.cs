@@ -21,6 +21,7 @@ namespace ButlerQuest
         List<Door> doors; // a list to hold all of the locked doors for a level.
         List<Key> keys; // a list to hold all of the keys for a level.
         List<Disguise> disguises; // a list to hold all of the disguises for a level.
+        List<FloorSwitcher> floorSwitchers; // a list to hold all of the floor switchers
         public Map levelMap; // parses the map and tiles used for the specific level.
         public Rectangle windowSpace; // window space used for drawing the map.
         GraphicsDevice graphics;
@@ -39,11 +40,12 @@ namespace ButlerQuest
             doors = new List<Door>();
             keys = new List<Key>();
             disguises = new List<Disguise>();
+            floorSwitchers = new List<FloorSwitcher>();
 
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
 
-            levelMap = new Map(mapFile, new int[2] { 1, int.MaxValue });
+            levelMap = new Map(mapFile, new int[4] { 1, int.MaxValue, 0, 0 });
 
 
             roomGraph = new RoomGraph();
@@ -87,6 +89,10 @@ namespace ButlerQuest
                         {
                             disguises.Add(EntityGenerator.GenerateDisguise(new Vector3(entity.X, entity.Y, currentFloor), entity.Properties.Find(x => x.Item1 == "disguiseType").Item2));
                         }
+                        else if (entity.Type == "FloorSwitcher")
+                        {
+                            floorSwitchers.Add(new FloorSwitcher(new Rectangle(entity.X, entity.Y, entity.Width, entity.Height), currentFloor, currentFloor + 1));
+                        }
                     }
                 }
                 if (groupname.Contains("Room"))
@@ -115,8 +121,6 @@ namespace ButlerQuest
             }
 
             windowSpace = new Rectangle((int)(player.location.X + (player.rectangle.Width / 2)) - (graphics.Viewport.Width / 2), (int)(player.location.Y + (player.rectangle.Height / 2)) - (graphics.Viewport.Height / 2), graphics.Viewport.Width, graphics.Viewport.Height);
-
-            //AIManager.DebugInitialize(this);
 
         }
 
@@ -384,6 +388,11 @@ namespace ButlerQuest
                         }
                     }
                 }
+            foreach (var fs in floorSwitchers)
+            {
+                if (fs.Collides(player))
+                    System.Diagnostics.Debug.WriteLine("Switched Floor");
+            }
 
             windowSpace.X = (int)(player.location.X + (player.rectangle.Width / 2)) - (windowSpace.Width / 2);
             windowSpace.Y = (int)(player.location.Y + (player.rectangle.Height / 2)) - (windowSpace.Height / 2);
