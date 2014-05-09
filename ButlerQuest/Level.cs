@@ -50,7 +50,7 @@ namespace ButlerQuest
 
             roomGraph = new RoomGraph();
 
-            foreach (var groupname in levelMap.ObjectGroups.Keys) // Sam did this loop and everything inside it.
+            foreach (var groupname in levelMap.ObjectGroups.Keys) // goes through each entity in the map file and creates objects based on them.
             {
                 int currentFloor = int.Parse(groupname[5].ToString()) - 1;
                 if (groupname.Substring(6, 8) == "Entities")
@@ -111,7 +111,6 @@ namespace ButlerQuest
                         roomGraph.AddNode(node, connections);
                     }
                 }
-                //Otherwise it's a floor graph and sam will write this code later when it's relevant
             }
 
             foreach (Door lockedDoor in doors)
