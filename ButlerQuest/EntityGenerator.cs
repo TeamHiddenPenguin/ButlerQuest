@@ -176,7 +176,7 @@ namespace ButlerQuest
         {
             Disguise disguise = new Disguise(
                 GameVariables.disguiseAnimation,
-                new String[1] { "disguise" },
+                GameVariables.disguiseAnimationNames,
                 position,
                 new Rectangle(
                     (int)position.X,
@@ -184,7 +184,7 @@ namespace ButlerQuest
                     GameVariables.tileWidth, GameVariables.tileHeight),
                     type);
 
-            disguise.CurrentAnimation = "disguise";
+            disguise.CurrentAnimation = type + "Down";
 
 
             return disguise;

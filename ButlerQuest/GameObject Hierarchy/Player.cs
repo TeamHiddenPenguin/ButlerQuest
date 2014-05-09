@@ -35,7 +35,8 @@ namespace ButlerQuest
             attackLength = 0;
 
             currentWeapon = null;
-            currentDisguise = new Disguise(animations, names, this.location, this.rectangle, "Default");
+            currentDisguise = EntityGenerator.GenerateDisguise(new Vector3(this.location.X, this.location.Y, 0), "player");
+
         }
 
         public void Attack() // sets the player's animation and weapon depending on what weapon is equipped
@@ -52,7 +53,6 @@ namespace ButlerQuest
                         break;
                     case 3: CurrentAnimation = "LeftAttack";
                         break;
-                    default: break;
                 }
                 currentWeapon.visible = true;
             }
@@ -77,7 +77,6 @@ namespace ButlerQuest
                     case 3: currentWeapon.location.X = this.location.X - 5;
                         currentWeapon.location.Y = this.location.Y - 5;
                         break;
-                    default: break;
                 }
 
                 if (CurrentAnimation.Contains("Attack"))
@@ -96,8 +95,6 @@ namespace ButlerQuest
                                 break;
                             case 3: CurrentAnimation = "StandLeft";
                                 break;
-                            default:
-                                break;
                         }
                         attackLength = 0;
                         currentWeapon.visible = false;
@@ -114,6 +111,18 @@ namespace ButlerQuest
             if (currentDisguise != null)
             {
                 currentDisguise.location = this.location;
+
+                switch (direction)
+                {
+                    case 0: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Up";
+                        break;
+                    case 1: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Right";
+                        break;
+                    case 2: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Down";
+                        break;
+                    case 3: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Left";
+                        break;
+                }
 
                 currentDisguise.Update(gameTime);
             }

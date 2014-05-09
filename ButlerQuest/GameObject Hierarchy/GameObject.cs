@@ -24,7 +24,7 @@ namespace ButlerQuest
 
         // method
         // sorry if this has too many if statements.
-        public int CollisionSide(GameObject otherObject) // checks if the current GameObject is colliding with the GameObject given in the parameters, based on their Rectangles.
+        public virtual int CollisionSide(GameObject otherObject) // checks if the current GameObject is colliding with the GameObject given in the parameters, based on their Rectangles.
         {
             if (this.location.Z == otherObject.location.Z)
             {

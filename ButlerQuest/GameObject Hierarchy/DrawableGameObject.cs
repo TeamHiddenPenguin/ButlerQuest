@@ -70,6 +70,8 @@ namespace ButlerQuest
             Texture2D thisTex = this.anims[this.CurrentAnimation].GetTexture(ScreenManager.SharedManager.gDevice, ScreenManager.SharedManager.sBatch);
             Color[] otherPixels = new Color[otherTex.Width * otherTex.Height];
             Color[] thisPixels = new Color[thisTex.Width * thisTex.Height];
+            otherTex.GetData(otherPixels);
+            thisTex.GetData(thisPixels);
 
             int minX = Math.Max(this.rectangle.X, other.rectangle.X);
             int maxX = Math.Min(this.rectangle.X + this.rectangle.Width, other.rectangle.X + other.rectangle.Width);

@@ -145,8 +145,17 @@ namespace ButlerQuest
         public static Texture2D disguiseTex = ScreenManager.SharedManager.Content.Load<Texture2D>(disguiseFile);
 
         // populates animation array for door
-        public static Animation[] disguiseAnimation = new Animation[1] {
-                    new Animation(0, 0, 40, 40, 1, 1, 1, disguiseTex)
+        public static Animation[] disguiseAnimation = new Animation[8] {
+                    new Animation(0, 0, 40, 40, 1, 1, 1, disguiseTex),
+                    new Animation(0, 0, 40, 40, 1, 1, 1, disguiseTex), 
+                    new Animation(0, 0, 40, 40, 1, 1, 1, disguiseTex),
+                    new Animation(0, 0, 40, 40, 1, 1, 1, disguiseTex), 
+                    new Animation(3, 3, 40, 40, 4, 4, 1, playerTex), 
+                    new Animation(11, 11, 40, 40, 4, 4, 1, playerTex), 
+                    new Animation(0, 0, 40 ,40, 4, 4, 1, playerTex), 
+                    new Animation(6, 6, 40, 40, 4, 4, 15, playerTex), 
                 };
+
+        public static string[] disguiseAnimationNames = new string[8] { "defaultUp", "defaultRight", "defaultDown", "defaultLeft", "playerUp", "playerRight", "playerDown", "playerLeft" };
     }
 }
