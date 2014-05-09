@@ -59,18 +59,26 @@ namespace ButlerQuest
                 if (currentCommand == null || currentCommand.IsFinished)
                     ChangeCommand();
 
-                switch (direction)
+                if (currentCommand is CommandWait)
                 {
-                    case 0: CurrentAnimation = "WalkUp";
-                        break;
-                    case 1: CurrentAnimation = "WalkRight";
-                        break;
-                    case 2: CurrentAnimation = "WalkDown";
-                        break;
-                    case 3: CurrentAnimation = "WalkLeft";
-                        break;
-                    default:
-                        break;
+                    CurrentAnimation = "default";
+                }
+
+                else
+                {
+                    switch (direction)
+                    {
+                        case 0: CurrentAnimation = "WalkUp";
+                            break;
+                        case 1: CurrentAnimation = "WalkRight";
+                            break;
+                        case 2: CurrentAnimation = "WalkDown";
+                            break;
+                        case 3: CurrentAnimation = "WalkLeft";
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 currentCommand.Update(gameTime);

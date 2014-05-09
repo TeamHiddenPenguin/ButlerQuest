@@ -190,7 +190,7 @@ namespace ButlerQuest
                 {
                     case 0:
                         // Level name subject to change
-                        ScreenManager.SharedManager.AddScreen(new LoadingGameScreen("TutorialLevel.tmx"));
+                        ScreenManager.SharedManager.AddScreen(new LoadingGameScreen("Level1.tmx"));
                         break;
                     case 1:
                         ScreenManager.SharedManager.AddScreen(new OptionsScreen());
