@@ -64,6 +64,7 @@ namespace ButlerQuest
                 anims[currentAnimation].Update();
         }
 
+        [Obsolete]
         public bool PixelCollide(DrawableGameObject other)
         {
             Texture2D otherTex = other.anims[other.CurrentAnimation].GetTexture(ScreenManager.SharedManager.gDevice, ScreenManager.SharedManager.sBatch);

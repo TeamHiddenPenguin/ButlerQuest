@@ -28,7 +28,7 @@ namespace ButlerQuest
             rectangle.Y = (int)location.Y;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public new void Draw(SpriteBatch spriteBatch)
         {
             if (visible)
                 base.Draw(spriteBatch);

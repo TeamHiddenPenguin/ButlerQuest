@@ -161,10 +161,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\DebugMap2.tmx">
+    <Content Include="Content\DebugMap2.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </None>
+    </Content>
     <Content Include="Content\TutorialLevel.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

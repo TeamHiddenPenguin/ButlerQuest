@@ -19,6 +19,11 @@ namespace ButlerQuest
         public Disguise currentDisguise; // the player's current disguise
         public int attackLength; // how long the player's attack has lasted (in ms)
         const int MAX_ATTACK_LENGTH = 10;
+
+        public Rectangle CloseRect
+        {
+            get { return new Rectangle(rectangle.X + 10, rectangle.Y, rectangle.Width / 2, rectangle.Height); }
+        }
         
 
         // constructor

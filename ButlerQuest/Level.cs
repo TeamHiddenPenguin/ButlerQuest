@@ -49,7 +49,6 @@ namespace ButlerQuest
 
 
             roomGraph = new RoomGraph();
-
             foreach (var groupname in levelMap.ObjectGroups.Keys) // Sam did this loop and everything inside it.
             {
                 int currentFloor = int.Parse(groupname[5].ToString()) - 1;
@@ -111,7 +110,7 @@ namespace ButlerQuest
                         roomGraph.AddNode(node, connections);
                     }
                 }
-                //Otherwise it's a floor graph and sam will write this code later when it's relevant
+                player.moneyNeeded = (basicEnemies.Count + coins.Count) * 70; 
             }
 
             foreach (Door lockedDoor in doors)
@@ -133,11 +132,6 @@ namespace ButlerQuest
 
             levelMap.Draw(windowSpace, (int)player.location.Z);
 
-            if (basicEnemies != null)
-                foreach (Enemy enemy in basicEnemies)
-                    if (enemy.alive && enemy.location.Z == player.location.Z)
-                        enemy.Draw(spriteBatch);
-
             if (weapons != null)
                 foreach (Weapon weapon in weapons) 
                     if (weapon.location.Z == player.location.Z)
@@ -153,15 +147,20 @@ namespace ButlerQuest
                     if (key.location.Z == player.location.Z)
                         key.Draw(spriteBatch);
 
-            if (doors != null)
-                foreach (Door door in doors)
-                    if (door.locked && door.location.Z == player.location.Z)
-                        door.Draw(spriteBatch);
-
             if (disguises != null)
                 foreach (Disguise disguise in disguises)
                     if (disguise.location.Z == player.location.Z)
                         disguise.Draw(spriteBatch);
+
+            if (basicEnemies != null)
+                foreach (Enemy enemy in basicEnemies)
+                    if (enemy.alive && enemy.location.Z == player.location.Z)
+                        enemy.Draw(spriteBatch);
+
+            if (doors != null)
+                foreach (Door door in doors)
+                    if (door.locked && door.location.Z == player.location.Z)
+                        door.Draw(spriteBatch);
 
             if (player.direction == 1 || player.direction == 2)
             {
@@ -210,7 +209,7 @@ namespace ButlerQuest
                         {
                             case -1: break;
                             default:
-                                if(enemy.PixelCollide(player))
+                                if(enemy.CloseRect.Intersects(player.CloseRect))
                                 {
                                     ScreenManager.SharedManager.PopScreen();
                                     ScreenManager.SharedManager.AddScreen(new GameOverScreen(mapFile));

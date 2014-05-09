@@ -19,6 +19,11 @@ namespace ButlerQuest
         public int moneyValue; // amount of money the enemy is worth
         public bool alive;
 
+        public Rectangle CloseRect
+        {
+            get { return new Rectangle(rectangle.X + 10, rectangle.Y, rectangle.Width / 2, rectangle.Height); }
+        }
+
         // constructor
         public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect, int value)
             : base(vel, animations, names, loc, rect)
