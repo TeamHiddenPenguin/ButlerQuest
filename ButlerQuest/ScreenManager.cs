@@ -247,18 +247,21 @@ namespace ButlerQuest
             if (kState.IsKeyDown(Keys.W))
             {
                 level.player.Move(new Vector3(0, -1, 0));
+
                 if (!level.player.CurrentAnimation.Contains("Attack"))
                     level.player.CurrentAnimation = "WalkUp";
             }
             if (kState.IsKeyDown(Keys.A))
             {
                 level.player.Move(new Vector3(-1, 0, 0));
+
                 if (!level.player.CurrentAnimation.Contains("Attack"))
                     level.player.CurrentAnimation = "WalkLeft";
             }
             if (kState.IsKeyDown(Keys.S))
             {
                 level.player.Move(new Vector3(0, 1, 0));
+
                 if (!level.player.CurrentAnimation.Contains("Attack"))
                     level.player.CurrentAnimation = "WalkDown";
             }

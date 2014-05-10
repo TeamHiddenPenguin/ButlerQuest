@@ -270,7 +270,7 @@ namespace ButlerQuest
 
         public bool PlayerIsSuspicious()
         {
-            if (level.roomGraph.GetNode(level.player.rectangle).validDisguises.Contains(level.player.currentDisguise.disguiseType) || (level.player.currentWeapon != null && level.player.currentWeapon.visible))
+            if ((level.player.currentDisguise != null && level.roomGraph.GetNode(level.player.rectangle).validDisguises.Contains(level.player.currentDisguise.disguiseType)) || (level.player.currentWeapon != null && level.player.currentWeapon.visible))
                 return false;
             return true;
         }

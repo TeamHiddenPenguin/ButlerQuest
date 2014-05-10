@@ -40,7 +40,7 @@ namespace ButlerQuest
             attackLength = 0;
 
             currentWeapon = null;
-            currentDisguise = EntityGenerator.GenerateDisguise(new Vector3(this.location.X, this.location.Y, 0), "player");
+            currentDisguise = null;
 
         }
 
@@ -132,17 +132,7 @@ namespace ButlerQuest
             {
                 currentDisguise.location = this.location;
 
-                switch (direction)
-                {
-                    case 0: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Up";
-                        break;
-                    case 1: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Right";
-                        break;
-                    case 2: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Down";
-                        break;
-                    case 3: currentDisguise.CurrentAnimation = currentDisguise.disguiseType + "Left";
-                        break;
-                }
+                currentDisguise.anims[CurrentAnimation].currentFrame = anims[CurrentAnimation].currentFrame;
 
                 currentDisguise.Update(gameTime);
             }

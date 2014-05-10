@@ -13,7 +13,7 @@ namespace ButlerQuest
     {
         // attributes
         // this is a dictionary of all the animations with the key being the name of the animations
-        Dictionary<string, Animation> anims;
+        public Dictionary<string, Animation> anims;
         // the name of the animation currently being displayed
         string currentAnimation;
 
@@ -26,11 +26,14 @@ namespace ButlerQuest
 
             set // if the given value exists in the animation dictionary, changes the current animation, otherwise sets the animation to the default
             {
-                if (anims.ContainsKey(value))
+                if (value != currentAnimation)
                 {
-                    currentAnimation = value;
+                    if (anims.ContainsKey(value))
+                    {
+                        currentAnimation = value;
+                    }
+                    else currentAnimation = "default";
                 }
-                else currentAnimation = "default";
             }
         }
 
@@ -91,6 +94,14 @@ namespace ButlerQuest
                 }
             }
             return false;
+        }
+
+        public void ResetAllAnimations()
+        {
+            foreach (var anim in anims.Values)
+            {
+                anim.Reset();
+            }
         }
     }
 }

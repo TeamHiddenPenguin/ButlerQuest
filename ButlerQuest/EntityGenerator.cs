@@ -176,8 +176,8 @@ namespace ButlerQuest
         public static Disguise GenerateDisguise(Vector3 position, string type)
         {
             Disguise disguise = new Disguise(
-                GameVariables.disguiseAnimation,
-                GameVariables.disguiseAnimationNames,
+                GameVariables.GetDisguiseAnimations(type),
+                GameVariables.playerAnimationNames,
                 position,
                 new Rectangle(
                     (int)position.X,
@@ -185,7 +185,7 @@ namespace ButlerQuest
                     GameVariables.tileWidth, GameVariables.tileHeight),
                     type);
 
-            disguise.CurrentAnimation = type + "Down";
+            disguise.CurrentAnimation = "StandDown";
 
 
             return disguise;

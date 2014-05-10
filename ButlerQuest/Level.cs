@@ -328,65 +328,78 @@ namespace ButlerQuest
                 }
             }
 
-            if (disguises != null)
+            // disguise collision
                 for (int i = 0; i < disguises.Count; i++)
                 {
                     int collision = player.CollisionSide(disguises[i]);
-                    if (collision > -1 && player.currentDisguise == null)
+                    if (collision > -1)
                     {
-                        player.currentDisguise = disguises[i];
-                        disguises.Remove(disguises[i]);
-                    }
-                    else
-                    {
-                        switch (collision)
+                        if (player.currentDisguise == null)
                         {
-                            case 0:
-                                disguises.Add(
-                                    EntityGenerator.GenerateDisguise(
-                                    new Vector3(player.location.X, player.location.Y + 40, player.location.Z),
-                                    player.currentDisguise.disguiseType)
-                                    );
+                            player.currentDisguise = disguises[i];
+                            disguises.Remove(disguises[i]);
+                            player.ResetAllAnimations();
+                            player.currentDisguise.ResetAllAnimations();
+                        }
+                        else
+                        {
+                            switch (collision)
+                            {
+                                case 0:
+                                    disguises.Add(
+                                        EntityGenerator.GenerateDisguise(
+                                        new Vector3(player.location.X, player.location.Y + 40, player.location.Z),
+                                        player.currentDisguise.disguiseType)
+                                        );
 
-                                player.currentDisguise = disguises[i];
-                                disguises.Remove(disguises[i]);
-                                break;
+                                    player.currentDisguise = disguises[i];
+                                    disguises.Remove(disguises[i]);
+                                    player.ResetAllAnimations();
+                                     player.currentDisguise.ResetAllAnimations();
+                                    break;
 
-                            case 1:
-                                disguises.Add(
-                                    EntityGenerator.GenerateDisguise(
-                                    new Vector3(player.location.X - 40, player.location.Y, player.location.Z),
-                                    player.currentDisguise.disguiseType)
-                                    );
+                                case 1:
+                                    disguises.Add(
+                                        EntityGenerator.GenerateDisguise(
+                                        new Vector3(player.location.X - 40, player.location.Y, player.location.Z),
+                                        player.currentDisguise.disguiseType)
+                                        );
 
-                                player.currentDisguise = disguises[i];
-                                disguises.Remove(disguises[i]);
-                                break;
+                                    player.currentDisguise = disguises[i];
+                                    disguises.Remove(disguises[i]);
+                                    player.ResetAllAnimations();
+                                    player.currentDisguise.ResetAllAnimations();
+                                    break;
 
-                            case 2:
-                                disguises.Add(
-                                    EntityGenerator.GenerateDisguise(
-                                    new Vector3(player.location.X, player.location.Y - 40, player.location.Z),
-                                    player.currentDisguise.disguiseType)
-                                    );
+                                case 2:
+                                    disguises.Add(
+                                        EntityGenerator.GenerateDisguise(
+                                        new Vector3(player.location.X, player.location.Y - 40, player.location.Z),
+                                        player.currentDisguise.disguiseType)
+                                        );
 
-                                player.currentDisguise = disguises[i];
-                                disguises.Remove(disguises[i]);
-                                break;
+                                    player.currentDisguise = disguises[i];
+                                    disguises.Remove(disguises[i]);
+                                    player.ResetAllAnimations();
+                                    player.currentDisguise.ResetAllAnimations();
+                                    break;
 
-                            case 3:
-                                disguises.Add(
-                                    EntityGenerator.GenerateDisguise(
-                                    new Vector3(player.location.X + 40, player.location.Y, player.location.Z),
-                                    player.currentDisguise.disguiseType)
-                                    );
+                                case 3:
+                                    disguises.Add(
+                                        EntityGenerator.GenerateDisguise(
+                                        new Vector3(player.location.X + 40, player.location.Y, player.location.Z),
+                                        player.currentDisguise.disguiseType)
+                                        );
 
-                                player.currentDisguise = disguises[i];
-                                disguises.Remove(disguises[i]);
-                                break;
+                                    player.currentDisguise = disguises[i];
+                                    disguises.Remove(disguises[i]);
+                                    player.ResetAllAnimations();
+                                    player.currentDisguise.ResetAllAnimations();
+                                    break;
 
-                            default:
-                                break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }
