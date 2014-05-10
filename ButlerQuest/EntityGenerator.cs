@@ -16,7 +16,7 @@ namespace ButlerQuest
         /// <param name="position">position to make the enemy at</param>
         /// <param name="commands">default commands</param>
         /// <returns>An enemy</returns>
-        public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands)
+        public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands, int dir)
         {
             Enemy temp = new Enemy(
                 GameVariables.enemyMoveSpeed,
@@ -25,7 +25,8 @@ namespace ButlerQuest
                 position,
                 new Rectangle((int)position.X, (int)position.Y,
                     GameVariables.tileWidth, GameVariables.tileHeight),
-                    GameVariables.normalEnemyCash);
+                    GameVariables.normalEnemyCash,
+                    dir);
 
             foreach (var parseable in commands)
             {

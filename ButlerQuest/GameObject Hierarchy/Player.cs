@@ -77,7 +77,7 @@ namespace ButlerQuest
                         currentWeapon.location.Y = this.location.Y - 5;
                         break;
                     case 2: currentWeapon.location.X = this.location.X;
-                        currentWeapon.location.Y = this.location.Y + 10;
+                        currentWeapon.location.Y = this.location.Y + 20;
                         break;
                     case 3: currentWeapon.location.X = this.location.X - 5;
                         currentWeapon.location.Y = this.location.Y - 5;
@@ -109,6 +109,21 @@ namespace ButlerQuest
                 else currentWeapon.visible = false;
 
                 currentWeapon.Update(gameTime);
+            }
+
+            else
+            {
+                switch (direction)
+                {
+                    case 0: CurrentAnimation = "WalkUp";
+                        break;
+                    case 1: CurrentAnimation = "WalkRight";
+                        break;
+                    case 2: CurrentAnimation = "WalkDown";
+                        break;
+                    case 3: CurrentAnimation = "WalkLeft";
+                        break;
+                }
             }
 
             

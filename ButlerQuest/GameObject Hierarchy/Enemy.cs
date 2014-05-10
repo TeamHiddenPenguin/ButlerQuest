@@ -25,7 +25,7 @@ namespace ButlerQuest
         }
 
         // constructor
-        public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect, int value)
+        public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect, int value, int direction)
             : base(vel, animations, names, loc, rect)
         {
             commandQueue = new Queue<ICommand>();
@@ -35,6 +35,19 @@ namespace ButlerQuest
             center = new Vector3(rect.X + rect.Width, rect.Y + rect.Height, loc.Z);
             moneyValue = value;
             alive = true;
+            this.direction = direction;
+
+            switch (direction)
+            {
+                case 0: CurrentAnimation = "StandUp";
+                    break;
+                case 1: CurrentAnimation = "StandRight";
+                    break;
+                case 2: CurrentAnimation = "StandDown";
+                    break;
+                case 3: CurrentAnimation = "StandLeft";
+                    break;
+            }
         }
 
         public void ChangeCommand()
@@ -61,7 +74,17 @@ namespace ButlerQuest
 
                 if (currentCommand is CommandWait)
                 {
-                    CurrentAnimation = "default";
+                    switch (direction)
+                    {
+                        case 0: CurrentAnimation = "StandUp";
+                            break;
+                        case 1: CurrentAnimation = "StandRight";
+                            break;
+                        case 2: CurrentAnimation = "StandDown";
+                            break;
+                        case 3: CurrentAnimation = "StandLeft";
+                            break;
+                    }
                 }
 
                 else
@@ -75,8 +98,6 @@ namespace ButlerQuest
                         case 2: CurrentAnimation = "WalkDown";
                             break;
                         case 3: CurrentAnimation = "WalkLeft";
-                            break;
-                        default:
                             break;
                     }
                 }

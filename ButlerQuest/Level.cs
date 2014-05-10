@@ -58,7 +58,7 @@ namespace ButlerQuest
                     {
                         if (entity.Type == "Enemy")
                         {
-                            basicEnemies.Add(EntityGenerator.GenerateEnemy(new Vector3(entity.X, entity.Y, currentFloor), entity.Properties));
+                            basicEnemies.Add(EntityGenerator.GenerateEnemy(new Vector3(entity.X, entity.Y, currentFloor), entity.Properties, int.Parse(entity.Properties.Find(x => x.Item1 == "startDirection").Item2)));
                         }
                         else if (entity.Type == "Player")
                         {
@@ -290,7 +290,7 @@ namespace ButlerQuest
                 int collision = player.CollisionSide(keys[i]);
                 if (collision > -1)
                 {
-                    doors[keys[i].doorAssociation].locked = false;
+                    doors.Remove(doors[keys[i].doorAssociation]);
                     keys.Remove(keys[i]);
                 }
             }

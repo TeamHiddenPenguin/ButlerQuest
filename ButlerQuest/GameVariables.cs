@@ -24,15 +24,18 @@ namespace ButlerQuest
         public static Texture2D enemyTex = ScreenManager.SharedManager.Content.Load<Texture2D>(enemyFile);
 
         // populate animation array for enemies
-        public static Animation[] enemyAnimations = new Animation[5]{
-                    new Animation(0,0,40,40,4,4,1, enemyTex), //default
+        public static Animation[] enemyAnimations = new Animation[8]{
+                    new Animation(3,3,40,40,4,4,1, enemyTex), //StandUp
+                    new Animation(11,11,40,40,4,4,1, enemyTex), //StandRight
+                    new Animation(0,0,40,40,4,4,1, enemyTex), //StandDown
+                    new Animation(6,6,40,40,4,4,1, enemyTex), //StandLeft
                     new Animation(4,5,40,40,4,4,15, enemyTex), //WalkUp
-                    new Animation(11,15,40,40,4,4,5,enemyTex), //WalkRight
+                    new Animation(11,15,40,40,4,4,15,enemyTex), //WalkRight
                     new Animation(1,2,40,40,4,4,15, enemyTex), //WalkDown
-                    new Animation(6,10,40,40,4,4,5,enemyTex)};//WalkLeft;
+                    new Animation(6,10,40,40,4,4,15,enemyTex)};//WalkLeft;
 
         // add in names of enemy animation frames
-        public static string[] enemyAnimationNames = new string[5] { "default", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" };
+        public static string[] enemyAnimationNames = new string[8] { "StandUp", "StandRight", "StandDown", "StandLeft", "WalkUp", "WalkRight", "WalkDown", "WalkLeft" };
         
         // sets how fast the enemies move
         public static Vector3 enemyMoveSpeed = new Vector3(2, 2, 1);
@@ -47,7 +50,7 @@ namespace ButlerQuest
                     new Animation(3, 3, 40, 40, 4, 4, 1, playerTex), // StandUp
                     new Animation(11, 11, 40, 40, 4, 4, 1, playerTex), // StandRight
                     new Animation(0, 0, 40 ,40, 4, 4, 1, playerTex), //StandDown
-                    new Animation(6, 6, 40, 40, 4, 4, 15, playerTex), // StandLeft
+                    new Animation(6, 6, 40, 40, 4, 4, 1, playerTex), // StandLeft
                     new Animation(4, 5, 40, 40, 4, 4, 15, playerTex), //WalkUp
                     new Animation(11, 15, 40, 40, 4, 4, 5, playerTex), //WalkRight
                     new Animation(1, 2, 40, 40, 4, 4, 15, playerTex), //WalkDown
