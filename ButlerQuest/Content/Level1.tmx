@@ -14,32 +14,70 @@
     <object name="StationaryEnemy" type="Enemy" x="2080" y="1840" width="40" height="40">
       <properties>
         <property name="2WAIT" value="60" />
+        <property name="startDirection" value="3" />
       </properties>
     </object>
     <object type="Key" x="2160" y="1840" width="40" height="40" />
     <object name="LoopingEnemy1" type="Enemy" x="1920" y="2280" width="40" height="40">
       <properties>
-        <property name="asdf" value="" />
+        <property name="2MOVE" value="1920,2040,0" />
+        <property name="3MOVE" value="2280,2040,0" />
+        <property name="4MOVE" value="2280,1680,0" />
+        <property name="5MOVE" value="1720,1520,0" />
+        <property name="6MOVE" value="1240,1520,0" />
+        <property name="7MOVE" value="1240,2040,0" />
+        <property name="8MOVE" value="1600,2040,0" />
+        <property name="9MOVE" value="1600,2280,0" />
+        <property name="10MOVE" value="1920,2280,0" />
+        <property name="startDirection" value="3" />
       </properties>
     </object>
     <object name="LoopingEnemy2" type="Enemy" x="1040" y="2280" width="40" height="40">
       <properties>
-        <property name="asdf" value="" />
+        <property name="2MOVE" value="1920,2280,0" />
+        <property name="3MOVE" value="1920,2040,0" />
+        <property name="4MOVE" value="1600,2040,0" />
+        <property name="5MOVE" value="1600,2280,0" />
+        <property name="startDirection" value="0" />
       </properties>
     </object>
     <object name="LoopingEnemy3" type="Enemy" x="1280" y="1560" width="40" height="40">
       <properties>
-        <property name="asdf" value="" />
+        <property name="2MOVE" value="1280,2040,0" />
+        <property name="3MOVE" value="2280,2040,0" />
+        <property name="5WAIT" value="180" />
+        <property name="6MOVE" value="1280,2040,0" />
+        <property name="7MOVE" value="1280,1560,0" />
+        <property name="startDirection" value="2" />
       </properties>
     </object>
     <object name="LoopingEnemy5" type="Enemy" x="840" y="1840" width="40" height="40">
       <properties>
-        <property name="adfs" value="" />
+        <property name="2MOVE" value="760,2000,0" />
+        <property name="3MOVE" value="760,2120,0" />
+        <property name="4MOVE" value="1040,2120,0" />
+        <property name="5MOVE" value="1040,2280,0" />
+        <property name="6MOVE" value="1600,2280,0" />
+        <property name="7MOVE" value="1600,2040,0" />
+        <property name="8MOVE" value="1240,2040,0" />
+        <property name="9MOVE" value="1240,1640,0" />
+        <property name="10MOVE" value="960,1600,0" />
+        <property name="11MOVE" value="840,1600,0" />
+        <property name="12MOVE" value="840,1840,0" />
+        <property name="startDirection" value="1" />
       </properties>
     </object>
     <object name="LoopingEnemy4" type="Enemy" x="1440" y="2000" width="40" height="40">
       <properties>
-        <property name="asdf" value="" />
+        <property name="2WAIT" value="60" />
+        <property name="3MOVE" value="1440,2040,0" />
+        <property name="4MOVE" value="1240,2040,0" />
+        <property name="6MOVE" value="1240,1520,0" />
+        <property name="7MOVE" value="1760,1520,0" />
+        <property name="8MOVE" value="2280,1680,0" />
+        <property name="9MOVE" value="2280,2040,0" />
+        <property name="10MOVE" value="1440,2040,0" />
+        <property name="startDirection" value="2" />
       </properties>
     </object>
     <object type="Weapon" x="1080" y="1800" width="40" height="40">
@@ -50,12 +88,12 @@
     </object>
     <object type="Disguise" x="2080" y="2240" width="40" height="40">
       <properties>
-        <property name="disguiseType" value="chef" />
+        <property name="disguiseType" value="Chef" />
       </properties>
     </object>
     <object type="Coin" x="1240" y="920" width="40" height="40">
       <properties>
-        <property name="value" value="1000" />
+        <property name="value" value="100" />
       </properties>
     </object>
     <object type="FloorSwitcher" x="660" y="1460" width="80" height="80">
@@ -112,9 +150,8 @@
     <object type="Wall" x="1000" y="1720" width="200" height="80" />
     <object type="Wall" x="1120" y="1800" width="40" height="200" />
     <object type="Wall" x="1160" y="1800" width="40" height="320" />
-    <object type="Wall" x="1480" y="1920" width="760" height="80" />
-    <object type="Wall" x="2200" y="1840" width="40" height="80" />
-    <object type="Wall" x="1840" y="1760" width="400" height="80" />
+    <object type="Wall" x="1480" y="1920" width="720" height="80" />
+    <object type="Wall" x="1840" y="1760" width="360" height="80" />
     <object type="Wall" x="1320" y="1720" width="80" height="280" />
     <object type="Wall" x="1400" y="1720" width="440" height="80" />
     <object type="Wall" x="1520" y="1600" width="240" height="120" />
@@ -122,6 +159,69 @@
     <object type="Wall" x="1840" y="1720" width="280" height="40" />
     <object type="Wall" x="1880" y="1680" width="120" height="40" />
     <object type="Wall" x="920" y="2360" width="1480" height="40" />
+    <object type="Wall" x="2200" y="1760" width="40" height="240" />
+    <object type="Weapon" x="1360" y="2200" width="40" height="40">
+      <properties>
+        <property name="durability" value="2" />
+        <property name="type" value="Tray" />
+      </properties>
+    </object>
+    <object type="Weapon" x="1480" y="1680" width="40" height="40">
+      <properties>
+        <property name="durability" value="3" />
+        <property name="type" value="CandleStick" />
+      </properties>
+    </object>
+    <object type="Coin" x="1280" y="920" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1320" y="920" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1200" y="920" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1160" y="920" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1200" y="880" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1240" y="880" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1280" y="880" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1280" y="960" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1240" y="960" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
+    <object type="Coin" x="1200" y="960" width="40" height="40">
+      <properties>
+        <property name="value" value="100" />
+      </properties>
+    </object>
   </objectgroup>
   <objectgroup name="Floor1RoomGraph" width="60" height="60" visible="0">
     <object name="Stair Room 1" type="Room" x="400" y="1440" width="320" height="560">
@@ -156,9 +256,8 @@
     </object>
     <object name="Hallway 2" type="Room" x="1200" y="2000" width="1040" height="200">
       <properties>
-        <property name="Disguise Room 1" value="" />
+        <property name="Disguise Room 1" value="Chef" />
         <property name="Hallway 3" value="Box" />
-        <property name="Key Room 1" value="Chef" />
       </properties>
     </object>
     <object name="Hallway 3" type="Room" x="1200" y="1720" width="120" height="280">

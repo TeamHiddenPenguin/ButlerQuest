@@ -365,16 +365,31 @@ namespace ButlerQuest
 
         public bool WallInWay(Enemy enemy,int dist)
         {
-            foreach (var wall in level.walls.Where(x => x.location.Z == playerLoc.Z && Vector3.DistanceSquared(enemy.center, x.center) < dist))
+            foreach (var wall in level.walls.Where(x => x.location.Z == playerLoc.Z /*&& Vector3.DistanceSquared(enemy.center, x.center) < dist*/))
             {
-                if (enemy.center.X > wall.rectangle.Right && playerLoc.X > wall.rectangle.Right)
-                    continue;
-                if (enemy.center.X < wall.rectangle.Left && playerLoc.X < wall.rectangle.Left)
-                    continue;
-                if (enemy.center.Y > wall.rectangle.Top && playerLoc.Y > wall.rectangle.Top)
-                    continue;
-                if (enemy.center.Y < wall.rectangle.Bottom && playerLoc.Y < wall.rectangle.Bottom)
-                    continue;
+                if ((enemy.center.X > wall.rectangle.Right && playerLoc.X > wall.rectangle.Right) ||
+                    (enemy.center.X < wall.rectangle.Left && playerLoc.X < wall.rectangle.Left) ||
+                    (enemy.center.Y > wall.rectangle.Top && playerLoc.Y > wall.rectangle.Top) ||
+                    (enemy.center.Y < wall.rectangle.Bottom && playerLoc.Y < wall.rectangle.Bottom))
+                {
+                    Vector2 v = new Vector2(playerLoc.X - enemy.center.X, playerLoc.Y - enemy.center.Y);
+                    Vector2[] wallVecs = new Vector2[4];
+                    wallVecs[0] = new Vector2(wall.rectangle.Left, wall.rectangle.Bottom - wall.rectangle.Top);
+                    wallVecs[1] = new Vector2(wall.rectangle.Right, wall.rectangle.Bottom - wall.rectangle.Top);
+                    wallVecs[2] = new Vector2(wall.rectangle.Right - wall.rectangle.Left, wall.rectangle.Top);
+                    wallVecs[3] = new Vector2(wall.rectangle.Right - wall.rectangle.Left, wall.rectangle.Bottom);
+                    bool checker = false;
+                    foreach (var wallVec in wallVecs)
+                    {
+                        if (wallVec.X / v.X == wallVec.Y / v.Y)
+                        {
+                            checker = true;
+                            break;
+                        }
+                    }
+                    if (!checker)
+                        continue;
+                }
                 return true;
             }
             return false;
