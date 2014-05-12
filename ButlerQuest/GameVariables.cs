@@ -51,9 +51,9 @@ namespace ButlerQuest
                     new Animation(12, 12, 40, 40, 5, 4, 1, playerTex), // StandRight
                     new Animation(4, 4, 40 ,40, 5, 4, 1, playerTex), //StandDown
                     new Animation(7, 7, 40, 40, 5, 4, 1, playerTex), // StandLeft
-                    new Animation(17, 19, 40, 40, 5, 4, 15, playerTex), //WalkUp
+                    new Animation(18, 19, 40, 40, 5, 4, 15, playerTex), //WalkUp
                     new Animation(12, 16, 40, 40, 5, 4, 5, playerTex), //WalkRight
-                    new Animation(4, 6, 40, 40, 5, 4, 15, playerTex), //WalkDown
+                    new Animation(5, 6, 40, 40, 5, 4, 15, playerTex), //WalkDown
                     new Animation(7, 11, 40, 40, 5, 4, 5, playerTex), //WalkLeft
                     new Animation(3, 3, 40, 40, 5, 4, 1, playerTex), // AttackUp
                     new Animation(2, 2, 40, 40, 5, 4, 1, playerTex), // AttackRight
@@ -139,9 +139,9 @@ namespace ButlerQuest
                     new Animation(12, 12, 40, 40, 5, 4, 1, chefTex), // StandRight
                     new Animation(4, 4, 40 ,40, 5, 4, 1, chefTex), //StandDown
                     new Animation(7, 7, 40, 40, 5, 4, 1, chefTex), // StandLeft
-                    new Animation(17, 19, 40, 40, 5, 4, 15, chefTex), //WalkUp
+                    new Animation(18, 19, 40, 40, 5, 4, 15, chefTex), //WalkUp
                     new Animation(12, 16, 40, 40, 5, 4, 5, chefTex), //WalkRight
-                    new Animation(4, 6, 40, 40, 5, 4, 15, chefTex), //WalkDown
+                    new Animation(5, 6, 40, 40, 5, 4, 15, chefTex), //WalkDown
                     new Animation(7, 11, 40, 40, 5, 4, 5, chefTex), //WalkLeft
                     new Animation(3, 3, 40, 40, 5, 4, 1, chefTex), // AttackUp
                     new Animation(2, 2, 40, 40, 5, 4, 1, chefTex), // AttackRight
@@ -153,9 +153,9 @@ namespace ButlerQuest
                     new Animation(12, 12, 40, 40, 5, 4, 1, mechTex), // StandRight
                     new Animation(4, 4, 40 ,40, 5, 4, 1, mechTex), //StandDown
                     new Animation(7, 7, 40, 40, 5, 4, 1, mechTex), // StandLeft
-                    new Animation(17, 19, 40, 40, 5, 4, 15, mechTex), //WalkUp
+                    new Animation(18, 19, 40, 40, 5, 4, 15, mechTex), //WalkUp
                     new Animation(12, 16, 40, 40, 5, 4, 5, mechTex), //WalkRight
-                    new Animation(4, 6, 40, 40, 5, 4, 15, mechTex), //WalkDown
+                    new Animation(5, 6, 40, 40, 5, 4, 15, mechTex), //WalkDown
                     new Animation(7, 11, 40, 40, 5, 4, 5, mechTex), //WalkLeft
                     new Animation(3, 3, 40, 40, 5, 4, 1, mechTex), // AttackUp
                     new Animation(2, 2, 40, 40, 5, 4, 1, mechTex), // AttackRight
@@ -167,9 +167,9 @@ namespace ButlerQuest
                     new Animation(12, 12, 40, 40, 5, 4, 1, boxTex), // StandRight
                     new Animation(4, 4, 40 ,40, 5, 4, 1, boxTex), //StandDown
                     new Animation(7, 7, 40, 40, 5, 4, 1, boxTex), // StandLeft
-                    new Animation(17, 19, 40, 40, 5, 4, 15, boxTex), //WalkUp
+                    new Animation(18, 19, 40, 40, 5, 4, 15, boxTex), //WalkUp
                     new Animation(12, 16, 40, 40, 5, 4, 5, boxTex), //WalkRight
-                    new Animation(4, 6, 40, 40, 5, 4, 15, boxTex), //WalkDown
+                    new Animation(5, 6, 40, 40, 5, 4, 15, boxTex), //WalkDown
                     new Animation(7, 11, 40, 40, 5, 4, 5, boxTex), //WalkLeft
                     new Animation(3, 3, 40, 40, 5, 4, 1, boxTex), // AttackUp
                     new Animation(2, 2, 40, 40, 5, 4, 1, boxTex), // AttackRight

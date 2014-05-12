@@ -165,6 +165,10 @@ namespace ButlerQuest
             if (player.direction == 1 || player.direction == 2)
             {
                 player.Draw(spriteBatch);
+
+                if (player.currentDisguise != null)
+                    player.currentDisguise.Draw(spriteBatch);
+
                 if (player.currentWeapon != null)
                     player.currentWeapon.Draw(spriteBatch);
             }
@@ -174,10 +178,10 @@ namespace ButlerQuest
                     player.currentWeapon.Draw(spriteBatch);
 
                 player.Draw(spriteBatch);
-            }
 
-            if (player.currentDisguise != null)
-                player.currentDisguise.Draw(spriteBatch);
+                if (player.currentDisguise != null)
+                    player.currentDisguise.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
         }

@@ -248,12 +248,24 @@ namespace ButlerQuest
             {
                 level.player.Move(new Vector3(0, -1, 0));
 
+                if (level.player.currentDisguise != null)
+                {
+                    level.player.currentDisguise.location = level.player.location;
+                    level.player.currentDisguise.rectangle = level.player.rectangle;
+                }
+
                 if (!level.player.CurrentAnimation.Contains("Attack"))
                     level.player.CurrentAnimation = "WalkUp";
             }
             if (kState.IsKeyDown(Keys.A))
             {
                 level.player.Move(new Vector3(-1, 0, 0));
+
+                if (level.player.currentDisguise != null)
+                {
+                    level.player.currentDisguise.location = level.player.location;
+                    level.player.currentDisguise.rectangle = level.player.rectangle;
+                }
 
                 if (!level.player.CurrentAnimation.Contains("Attack"))
                     level.player.CurrentAnimation = "WalkLeft";
@@ -262,12 +274,25 @@ namespace ButlerQuest
             {
                 level.player.Move(new Vector3(0, 1, 0));
 
+                if (level.player.currentDisguise != null)
+                {
+                    level.player.currentDisguise.location = level.player.location;
+                    level.player.currentDisguise.rectangle = level.player.rectangle;
+                }
+
                 if (!level.player.CurrentAnimation.Contains("Attack"))
                     level.player.CurrentAnimation = "WalkDown";
             }
             if (kState.IsKeyDown(Keys.D))
             {
                 level.player.Move(new Vector3(1, 0, 0));
+
+                if (level.player.currentDisguise != null)
+                {
+                    level.player.currentDisguise.location = level.player.location;
+                    level.player.currentDisguise.rectangle = level.player.rectangle;
+                }
+
                 if (!level.player.CurrentAnimation.Contains("Attack"))
                     level.player.CurrentAnimation = "WalkRight";
             }
@@ -294,6 +319,10 @@ namespace ButlerQuest
                         break;
                     default:
                         break;
+                }
+                if (level.player.currentDisguise != null)
+                {
+                    level.player.currentDisguise.CurrentAnimation = level.player.CurrentAnimation;
                 }
             }
 

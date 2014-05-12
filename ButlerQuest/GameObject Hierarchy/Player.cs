@@ -70,16 +70,16 @@ namespace ButlerQuest
             {
                 switch (direction)
                 {
-                    case 0: currentWeapon.location.X = this.location.X + 10;
+                    case 0: currentWeapon.location.X = this.location.X;
                         currentWeapon.location.Y = this.location.Y - 10;
                         break;
-                    case 1: currentWeapon.location.X = this.location.X + 20;
+                    case 1: currentWeapon.location.X = this.location.X + 25;
                         currentWeapon.location.Y = this.location.Y - 5;
                         break;
-                    case 2: currentWeapon.location.X = this.location.X;
-                        currentWeapon.location.Y = this.location.Y + 20;
+                    case 2: currentWeapon.location.X = this.location.X + 5;
+                        currentWeapon.location.Y = this.location.Y + 15;
                         break;
-                    case 3: currentWeapon.location.X = this.location.X - 5;
+                    case 3: currentWeapon.location.X = this.location.X - 15;
                         currentWeapon.location.Y = this.location.Y - 5;
                         break;
                 }
@@ -131,10 +131,10 @@ namespace ButlerQuest
             if (currentDisguise != null)
             {
                 currentDisguise.location = this.location;
+                currentDisguise.rectangle = this.rectangle;
 
+                currentDisguise.CurrentAnimation = CurrentAnimation;
                 currentDisguise.anims[CurrentAnimation].currentFrame = anims[CurrentAnimation].currentFrame;
-
-                currentDisguise.Update(gameTime);
             }
         }
     }
