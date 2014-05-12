@@ -45,7 +45,7 @@ namespace ButlerQuest
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
 
-            levelMap = new Map(mapFile, new int[4] { 1, int.MaxValue, 0, 0 });
+            levelMap = new Map(mapFile, new int[8] { 1, int.MaxValue, 1, 1, 1, 1, 0, 0 });
 
 
             roomGraph = new RoomGraph();
