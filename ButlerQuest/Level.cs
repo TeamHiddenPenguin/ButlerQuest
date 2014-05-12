@@ -28,6 +28,7 @@ namespace ButlerQuest
         SpriteBatch spriteBatch;
         public RoomGraph roomGraph;
         public string mapFile;
+        SpriteFont font;
 
         // constructor
         public Level(string mapFile)
@@ -41,6 +42,7 @@ namespace ButlerQuest
             keys = new List<Key>();
             disguises = new List<Disguise>();
             floorSwitchers = new List<FloorSwitcher>();
+            font = ScreenManager.SharedManager.Content.Load<SpriteFont>("Arial");
 
             graphics = ScreenManager.SharedManager.gDevice;
             spriteBatch = ScreenManager.SharedManager.sBatch;
@@ -179,6 +181,7 @@ namespace ButlerQuest
             if (player.currentDisguise != null)
                 player.currentDisguise.Draw(spriteBatch);
 
+            spriteBatch.DrawString(font, "Money: " + player.moneyCollected + " / " + player.moneyNeeded, new Vector2(windowSpace.X, windowSpace.Y), Color.FromNonPremultiplied(255,114,0,255));
             spriteBatch.End();
         }
 
