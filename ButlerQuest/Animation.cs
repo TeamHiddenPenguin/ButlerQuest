@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ButlerQuest
 {
-    // 
+    // Written by Jesse Florio and Drew Stanton
     public class Animation
     {
         // attributes

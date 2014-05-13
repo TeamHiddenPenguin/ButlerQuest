@@ -53,8 +53,6 @@ namespace ButlerQuest
         {
             // TODO: use this.Content to load your game content here
 
-            //I'm not fixing this. Feel free to try yourselves.
-            //-Sam
             ScreenManager.SharedManager.Game = this;
             ScreenManager.SharedManager.Content = Content;
             ScreenManager.SharedManager.gDevice = GraphicsDevice;

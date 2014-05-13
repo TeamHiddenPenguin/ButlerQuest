@@ -18,6 +18,7 @@ namespace ButlerQuest
         /// <returns>An enemy</returns>
         public static Enemy GenerateEnemy(Vector3 position, List<Tuple<string, string>> commands, int dir)
         {
+            //Create a new enemy with the default starting variables and positions.
             Enemy temp = new Enemy(
                 GameVariables.enemyMoveSpeed,
                 GameVariables.enemyAnimations,
@@ -28,8 +29,10 @@ namespace ButlerQuest
                     GameVariables.normalEnemyCash,
                     dir);
 
+            //For each parseable command in the command list
             foreach (var parseable in commands)
             {
+                //Add a new command based on the command's parameters
                 switch (parseable.Item1.ToUpper().Trim('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'))
                 {
                     case "MOVE":
@@ -70,6 +73,8 @@ namespace ButlerQuest
             return new Wall(position, width, height);
         }
 
+
+        // makes a door with a given position and number to use for key association
         public static Door GenerateDoor(Vector3 position, int doorNum)
         {
             Door door = new Door(
@@ -87,6 +92,7 @@ namespace ButlerQuest
             return door;
         }
 
+        // makes a key with a given position and a number to use for door association
         public static Key GenerateKey(Vector3 position, int keyNum)
         {
             Key key = new Key(
@@ -133,6 +139,8 @@ namespace ButlerQuest
         }
 
 
+        // creates a weapon with a given position, durability before breaking, and type of weapon (vase, tray, candlestick)
+        // and sets the animation based on the weapon type.
         public static Weapon GenerateWeapon(Vector3 position, int durability, string weaponType)
         {
             
@@ -154,7 +162,7 @@ namespace ButlerQuest
             return weapon;
         }
 
-
+        // creates a coin with a given money value
         public static Coin GenerateCoin(Vector3 position, int value)
         {
 
@@ -173,6 +181,7 @@ namespace ButlerQuest
             return coin;
         }
 
+        // creates a disguise of the given type (chef, mechanic, box) and sets it's animation to be facing down.
         public static Disguise GenerateDisguise(Vector3 position, string type)
         {
             Disguise disguise = new Disguise(
