@@ -65,6 +65,7 @@ namespace ButlerQuest
             return -1; // if the method makes it this far, then no collison has occured
         }
 
+        // updates the center of the object.
         public virtual void Update()
         {
             center = new Vector3(rectangle.X + (rectangle.Width / 2), rectangle.Y + (rectangle.Height / 2), location.Z);
