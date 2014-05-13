@@ -17,8 +17,9 @@ namespace ButlerQuest
         public double awareness = 0;
         
         public int moneyValue; // amount of money the enemy is worth
-        public bool alive;
+        public bool alive; // whether or not the enemy is alive
 
+        // used to check if objects are close enough to use pixel collision. NOT USED
         public Rectangle CloseRect
         {
             get { return new Rectangle(rectangle.X + 10, rectangle.Y, rectangle.Width / 2, rectangle.Height); }
@@ -28,11 +29,18 @@ namespace ButlerQuest
         public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect, int value, int dir)
             : base(vel, animations, names, loc, rect)
         {
+            // sets up commands
             commandQueue = new Queue<ICommand>();
             defaultCommands = new Queue<ICommand>();
+
+            // sets starting location
             startLocation = loc;
+
+            // sets enemy to be unaware of player
             state = AI_STATE.UNAWARE;
+
             center = new Vector3(rect.X + rect.Width, rect.Y + rect.Height, loc.Z);
+
             moneyValue = value;
             alive = true;
             direction = dir;
@@ -50,29 +58,30 @@ namespace ButlerQuest
             }
         }
 
-        public void ChangeCommand()
+        public void ChangeCommand() // goes to the next command in the priority queue.
         {
-            if (commandQueue.Count != 0 && commandQueue.Peek() != null)
+            if (commandQueue.Count != 0 && commandQueue.Peek() != null) // if priority queue isn't empty, gets next command
             {
                 currentCommand = commandQueue.Dequeue();
                 currentCommand.Initialize();
             }
             else
-                currentCommand = new GetNextCommandSet(this, int.MaxValue);
+                currentCommand = new GetNextCommandSet(this, int.MaxValue); // priority queue is empty, and needs to be re-populated.
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (alive)
+
+            if (alive) // doesn't bother doing anything if the enemy is dead.
             {
 
-                AIManager.SharedAIManager.RunAI(this);
+                AIManager.SharedAIManager.RunAI(this); // adds the enemy to the shared manager for AI updates
 
-                if (currentCommand == null || currentCommand.IsFinished)
+                if (currentCommand == null || currentCommand.IsFinished) // current command is done and needs a new one.
                     ChangeCommand();
 
-                if (currentCommand is CommandWait)
+                if (currentCommand is CommandWait) // enemy is standing still, so standing animation is played.
                 {
                     switch (direction)
                     {
@@ -87,7 +96,7 @@ namespace ButlerQuest
                     }
                 }
 
-                else
+                else // enemy is moving somewhere, so walking animation is played.
                 {
                     switch (direction)
                     {
@@ -102,11 +111,12 @@ namespace ButlerQuest
                     }
                 }
 
-                currentCommand.Update(gameTime);
+                currentCommand.Update(gameTime); // updates current command as necessary.
             }
+
             else
             {
-                CurrentAnimation = "Dead";
+                CurrentAnimation = "Dead"; // enemy will not be drawn.
             }
         }
     }

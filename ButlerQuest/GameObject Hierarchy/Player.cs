@@ -20,6 +20,7 @@ namespace ButlerQuest
         public int attackLength; // how long the player's attack has lasted (in ms)
         const int MAX_ATTACK_LENGTH = 10;
 
+        // used to check if player is close enough with something to bother checking for collision.
         public Rectangle CloseRect
         {
             get { return new Rectangle(rectangle.X + 10, rectangle.Y, rectangle.Width / 2, rectangle.Height); }
@@ -66,6 +67,8 @@ namespace ButlerQuest
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            // moves the weapon to keep up with the player.
             if (currentWeapon != null)
             {
                 switch (direction)
@@ -84,6 +87,7 @@ namespace ButlerQuest
                         break;
                 }
 
+                // ends the attack after a short amount of time (MAX_ATTACK_LENGTH number of frames)
                 if (CurrentAnimation.Contains("Attack"))
                 {
                     attackLength++;
@@ -111,6 +115,7 @@ namespace ButlerQuest
                 currentWeapon.Update(gameTime);
             }
 
+            // else player is walking.
             else
             {
                 switch (direction)
@@ -127,7 +132,7 @@ namespace ButlerQuest
             }
 
             
-
+            // updates disguise to follow player and updates its drawing rectangle and current frame.
             if (currentDisguise != null)
             {
                 currentDisguise.location = this.location;

@@ -8,10 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ButlerQuest
 {
+    // a weapon that can be used by the player.
     public class Weapon : DrawableGameObject
     {
-        public int durability;
-        public bool visible;
+        public int durability; // how many times an enemy can be hit with the weapon before the weapon breaks.
+        public bool visible; // whether or not to draw the weapon.
 
         public Weapon(Animation[] animations, string[] names, Vector3 location, Rectangle rect, int durable)
             : base(animations, names, location, rect)
@@ -24,11 +25,12 @@ namespace ButlerQuest
         {
             base.Update(gameTime);
 
+            // updates the drawing rectangle, as drawable game objects do not automatically do this.
             rectangle.X = (int)location.X;
             rectangle.Y = (int)location.Y;
         }
 
-        public new void Draw(SpriteBatch spriteBatch)
+        public new void Draw(SpriteBatch spriteBatch) // only draws if it is visible.
         {
             if (visible)
                 base.Draw(spriteBatch);

@@ -67,6 +67,7 @@ namespace ButlerQuest
                 anims[currentAnimation].Update();
         }
 
+        // pixel collision. We're not using this.
         [Obsolete]
         public bool PixelCollide(DrawableGameObject other)
         {
@@ -96,6 +97,7 @@ namespace ButlerQuest
             return false;
         }
 
+        // resets all animations in the anims dictionary.
         public void ResetAllAnimations()
         {
             foreach (var anim in anims.Values)
