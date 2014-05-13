@@ -519,7 +519,7 @@ namespace ButlerQuest
 
         public override void Update(GameTime time)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 ScreenManager.SharedManager.NextScreen();
             }

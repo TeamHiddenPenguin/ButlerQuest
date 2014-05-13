@@ -172,6 +172,11 @@ namespace ButlerQuest
             //create a list of commands to translate between a list of nodes and a queue of commands
             List<ICommand> translationList = new List<ICommand>();
             //Populate the translation list with commands from the graph nodes.
+            if (path == null)
+            {
+                return new Queue<ICommand>();
+            }
+
             for (int i = 1; i < path.Count; i++)
             {
                 var item = path[i];
@@ -246,7 +251,7 @@ namespace ButlerQuest
                     AddToPursuit(other);
                 }
                 //If the player is within the current vision radius and not behind any walls, update his current known location
-                if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT && !WallInWay(enemy))
+                if (dist < MAX_VISION_RADIUS_SQUARED_PURSUIT)
                 {
                     lastKnownPlayerLoc = playerLoc;
                 }
