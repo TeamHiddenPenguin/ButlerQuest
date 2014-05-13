@@ -228,6 +228,7 @@ namespace ButlerQuest
                     // only worry about collision if the player is attacking
                     if (player.CurrentAnimation.Contains("Attack") && player.currentWeapon != null)
                     {
+                        player.currentWeapon.location.Z = player.location.Z;
                         int collision = player.currentWeapon.CollisionSide(enemy);
                         if (collision > -1)
                         {

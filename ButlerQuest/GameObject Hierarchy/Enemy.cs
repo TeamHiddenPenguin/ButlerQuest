@@ -25,7 +25,7 @@ namespace ButlerQuest
         }
 
         // constructor
-        public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect, int value, int direction)
+        public Enemy(Vector3 vel, Animation[] animations, string[] names, Vector3 loc, Rectangle rect, int value, int dir)
             : base(vel, animations, names, loc, rect)
         {
             commandQueue = new Queue<ICommand>();
@@ -35,7 +35,7 @@ namespace ButlerQuest
             center = new Vector3(rect.X + rect.Width, rect.Y + rect.Height, loc.Z);
             moneyValue = value;
             alive = true;
-            this.direction = direction;
+            direction = dir;
 
             switch (direction)
             {
